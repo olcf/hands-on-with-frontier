@@ -14,10 +14,11 @@ pick any 7 of the challenges below. For all challenges other than the first one,
 5. [OpenMP_Basics](OpenMP_Basics)
 6. [MPI_Basics](MPI_Basics)
 7. [OpenMP_Offload](OpenMP_Offload) (Frontier only)
-8. [GPU_Matrix_Multiply](GPU_Matrix_Multiply) (Frontier only) 
-9. [Python_Conda_Basics](Python_Conda_Basics) (Required before attemping any of the Python challenges below)
-10. [Python_Pytorch_Basics](Python_Pytorch_Basics)
-11. [Python_Parallel_HDF5](Python_Parallel_HDF5)
+8. [GPU_Matrix_Multiply](GPU_Matrix_Multiply) (Frontier only)
+9. [GPU_Data_Transfers](GPU_DATA_Transfers)
+10. [Python_Conda_Basics](Python_Conda_Basics) (Required before attemping any of the Python challenges below)
+11. [Python_Pytorch_Basics](Python_Pytorch_Basics)
+12. [Python_Parallel_HDF5](Python_Parallel_HDF5)
 
 After completing 7 of the above challenges, feel free to "choose your own adventure" by completing the rest of the challenges in any order you prefer.
 
