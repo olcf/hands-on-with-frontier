@@ -50,15 +50,15 @@ int main()
 
     /* -------------------------------------------------------------------
     Set execution configuration parameters
-        thr_per_blk: number of CUDA threads per grid block
-        blk_in_grid: number of blocks in grid
+        thr_per_wg: number of HIP threads per grid block
+        wg_in_grid: number of workgroups in grid
     -------------------------------------------------------------------- */
-    int thr_per_blk = 256;
-    int blk_in_grid = ceil( float(N) / thr_per_blk );
+    int thr_per_wg = 256;
+    int wg_in_grid = ceil( float(N) / thr_per_wg );
 
     /* Launch kernel --------------------------------------------------- */
-    /* cuda add_vectors<<< blk_in_grid, thr_per_blk >>>(d_A, d_B, d_C); */
-     hipLaunchKernelGGL(add_vectors,blk_in_grid,thr_per_blk,0,0,d_A,d_B,d_C);
+    /* hip add_vectors<<< wg_in_grid, thr_per_wg >>>(d_A, d_B, d_C); */
+     hipLaunchKernelGGL(add_vectors,wg_in_grid,thr_per_wg,0,0,d_A,d_B,d_C);
 
     /* Copy data from device array d_C to host array C ----------------- */
     /* TODO: Look up hipMemcpy API and...                               */
@@ -93,8 +93,8 @@ int main()
     printf("__SUCCESS__\n");
     printf("---------------------------\n");
     printf("N                 = %d\n", N);
-    printf("Threads Per Block = %d\n", thr_per_blk);
-    printf("Blocks In Grid    = %d\n", blk_in_grid);
+    printf("Threads Per Block = %d\n", thr_per_wg);
+    printf("Blocks In Grid    = %d\n", wg_in_grid);
     printf("---------------------------\n\n");
 
     return 0;
