@@ -41,7 +41,7 @@ $ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
-The `source deactivate_envs.sh` command is only necessary if you already have the Python module loaded.
+The `source deactivate_envs.sh` command is only necessary if you already have existing conda environments active.
 The script unloads all of your previously activated conda environments, and no harm will come from executing the script if that does not apply to you.
 
 Next, we will load the gnu compiler module (most Python packages assume GCC), hdf5 module (necessary for h5py):
@@ -131,7 +131,7 @@ We will test our build by trying to write an HDF5 file in parallel using 42 MPI 
 First, change directories to your Orion scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /lustre/orion/<PROJECT ID>/scratch/<USER ID>
+$ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir h5py_test
 $ cd h5py_test
 $ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/hello_mpi.py .
@@ -228,10 +228,10 @@ The results of the simulation will look something like this:
     <img width="50%" src="images/galaxy_collision.gif">
 </p>
 
-First, similar to before, change directories to your GPFS scratch area and copy over the python and batch scripts:
+First, similar to before, change directories to your Lustre scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /lustre/orion/<PROJECT ID>/scratch/<USER ID>
+$ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir galaxy_challenge
 $ cd galaxy_challenge
 $ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/galaxy.py .
@@ -246,7 +246,7 @@ You will be dealing with `galaxy.py`.
 The goal of `galaxy.py` is to simulate an infalling galaxy made up of "particles" (stars) and a "nucleus" (the compact central region) colliding with a bigger host galaxy.
 This would require a lot of code for it to be the most accurate ("many body" problems in physics are complicated); however, we made some physical assumptions to simplify the problem so that it is less complicated but still results in a roughly accurate galactic event.
 Even with simplifying things down, this script does not run quickly when not using MPI, as the amount of stars you want to simulate over a given time period quickly slows things down.
-We will be simulating 1000 stars and it takes about 10 minutes for the script to complete on Frontier when only using 1 MPI task, while completing in about 1.5 minutes when using 8 MPI tasks.
+We will be simulating 1000 stars and it takes about 2 minutes for the script to complete on Frontier when only using 1 MPI task, while completing in about 20 seconds when using 8 MPI tasks.
 
 In this challenge, you will be using 8 MPI tasks to help speed up the computations by splitting up the particles across your MPI tasks (each MPI task will only simulate a subset of the total number of particles).
 The tasks will then write their subset of the data in parallel to an HDF5 file that will hold the entire final dataset.
@@ -295,14 +295,14 @@ To do this challenge:
 4. If you fixed the script, you should see something similar to the output below in `galaxy-<JOB_ID>.out` after the job completes:
 
     ```python
-    MPI Rank 0 : Simulating my particles took 102.9287338256836 s
-    MPI Rank 5 : Simulating my particles took 105.36905121803284 s
-    MPI Rank 7 : Simulating my particles took 106.68532800674438 s
-    MPI Rank 2 : Simulating my particles took 108.80526208877563 s
-    MPI Rank 6 : Simulating my particles took 109.75137877464294 s
-    MPI Rank 4 : Simulating my particles took 111.80397272109985 s
-    MPI Rank 1 : Simulating my particles took 112.4355766773224 s
-    MPI Rank 3 : Simulating my particles took 117.3634796142578 s
+    MPI Rank 3 : Simulating my particles took 16.70100736618042 s
+    MPI Rank 0 : Simulating my particles took 16.869715690612793 s
+    MPI Rank 1 : Simulating my particles took 17.179004669189453 s
+    MPI Rank 6 : Simulating my particles took 17.414162635803223 s
+    MPI Rank 4 : Simulating my particles took 17.449076890945435 s
+    MPI Rank 2 : Simulating my particles took 17.516165733337402 s
+    MPI Rank 5 : Simulating my particles took 18.588200092315674 s
+    MPI Rank 7 : Simulating my particles took 19.119014263153076 s
     Success!
     ```
 
