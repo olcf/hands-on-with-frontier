@@ -111,16 +111,17 @@ base                     /ccs/home/<YOUR_USER_ID>/miniconda-frontier-handson
 Next, let's install a package ([NumPy](https://numpy.org/)). 
 There are a few different approaches.
 
-One way to install packages into your conda environment is to build packages from source using [pip](https://pip.pypa.io/en/stable/).
+One way to install packages into your conda environment is to use [pip](https://pip.pypa.io/en/stable/).
+Although pip can install pre-compiled binaries like conda, it can also be used to build packages from source.
 This approach is useful if a specific package or package version is not available in the conda repository, or if the pre-compiled binaries don't work on the HPC resources (which is common).
-However, building from source means you need to take care of some of the dependencies yourself, especially for optimization.
-In Frontier's case, this means we need to load the `openblas` module.
 Pip is available to use after installing Python into your conda environment, which we have already done.
 
 >>  ---
 > NOTE: Because issues can arise when using conda and pip together (see link in [Additional Resources Section](#refs)), it is recommended to do this only if absolutely necessary.
 >>  ---
 
+Building from source means you need to take care of some of the dependencies yourself, especially for optimization.
+In Frontier's case, this means we need to load the `openblas` module.
 To build a package from source, use `pip install --no-binary=<package_name> <package_name>`:
 
 ```bash
@@ -131,10 +132,17 @@ $ CC=gcc pip install --no-binary=numpy numpy
 The `CC=gcc` flag will ensure that we are using the proper compiler and wrapper.
 Building from source results in a longer installation time for packages, so you may need to wait a few minutes for the install to finish.
 
+After it is finished building, you should see something similar to:
+
+```
+Successfully built numpy
+Installing collected packages: numpy
+Successfully installed numpy-1.26.1
+```
+
 Congratulations, you have built NumPy from source in your conda environment!  
 
-We did not link in any additional linear algebra packages, so this version of NumPy is not optimized.
-Let's install a more optimized version using a different method instead, but first we must uninstall the pip-installed NumPy:
+Now, let's install using a different method instead, but first we must uninstall the pip-installed NumPy:
 
 ```bash
 $ pip uninstall numpy
@@ -151,7 +159,7 @@ $ conda install numpy
 
 Conda handles dependencies when installing pre-built binaries, so  it will automatically install all of the packages NumPy needs for optimization.   
 
-Congratulations, you have just installed an optimized version of NumPy, now let's test it!
+Congratulations, you have just installed NumPy, now let's test it!
 
 &nbsp;
 
