@@ -11,7 +11,7 @@ unset SLURM_EXPORT_ENV
 date
 
 module load PrgEnv-gnu
-module load rocm/5.3.0
+module load amd-mixed/5.3.0
 module load craype-accel-amd-gfx90a
 
 source ~/miniconda-frontier-handson/bin/activate base
