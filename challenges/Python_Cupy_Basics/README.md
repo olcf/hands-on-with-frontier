@@ -1,7 +1,7 @@
 # Python: CuPy Basics
 
 GPU computing has become a big part of the data science landscape, as array operations with NVIDIA GPUs can provide considerable speedups over CPU computing.
-Although GPU computing on Summit is often utilized in codes that are written in Fortran and C, GPU-related Python packages are quickly becoming popular in the data science community.
+Although GPU computing on Frontier is often utilized in codes that are written in Fortran and C, GPU-related Python packages are quickly becoming popular in the data science community.
 One of these packages is [CuPy](https://cupy.dev/), a NumPy/SciPy-compatible array library accelerated with NVIDIA CUDA.
 
 CuPy is a library that implements NumPy arrays on NVIDIA GPUs by utilizing CUDA Toolkit libraries like cuBLAS, cuRAND, cuSOLVER, cuSPARSE, cuFFT, cuDNN and NCCL.
@@ -43,14 +43,14 @@ $ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
-The `source deactivate_envs.sh` command is only necessary if you already have the Python module loaded.
+The `source deactivate_envs.sh` command is only necessary if you already have existing conda environments active.
 The script unloads all of your previously activated conda environments, and no harm will come from executing the script if that does not apply to you.
 
 Next, we will load the gnu compiler module (most Python packages assume GCC), relevant GPU module (necessary for CuPy):
 
 ```bash
 $ module load PrgEnv-gnu
-$ module load rocm/5.3.0
+$ module load amd-mixed/5.3.0
 $ module load craype-accel-amd-gfx90a
 $ source ~/miniconda-frontier-handson/bin/activate base
 ```
@@ -226,7 +226,7 @@ Similarly, you can temporarily switch to a device using the `with` context:
 
 >> ---
 > NOTE: In older versions of CuPy, trying to access an array stored on a different GPU resulted in error.
-> Transferring an array to the "correct" device before trying to access the array on said device is still highly recommended.
+> Transferring an array to the "correct" device before trying to access it is still highly recommended.
 >> ---
 
 Now, transfer `x_gpu_0` to "Device 1".
@@ -273,7 +273,7 @@ Now let's apply what you've learned.
 Before asking for a compute node, let's change into our scratch directory and copy over the relevant files.
 
 ```
-$ cd /lustre/orion/<PROJECT ID>/scratch/<USER ID>
+$ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir cupy_test
 $ cd cupy_test
 $ cp ~/hands-on-with-Frontier-/challenges/Python_Cupy_Basics/data_transfer.py .
