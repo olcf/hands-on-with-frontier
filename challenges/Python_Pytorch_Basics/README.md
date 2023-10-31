@@ -60,7 +60,7 @@ $ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
-The `source deactivate_envs.sh` command is only necessary if you already have the Python module loaded.
+The `source deactivate_envs.sh` command is only necessary if you already have existing conda environments active.
 The script unloads all of your previously activated conda environments, and no harm will come from executing the script if that does not apply to you.
 
 Next, we will load the gnu compiler module (most Python packages assume GCC) and the GPU module (necessary for using PyTorch on the GPU):
@@ -75,7 +75,7 @@ $ source ~/miniconda-frontier-handson/bin/activate base
 We loaded the "base" conda environment, but we need to create a new environment using the conda create command:
 
 ```bash
-$ conda create -p ~/.conda/envs/torch-frontier python=3.10
+$ conda create -p ~/.conda/envs/torch-frontier python=3.10 imagemagick -c conda-forge
 ```
 
 >>  ---
@@ -124,6 +124,7 @@ $ pip install torch torchvision torchaudio --index-url https://download.pytorch.
 $ pip install matplotlib
 ```
 
+As opposed to other challenges in this repository, here we used `pip` to install a pre-compiled binary instead of using it to build PyTorch from source.
 Note that we also installed matplotlib as it will be needed for plotting functions in the CNN.
 
 &nbsp;
@@ -719,7 +720,7 @@ You'll be submitting a job to run on a compute node to train your network.
 However, before asking for a compute node, change into your scratch directory and copy over the relevant files.
 
 ```bash
-$ cd /lustre/orion/[projid]/scratch/[userid]
+$ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir pytorch_test
 $ cd pytorch_test
 $ cp ~/hands-on-with-Frontier-/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
@@ -744,7 +745,6 @@ More specifically:
 If you have something like [XQuartz](https://www.xquartz.org/index.html) (Mac) or [Xming](http://www.straightrunning.com/XmingNotes/) (Windows) installed on your local computer, and have enabled window forwarding, you can open the images on Frontier by doing:
 
 ```bash
-$ module load imagemagick
 $ display last_batch.png
 $ display overall_results.png
 ```
@@ -757,7 +757,7 @@ After you complete the challenge, you can transfer these plots to your computer 
 
 To do this challenge:
 
-0. Make sure you copied over the scripts and are in your `/lustre/orion/[projid]/scratch/[userid]/pytorch_test` directory (see beginning of this section).
+0. Make sure you copied over the scripts and are in your `$MEMBERWORK/<PROJECT ID>/pytorch_test` directory (see beginning of this section).
 
 1. Run the `download_data.py` script to download the CIFAR-10 dataset. This is necessary because the compute nodes won't be able to download it during your batch job when running `cnn.py`. If successful, you'll see a directory named `data` in your current directory.
 
