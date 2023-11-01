@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A TRN016
+#SBATCH -A TRN001
 #SBATCH -J 32_omp
 #SBATCH -o %x-%j.out
 #SBATCH -t 0:10:00
