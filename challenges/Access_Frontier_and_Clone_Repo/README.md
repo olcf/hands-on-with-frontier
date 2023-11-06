@@ -81,11 +81,6 @@ Or, Visualize all the data!
 &nbsp;
 
 
-Not Functioning
-- [srun_Job_Launcher](jsrun_Job_Launcher)
-- [Find_the_Compiler_Flag](Find_the_Compiler_Flag)
-- [Parallel_Scaling_Performance](Parallel_Scaling_Performance)
-- [Score-P_and_Vampir_Basics](Score-P_and_Vampir_Basics)
 
 
 
