@@ -254,7 +254,7 @@ Which option would you set to `7` to get 7 MPI tasks per node?
 
 Open your submit.sl with `vi` or your favored text editor and make the change. 
 
-Then submit your job with `sbatch submit.sl. 
+Then submit your job with `sbatch submit.sl`. 
 
 When your job is done, open the output file (looks like a variation of srun_myjob-397453.out) with 'vi' or a text editor. Does it look like this? :
 
