@@ -180,7 +180,7 @@ To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. T
 If you like, you may look at the code by doing:
 
 ```
-vi hello_mpi-omp.c
+vi hello_mpi_omp.c
 ```
 To close the file from vi do `esc`, followed by `:q`. 
 
@@ -259,19 +259,18 @@ Then submit your job with `sbatch submit.sl.
 When your job is done, open the output file (looks like a variation of srun_myjob-397453.out) with 'vi' or a text editor. Does it look like this? :
 
 ```
-MPI 001 - OMP 000 - HWT 009 - Node frontier143
-MPI 004 - OMP 000 - HWT 033 - Node frontier143
-MPI 000 - OMP 000 - HWT 001 - Node frontier143
-MPI 002 - OMP 000 - HWT 017 - Node frontier143
-MPI 003 - OMP 000 - HWT 025 - Node frontier143
-MPI 005 - OMP 000 - HWT 041 - Node frontier143
-MPI 006 - OMP 000 - HWT 049 - Node frontier143
-
+MPI 000 - OMP 000 - HWT 001 - Node frontier143 
+MPI 001 - OMP 000 - HWT 009 - Node frontier143 
+MPI 002 - OMP 000 - HWT 017 - Node frontier143 
+MPI 003 - OMP 000 - HWT 025 - Node frontier143 
+MPI 004 - OMP 000 - HWT 033 - Node frontier143 
+MPI 005 - OMP 000 - HWT 041 - Node frontier143 
+MPI 006 - OMP 000 - HWT 049 - Node frontier143 
 ```
 If so, you successfully ran 7 MPI tasks per node. 
 
 Multiple OpenMP Processes Exercise 
-------------------------------
+----------------------------------
 
 Let's now try to run two OpenMP processes per MPI task. 
 
@@ -305,7 +304,7 @@ MPI 003 - OMP 000 - HWT 025 - Node frontier139
 MPI 003 - OMP 001 - HWT 025 - Node frontier139
 .  .  .    
 ```
-The CPU's cores could easily handle two processes each, in fact, the Frontier cores have two hardware threads each, but the default slrum setting on Frontier is to only schedule one hardware thread per core. This allows each process to have all the resources of the core. So, in the way we have submitted the job, each hardware thread had to handle two processes. You can see this in the example output by the fact that every two OMP processes share one HWT. That is not an ideal situation because the thread would need to wait for one process to finish before it could start running the other. That situation is called oversubscription and the reason for the warnings in my example output. 
+The CPU's cores could easily handle two processes each, in fact, the Frontier cores have two hardware threads each, but the default slurm setting on Frontier is to only schedule one hardware thread per core. This allows each process to have all the resources of the core. So, in the way we have submitted the job, each hardware thread had to handle two processes. You can see this in the example output by the fact that every two OMP processes share one HWT. That is not an ideal situation because the thread would need to wait for one process to finish before it could start running the other. That situation is called oversubscription and the reason for the warnings in my example output. 
 
 A better plan is to reserve a core for each process in the MPI task. What would you need to change about your current srun line, in submit.sl, to get a core reserved for each process in each MPI task? 
 
