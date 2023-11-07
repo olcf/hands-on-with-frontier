@@ -64,7 +64,7 @@ Below is an outline for the program and its MPI functions. For this challenge, r
 
 **Helloworld Outline**
 
-We have setup this example to use 4 ranks, each mapped to a separate core on the node. This was done in the submission script, which you may look at if you wish, with `vi /hello/submit_hello.sbatch`.
+We have setup this example to use 4 ranks, each mapped to a separate core on the node. This was done in the submission script, which you may look at if you wish, with `cat hello/submit_hello.sbatch`.
 
 
 The line in the submssion script that sets this example to use 4 ranks with one per core is: 
@@ -75,8 +75,6 @@ srun -n 4 -c 1 ./run
 
 ```
 You won't need to change or edit this script. It is only shown so you know where we set up the number of ranks. Now we will look at an outline of the program.
-
-You can close the file by doing `esc` then typing `:q` followed by hitting the `return' key. 
 
 
 * First initialize  MPI. 
