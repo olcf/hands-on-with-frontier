@@ -437,7 +437,7 @@ int main(int argc, char **argv)
 To find this code: 
 
 ```
-$ cd hands-on-with-Frontier-/challenges/MPI_basics/bcast/mpi_bcast.c
+$ cd ~/hands-on-with-Frontier-/challenges/MPI_basics/bcast/mpi_bcast.c
 ```
 
 To compile it:
