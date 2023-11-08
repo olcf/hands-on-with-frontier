@@ -335,7 +335,7 @@ To do this challenge:
 
 2. Go to hands-on-with-Frontier-/challenges/MPI_Basics/ptp/. 
 ```
-$ cd hands-on-with-Frontier-/challenges/MPI_Basics/ptp/
+$ cd ~/hands-on-with-Frontier-/challenges/MPI_Basics/ptp/
 
 ```
 3. Edit the Receive function in ptp.c with your A, B and C arguments. 
