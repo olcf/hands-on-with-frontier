@@ -44,43 +44,5 @@ $ cd hands-on-with-Frontier-
 ## Congratulations! You've completed your first challenge. 
 You can now move on to other [challenges](../). 
 
-``` 
-New to Unix? Start here.
-```
-- [Basic_Unix_Vim](Basic_Unix_Vim)
-- [Basic_Workflow](Basic_Workflow)
-- [Password_in_a_Haystack](Password_in_a_Haystack)
-
-```
-Ready for HPC and Parallel Code?
-```
-- [Jobs_in_Time_Window](Jobs_in_Time_Window)
-- [MPI_Basics](MPI_Basics)
-- [OpenMP_Basics](OpenMP_Basics)
-
-```
-Learn to use those AMD GPUs!
-```
-- [OpenMP_Offload](OpenMP_Offload)
-- [GPU_Data_Transfers](GPU_Data_Transfers)
-- [GPU_Matrix_Multiply](GPU_Matrix_Multiply)
-- [GPU_Profiling](GPU_Profiling)
-
-```
-Or, Visualize all the data!
-```
-- [Python_Conda_Basics](Python_Conda_Basics)
-- [Python_Parallel_HDF5](Python_Parallel_HDF5)
-- [Python_Pytorch_Basics](Python_Pytorch_Basics)
-- [Python_Cupy_Basics](Python_Cupy_Basics)
-
-&nbsp;
-
-<hr>
-
-&nbsp;
-
-
-
 
 
