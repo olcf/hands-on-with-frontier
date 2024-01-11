@@ -70,11 +70,13 @@ int main(int argc, char *argv[])
 
     /************************************************************/
 	/* TODO: Look up the hipblasDgemm routine and add it here to */
-	/*       perform a matrix multiply on the GPU               */
-	/*                                                          */
-	/* NOTE: This will be similar to the CPU dgemm above but    */
-	/*       will use d_A, d_B, and d_C instead                 */ 
-	/************************************************************/
+	/*       perform a matrix multiply on the GPU                */
+	/*                                                           */
+	/* NOTE: This will be similar to the CPU dgemm above but     */ 
+	/*       will use d_A, d_B, and d_C instead                  */
+	/*       use HIPBLAS_OP_N and HIPBLAS_OP_N for the           */
+	/*       2nd and 3rd option.                                 */
+	/*************************************************************/
 
 
 
