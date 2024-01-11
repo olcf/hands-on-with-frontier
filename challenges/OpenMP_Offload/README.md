@@ -234,7 +234,7 @@ To truly take advantage of the GPU, we'll need to add the `teams`, `distribute`,
 First, makes sure you're in the `OpenMP_Offload` challenge directory:
 
 ```bash
-$ cd ~/hands-on-with-Frontier-/challenges/OpenMP_Offload
+$ cd ~/hands-on-with-frontier/challenges/OpenMP_Offload
 ```
 
 Then load the following modules:

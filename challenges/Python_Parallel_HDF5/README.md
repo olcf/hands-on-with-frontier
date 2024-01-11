@@ -36,8 +36,8 @@ First, we will unload all the current modules that you may have previously loade
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5
-$ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -134,10 +134,10 @@ First, change directories to your Orion scratch area and copy over the python an
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir h5py_test
 $ cd h5py_test
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/hello_mpi.py .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/hdf5_parallel.py .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/submit_hello.sbatch .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/submit_h5py.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/hello_mpi.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/hdf5_parallel.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_hello.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_h5py.sbatch .
 ```
 
 Let's test that mpi4py is working properly first by executing the example Python script "hello_mpi.py".
@@ -234,9 +234,9 @@ First, similar to before, change directories to your Lustre scratch area and cop
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir galaxy_challenge
 $ cd galaxy_challenge
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/galaxy.py .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/generate_animation.py .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Parallel_HDF5/submit_galaxy.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/galaxy.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/generate_animation.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_galaxy.sbatch .
 ```
 
 The two scripts of interest are called `galaxy.py` and `generate_animation.py`.

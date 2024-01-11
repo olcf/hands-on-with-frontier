@@ -9,7 +9,7 @@ In this challenge, you will be given a program that initilizes two matrices with
 Before getting started, you'll need to make sure you're in the `GPU_Matrix_Multiply/` directory:
 
 ```
-$ cd ~/hands-on-with-Frontier-/challenges/GPU_Matrix_Multiply/
+$ cd ~/hands-on-with-frontier/challenges/GPU_Matrix_Multiply/
 ```
 
 Look in the code `cpu_gpu_dgemm.cpp` and find the `TODO` section and add in the `hipblasDgemm` call.

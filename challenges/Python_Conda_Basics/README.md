@@ -18,7 +18,7 @@ Luckily, a script was created ahead of time to do this for you!
 All you need to do is run the `install_conda_frontier.sh` script like so:
 
 ```bash
-$ ~/hands-on-with-Frontier-/misc_scripts/install_conda_frontier.sh
+$ ~/hands-on-with-frontier/misc_scripts/install_conda_frontier.sh
 ```
 
 >>  ---
@@ -177,7 +177,7 @@ It is always highly recommended to run on the compute nodes (through the use of 
 Make sure you're in the correct directory and execute the example Python script:
 
 ```
-$ cd ~/hands-on-with-Frontier-/challenges/Python_Conda_Basics/
+$ cd ~/hands-on-with-frontier/challenges/Python_Conda_Basics/
 $ python3 hello.py
 
 Hello from Python 3.9.18!

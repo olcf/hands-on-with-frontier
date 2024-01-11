@@ -22,18 +22,18 @@ GitHub is a code-hosting platform for version control and collaboration. It lets
 You will need to `clone` a copy of our repository to your `home` directory so that you can complete all of our challenges. Use the following commands to complete this step:
 ```bash
 $ cd /ccs/home/userid
-$ git clone https://github.com/olcf/hands-on-with-Frontier-.git
+$ git clone https://github.com/olcf/hands-on-with-frontier.git
 ```
 
 Check that you can list the files in your current directory to see the repository directory: 
 ```bash
 $ ls
-hands-on-with-Frontier-
+hands-on-with-frontier
 ```
 
 Finally, move into that directory:
 ```bash
-$ cd hands-on-with-Frontier-
+$ cd hands-on-with-frontier
 ```
 
 &nbsp;
