@@ -61,12 +61,12 @@ Use the `cd` command to 'change directory'. On the command line, type `cd` follo
 
 &nbsp;
 
-If you have not already cloned the repository, execute `git clone https://github.com/olcf/hands-on-with-Frontier-/` on the command line to download the 'Hands On With Frontier' repository. 
+If you have not already cloned the repository, execute `git clone https://github.com/olcf/hands-on-with-frontier/` on the command line to download the 'Hands On With Frontier' repository. 
 
 The output should look something like:
 ```bash
-[userid@login1.frontier ~]$ git clone https://github.com/olcf/hands-on-with-Frontier-/
-Cloning into 'hands-on-with-Frontier-'...
+[userid@login1.frontier ~]$ git clone https://github.com/olcf/hands-on-with-frontier/
+Cloning into 'hands-on-with-frontier'...
 remote: Enumerating objects: 1486, done.
 remote: Counting objects: 100% (445/445), done.
 remote: Compressing objects: 100% (248/248), done.
@@ -79,24 +79,24 @@ Resolving deltas: 100% (829/829), done.
 Use the `ls` command to see what files and directories are present in your current directory. You should see something similar to this:
 ```bash
 [userid@login1.frontier ~]$ ls
-hands-on-with-Frontier-
+hands-on-with-frontier
 ```
 
-From here, lets try using `cd` to get to the `Basic_Unix_Vim` challenge directory in the `hands-on-with-Frontier-` repository.
+From here, lets try using `cd` to get to the `Basic_Unix_Vim` challenge directory in the `hands-on-with-frontier` repository.
 ```bash
-[userid@login1.frontier ~]$ cd ~/hands-on-with-Frontier-/challenges/Basic_Unix_Vim
+[userid@login1.frontier ~]$ cd ~/hands-on-with-frontier/challenges/Basic_Unix_Vim
 ```
 
 This is the path _relative to your current directory_ (which would be `/ccs/home/<userid>`). You can also use the _absolute path_ with `cd` i.e. the path string starting with `/` is called a absolute path. This will take you to the same directory.
 ```bash
-[userid@login1.frontier ~]$ cd /ccs/home/<userid>/hands-on-with-Frontier-/challenges/Basic_Unix_Vim
+[userid@login1.frontier ~]$ cd /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim
 ```
 
 Execute `pwd` to check if you're in the right place, and execute `ls` to see what files are available in this directory. 
 
 ```bash
 [userid@login1.frontier Basic_Unix_Vim]$ pwd 
-/ccs/home/<userid>/hands-on-with-Frontier-/challenges/Basic_Unix_Vim
+/ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim
 [userid@login1.frontier Basic_Unix_Vim]$ ls
 images README.md text_file.txt
 ```
@@ -127,7 +127,7 @@ Try to copy the file `text_file.txt` to the newly created `mydirectory` director
 
 Remember that specifying the full path for the file or directory will also work.
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ cp /ccs/home/<userid>/hands-on-with-Frontier-/challenges/Basic_Unix_Vim/text_file.txt /ccs/home/<userid>/hands-on-with-Frontier-/challenges/Basic_Unix_Vim/mydirectory
+[userid@login1.frontier Basic_Unix_Vim]$ cp /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim/text_file.txt /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim/mydirectory
 ```
 
 You can check the contents of a directory with `ls` without first using `cd` to go to that directory, by using `ls` followed by the path or directory name.

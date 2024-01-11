@@ -55,8 +55,8 @@ First, we will unload all the current modules that you may have previously loade
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-Frontier-/challenges/Python_Pytorch_Basics
-$ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -723,9 +723,9 @@ However, before asking for a compute node, change into your scratch directory an
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir pytorch_test
 $ cd pytorch_test
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
 ```
 
 The goal of this challenge is to achieve an overall network accuracy of 60% or greater with a learning rate of 0.001 within an hour of compute time.

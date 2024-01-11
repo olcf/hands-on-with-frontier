@@ -32,7 +32,7 @@ Next, you will need to find the GCC compiler flag needed to compile the code wit
 First, make sure you're in the `Find_the_Compiler_Flag` directory:
 
 ```bash
-$ cd ~/hands-on-with-Frontier-/challenges/Find_the_Compiler_Flag
+$ cd ~/hands-on-with-frontier/challenges/Find_the_Compiler_Flag
 ```
 
 Ok, if you haven't done so already, go find the compiler flag...

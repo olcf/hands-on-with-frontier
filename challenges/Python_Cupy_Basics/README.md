@@ -38,8 +38,8 @@ First, we will unload all the current modules that you may have previously loade
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-Frontier-/challenges/Python_Cupy_Basics
-$ source ~/hands-on-with-Frontier-/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-frontier/challenges/Python_Cupy_Basics
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -276,8 +276,8 @@ Before asking for a compute node, let's change into our scratch directory and co
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir cupy_test
 $ cd cupy_test
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Cupy_Basics/data_transfer.py .
-$ cp ~/hands-on-with-Frontier-/challenges/Python_Cupy_Basics/submit_data.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Cupy_Basics/data_transfer.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Cupy_Basics/submit_data.sbatch .
 ```
 
 When a kernel call is required in CuPy, it compiles a kernel code optimized for the shapes and data types of given arguments, sends it to the GPU device, and executes the kernel. 
