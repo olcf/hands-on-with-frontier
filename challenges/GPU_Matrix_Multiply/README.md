@@ -2,7 +2,7 @@
 
 BLAS (Basic Linear Algebra Subprograms) are a set of linear algebra routines that perform basic vector and matrix operations on CPUs. The hipBLAS library includes a similar set of routines that perform basic linear algebra operations on GPUs. 
 
-In this challenge, you will be given a program that initilizes two matrices with random numbers, performs a matrix multiply on the two matrices on the CPU, performs the same matrix multiply on the GPU, then compares the results. The only part of the code that is missing is the call to `hipblasDgemm` that performs the GPU matrix multiply. Your task will be to look up the `hipblasDgemm` routine and add it to the section of the code identified with a `TODO`.
+In this challenge, you will be given a program that initializes two matrices with random numbers, performs a matrix multiply on the two matrices on the CPU, performs the same matrix multiply on the GPU, then compares the results. The only part of the code that is missing is the call to `hipblasDgemm` that performs the GPU matrix multiply. Your task will be to look up the `hipblasDgemm` routine and add it to the section of the code identified with a `TODO`.
 
 ## Add the Call to hipblasDgemm
 
@@ -35,7 +35,7 @@ Then, try to compile the code:
 $ make
 ``` 
 
-Did you encounter an error? If so, The compilation errors may assist in identifying the problem. 
+Did you encounter an error? If so, the compilation errors may assist in identifying the problem. 
 
 ## Run the Program
 
