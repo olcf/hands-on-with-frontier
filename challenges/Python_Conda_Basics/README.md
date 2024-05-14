@@ -1,31 +1,12 @@
 # Python: Conda Basics
 
 In high-performance computing, [Python](https://www.python.org/) is heavily used to analyze scientific data on the system. 
-Various Python installations and scientific packages need to be installed to analyze data for our users. These Python installations can become difficult to manage on an HPC system as the programming environment is complicated.  [Conda](https://conda.io/projects/conda/en/latest/index.html), a package and virtual environment manager from the [Anaconda](https://www.anaconda.com/) distribution, helps alleviate these issues. 
+Various Python installations and scientific packages need to be installed to analyze data for our users. These Python installations can become difficult to manage on an HPC system as the programming environment is complicated.  [Conda](https://conda.io/projects/conda/en/latest/index.html), a package and virtual environment manager from the [Anaconda](https://www.anaconda.com/) distribution, helps alleviate these issues. [Miniforge](https://github.com/conda-forge/miniforge) is an open source version of Miniconda, which is what the OLCF crash course will use to be able to utilize conda environments.
 
 Conda allows users to easily install different versions of binary software packages and any required libraries appropriate for their computing platform.
 The versatility of conda allows a user to essentially build their own isolated Python environment, without having to worry about clashing dependencies and other system installations of Python.
 
 This hands-on challenge will introduce a user to installing Conda on Frontier, the basic workflow of using conda environments, as well as providing an example of how to create a conda environment that uses a different version of Python than the base environment uses on Frontier.
-
-&nbsp;
-
-## Installing Miniconda
-
-Currently, Frontier does NOT have Anaconda/Conda modules, so we'll have to install Conda ourselves.
-More specifically, we'll be installing Miniconda which is a more minimal version of Anaconda that will be quicker to install.
-Luckily, a script was created ahead of time to do this for you!
-All you need to do is run the `install_conda_frontier.sh` script like so:
-
-```bash
-$ ~/hands-on-with-frontier/misc_scripts/install_conda_frontier.sh
-```
-
->>  ---
-> NOTE: You will ever only need to run the installation script once!
->>  ---
-
-Provided there are no errors (there shouldn't be), you will now have access to your own Miniconda installation!
 
 &nbsp;
 
@@ -37,16 +18,11 @@ First, we will unload all the current modules that you may have previously loade
 $ module reset
 ```
 
-Next, we need to load the gnu compiler module (most Python packages assume use of GCC):
+Next, we need to load the gnu compiler module (most Python packages assume use of GCC), and the miniforge module (allows us to create conda environments):
 
 ```bash
 $ module load PrgEnv-gnu
-```
-
-Next, let's activate your Frontier Miniconda installation:
-
-```bash
-$ source ~/miniconda-frontier-handson/bin/activate base
+$ module load miniforge3
 ```
 
 This puts you in the "`base`" conda environment (your base-level install that came with a few packages).
@@ -64,7 +40,7 @@ Instead, one can solely use the `--name <your_env_name>` flag which will automat
 
 >>  ---
 > NOTE: It is highly recommended to create new environments in the "Project Home" directory (on Frontier, this is `/ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>`).
-> This space avoids purges, allows for potential collaboration within your project, and works better with the compute nodes.
+> This space avoids purges and allows for potential collaboration within your project.
 > It is also recommended, for convenience, that you use environment names that indicate the hostname, as virtual environments created on one system will not necessarily work on others.
 >>  ---
 
@@ -101,7 +77,7 @@ $ conda env list
 # conda environments:
 #
                       *  /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py39-frontier
-base                     /ccs/home/<YOUR_USER_ID>/miniconda-frontier-handson
+base                     /autofs/nccs-svm1_sw/odo/miniforge3/23.11.0
 ```
 
 &nbsp;
@@ -117,7 +93,7 @@ This approach is useful if a specific package or package version is not availabl
 Pip is available to use after installing Python into your conda environment, which we have already done.
 
 >>  ---
-> NOTE: Because issues can arise when using conda and pip together (see link in [Additional Resources Section](#refs)), it is recommended to do this only if absolutely necessary.
+> NOTE: Because issues can arise when using conda and pip together (see link in [Additional Resources Section](#refs)), it is recommended to do this only if absolutely necessary. However, as long as you are careful about it, things will probably be fine.
 >>  ---
 
 Building from source means you need to take care of some of the dependencies yourself, especially for optimization.
@@ -150,7 +126,8 @@ $ module unload openblas
 ```
 
 The traditional, and more basic, approach to installing/uninstalling packages into a conda environment is to use the commands `conda install` and `conda remove`.
-Installing packages with this method checks the [Anaconda Distribution Repository](https://docs.anaconda.com/anaconda/packages/pkg-docs/) for pre-built binary packages to install.
+In "regular" Andaconda, installing packages with this method checks the [Anaconda Distribution Repository](https://docs.anaconda.com/anaconda/packages/pkg-docs/) for pre-built binary packages to install.
+However, because we are using Miniforge, installing packages checks the [Conda-forge](https://anaconda.org/conda-forge) repository ("channel") instead.
 Let's do this to install NumPy:
 
 ```bash

@@ -13,8 +13,8 @@ date
 module load PrgEnv-gnu
 module load amd-mixed/5.3.0
 module load craype-accel-amd-gfx90a
+module load miniforge3
 
-source ~/miniconda-frontier-handson/bin/activate base
 source activate ~/.conda/envs/cupy-frontier
 
 srun -n1 --gpus-per-task=3 --gpu-bind=closest python3 data_transfer.py

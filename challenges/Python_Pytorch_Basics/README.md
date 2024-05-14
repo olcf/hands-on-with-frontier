@@ -69,7 +69,7 @@ Next, we will load the gnu compiler module (most Python packages assume GCC) and
 $ module load PrgEnv-gnu
 $ module load amd-mixed/5.6.0
 $ module load craype-accel-amd-gfx90a
-$ source ~/miniconda-frontier-handson/bin/activate base
+$ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to create a new environment using the conda create command:
@@ -114,7 +114,7 @@ $ conda env list
 # conda environments:
 #
                       * /ccs/home/<YOUR_USER_ID>/.conda/envs/torch-frontier
-base                    /ccs/home/<YOUR_USER_ID>/miniconda-frontier-handson
+base                    /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 ```
 
 Finally, we can install PyTorch using `pip` in our new conda environment:

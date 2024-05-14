@@ -13,13 +13,13 @@ date
 module load PrgEnv-gnu
 module load amd-mixed/5.6.0
 module load craype-accel-amd-gfx90a
+module load miniforge3
 
 export MIOPEN_USER_DB_PATH="/tmp/my-miopen-cache"
 export MIOPEN_CUSTOM_CACHE_DIR=${MIOPEN_USER_DB_PATH}
 rm -rf ${MIOPEN_USER_DB_PATH}
 mkdir -p ${MIOPEN_USER_DB_PATH}
 
-source ~/miniconda-frontier-handson/bin/activate base
 source activate ~/.conda/envs/torch-frontier
 
 python3 -u cnn.py

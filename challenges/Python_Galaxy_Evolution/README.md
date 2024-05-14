@@ -50,7 +50,7 @@ Next, we will load the gnu compiler module (most Python packages assume GCC), hd
 ```bash
 $ module load PrgEnv-gnu
 $ module load hdf5
-$ source ~/miniconda-frontier-handson/bin/activate base
+$ module load miniforge3
 ```
 
 We are in a "base" conda environment, but we need to create a new environment using the `conda create` command.
@@ -96,7 +96,7 @@ $ conda env list
 # conda environments:
 #
                       *  /ccs/home/<YOUR_USER_ID>/.conda/envs/h5pympi-frontier
-base                     /ccs/home/<YOUR_USER_ID>/miniconda-frontier-handson
+base                     /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 ```
 
 ## Installing mpi4py
