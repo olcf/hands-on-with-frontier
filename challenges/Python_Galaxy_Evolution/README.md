@@ -1,4 +1,4 @@
-# Python: Parallel HDF5
+# Python: Galaxy Evolution
 
 Scientific simulations generate large amounts of data on Frontier (about 100 Terabytes per day for some applications).
 Because of how large some datafiles may be, it is important that writing and reading these files is done as fast as possible.
@@ -18,6 +18,7 @@ Building h5py against mpi4py allows you to write to an HDF5 file using multiple 
 h5Py is available after loading the default Python module on Frontier, but it has not been built with parallel support.
 
 This hands-on challenge will teach you how to build a personal, parallel-enabled version of h5py and how to write an HDF5 file in parallel using mpi4py and h5py.
+Afterwards, using mpi4py and h5py, you will fix a galaxy evolution script that showcases the effects of tidal stripping for colliding galaxies.
 
 Our plan for building parallel h5py is to:
 
@@ -36,7 +37,7 @@ First, we will unload all the current modules that you may have previously loade
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5
+$ cd ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution
 $ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
@@ -134,10 +135,10 @@ First, change directories to your Orion scratch area and copy over the python an
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir h5py_test
 $ cd h5py_test
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/hello_mpi.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/hdf5_parallel.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_hello.sbatch .
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_h5py.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/hello_mpi.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/hdf5_parallel.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_hello.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_h5py.sbatch .
 ```
 
 Let's test that mpi4py is working properly first by executing the example Python script "hello_mpi.py".
@@ -234,9 +235,9 @@ First, similar to before, change directories to your Lustre scratch area and cop
 $ cd $MEMBERWORK/<PROJECT ID>
 $ mkdir galaxy_challenge
 $ cd galaxy_challenge
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/galaxy.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/generate_animation.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Parallel_HDF5/submit_galaxy.sbatch .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/galaxy.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/generate_animation.py .
+$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_galaxy.sbatch .
 ```
 
 The two scripts of interest are called `galaxy.py` and `generate_animation.py`.

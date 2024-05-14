@@ -17,7 +17,7 @@ pick any 7 of the challenges below. For all challenges other than the first one,
 8. [GPU_Matrix_Multiply](GPU_Matrix_Multiply) (Frontier only) 
 9. [Python_Conda_Basics](Python_Conda_Basics) (Required before attemping any of the Python challenges below)
 10. [Python_Pytorch_Basics](Python_Pytorch_Basics)
-11. [Python_Parallel_HDF5](Python_Parallel_HDF5)
+11. [Python_Galaxy_Evolution](Python_Galaxy_Evolution)
 
 After completing 7 of the above challenges, feel free to "choose your own adventure" by completing the rest of the challenges in any order you prefer.
 
