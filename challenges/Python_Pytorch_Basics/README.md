@@ -765,7 +765,7 @@ To do this challenge:
     $ python3 download_data.py
     ```
     > Note: You only need to run this script once.
-    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/lustre/orion/[projid]/scratch/[userid]/pytorch_test` directory)
+    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/gpfs/wolf2/olcf/[projid]/scratch/[userid]/pytorch_test` directory)
 
 2. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
 
