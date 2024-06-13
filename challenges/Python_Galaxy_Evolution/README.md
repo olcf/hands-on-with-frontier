@@ -129,7 +129,7 @@ When the installation finishes, you will see a "Successfully installed h5py" mes
 Now for the fun part, testing to see if our build was truly successful.
 We will test our build by trying to write an HDF5 file in parallel using 42 MPI tasks.
 
-First, change directories to your Orion scratch area and copy over the python and batch scripts:
+First, change directories to your Wolf2 scratch area and copy over the python and batch scripts:
 
 ```bash
 $ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
