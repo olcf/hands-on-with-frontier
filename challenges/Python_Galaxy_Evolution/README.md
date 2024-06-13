@@ -57,7 +57,7 @@ We are in a "base" conda environment, but we need to create a new environment us
 Because h5py depends on NumPy, and our challenge depends on other packages (scipy and matplotlib), we will install all of them at once:
 
 ```
-$ conda create -p ~/.conda/envs/h5pympi-frontier python=3.9 libssh numpy scipy matplotlib -c conda-forge
+$ conda create -p ~/.conda/envs/h5pympi-frontier python=3.10 numpy scipy matplotlib -c conda-forge
 ```
 
 >> ---
