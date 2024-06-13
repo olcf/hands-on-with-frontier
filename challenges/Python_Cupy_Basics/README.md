@@ -273,7 +273,7 @@ Now let's apply what you've learned.
 Before asking for a compute node, let's change into our scratch directory and copy over the relevant files.
 
 ```
-$ cd $MEMBERWORK/<PROJECT ID>
+$ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
 $ mkdir cupy_test
 $ cd cupy_test
 $ cp ~/hands-on-with-frontier/challenges/Python_Cupy_Basics/data_transfer.py .
