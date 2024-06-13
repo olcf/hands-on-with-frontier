@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A TRN001
+#SBATCH -A TRN025
 #SBATCH -J pytorch_cnn
 #SBATCH -o %x-%j.out
 #SBATCH -t 1:00:00

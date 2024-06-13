@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A TRN001
+#SBATCH -A TRN025
 #SBATCH -J cupy_xfer
 #SBATCH -o %x-%j.out
 #SBATCH -t 0:10:00
