@@ -103,7 +103,7 @@ base                    /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 CuPy depends on NumPy, so let's install an optimized version of NumPy into our fresh conda environment:
 
 ```bash
-$ conda install -c defaults --override-channels numpy scipy
+$ conda install numpy scipy
 ```
 
 After following the prompts, NumPy and its linear algebra dependencies should successfully install.
@@ -117,7 +117,7 @@ To make sure that we are building from source, and not a pre-compiled binary, we
 $ export CUPY_INSTALL_USE_HIP=1
 $ export ROCM_HOME=/opt/rocm-5.3.0
 $ export HCC_AMDGPU_TARGET=gfx90a
-$ CC=gcc pip install --no-cache-dir --no-binary=cupy cupy
+$ CC=gcc pip install --no-cache-dir --no-binary=cupy cupy==12.3.0
 ```
 
 The `CUPY_INSTALL_USE_HIP` flag makes sure that we are using HIP instead of CUDA, and the `CC` flag ensures that we are passing the correct compiler wrapper.  
@@ -126,7 +126,7 @@ This installation takes, on average, 20 minutes to complete (due to building eve
 Eventually you should see output similar to:
 
 ```
-Successfully installed cupy-12.2.0 fastrlock-0.8.1
+Successfully installed cupy-12.3.0 fastrlock-0.8.1
 ```
 
 Congratulations, you just installed CuPy on Frontier!
