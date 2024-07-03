@@ -5,7 +5,7 @@
 Each challenge is a stand-alone, self-guided tutorial that includes a `README.md` file to walk you through the content. The first challenge is to complete [Access_Frontier_and_Clone_Repo](Access_Frontier_and_Clone_Repo), which will show you how to clone this repository.
 
 To complete the requirements for your certificate,
-pick any 7 of the challenges in any of the sections below. For all challenges other than the first one, which we will do together, you will turn in your work by entering the path to one of the challenge's output file in a google sheet as directed by your instructor. 
+pick any 7 of the challenges in any of the sections below. For all challenges other than the first one, which we will do together, you will turn in your work by entering the path to one of the challenge's output file in this [google sheet](https://docs.google.com/spreadsheets/d/1LIByr47l9IvHtpnmF-E-pqFKpVA7jbyvWwefq4mSHNA/edit?usp=sharing)  as directed by your instructor. 
 
 Getting started: 
 
@@ -16,6 +16,7 @@ Getting started:
 5. [Password_in_a_Haystack](Password_in_a_Haystack)
 
 Parallel Programming Models (in C) 
+
 6. [OpenMP_Basics](OpenMP_Basics)
 7. [MPI_Basics](MPI_Basics)
 8. [OpenMP_Offload](OpenMP_Offload) (Frontier only)
