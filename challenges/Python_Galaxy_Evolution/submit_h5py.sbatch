@@ -11,7 +11,7 @@ unset SLURM_EXPORT_ENV
 date
 
 module load PrgEnv-gnu
-module load hdf5
+module load cray-hdf5-parallel
 module load miniforge3
 
 source activate ~/.conda/envs/h5pympi-frontier
