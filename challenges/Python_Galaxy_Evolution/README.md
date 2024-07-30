@@ -49,7 +49,7 @@ Next, we will load the gnu compiler module (most Python packages assume GCC), hd
 
 ```bash
 $ module load PrgEnv-gnu
-$ module load hdf5
+$ module load cray-hdf5-parallel
 $ module load miniforge3
 ```
 
