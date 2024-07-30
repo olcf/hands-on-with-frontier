@@ -117,7 +117,7 @@ If everything goes well, you should see a "Successfully installed mpi4py" messag
 Next, we are finally ready to install h5py from source:
 
 ```bash
-$ HDF5_MPI="ON" CC=cc HDF5_DIR=${OLCF_HDF5_ROOT} pip install --no-cache-dir --no-binary=h5py h5py
+$ HDF5_MPI="ON" CC=cc HDF5_DIR=${HDF5_ROOT} pip install --no-cache-dir --no-binary=h5py h5py
 ```
 
 The `HDF5_MPI` flag is the key to telling pip to build h5py with parallel support, while the `CC` flag makes sure that we are using the correct C wrapper for MPI.
