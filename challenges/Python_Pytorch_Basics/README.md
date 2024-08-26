@@ -805,14 +805,34 @@ Top Accuracy:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | Michael S.       | OLCF                          | 99.99%   | 9999s   |
+| 1.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 2.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 3.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 4.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 7.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 8.    | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
+| 9.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 10.   | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
 
 
 Top Speed:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | Michael S.       | OLCF                          | 99.99%   | 9999s   |
+| 1.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 2.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 3.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 4.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 7.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 8.    | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
+| 9.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 10.   | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
+
+
 
 ## 6. <a name="resources"></a>Additional Resources
 
