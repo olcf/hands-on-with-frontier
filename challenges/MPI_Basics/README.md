@@ -67,7 +67,7 @@ Below is an outline for the program and its MPI functions. For this challenge, r
 We have setup this example to use 4 ranks, each mapped to a separate core on the node. This was done in the submission script, which you may look at if you wish, with `cat hello/submit_hello.sbatch`.
 
 
-The line in the submssion script that sets this example to use 4 ranks with one per core is: 
+The line in the submission script that sets this example to use 4 ranks with one per core is: 
 ```
 . . .
 
@@ -247,7 +247,7 @@ In this function:
 
 * Comm - Communicator 
 
-This functions retruns after send buffer is ready to reuse. 
+This functions returns after send buffer is ready to reuse. 
 
 Here is the MPI Receive function. 
 
