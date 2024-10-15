@@ -720,7 +720,7 @@ You'll be submitting a job to run on a compute node to train your network.
 However, before asking for a compute node, change into your scratch directory and copy over the relevant files.
 
 ```bash
-$ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
+$ cd /lustre/orion/trn001/scratch/${USER}
 $ mkdir pytorch_test
 $ cd pytorch_test
 $ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
@@ -757,7 +757,7 @@ After you complete the challenge, you can transfer these plots to your computer 
 
 To do this challenge:
 
-0. Make sure you copied over the scripts and are in your `/gpfs/wolf2/olcf/trn025/scratch/${USER}/pytorch_test` directory (see beginning of this section).
+0. Make sure you copied over the scripts and are in your `/lustre/orion/trn001/scratch/${USER}/pytorch_test` directory (see beginning of this section).
 
 1. Run the `download_data.py` script to download the CIFAR-10 dataset. This is necessary because the compute nodes won't be able to download it during your batch job when running `cnn.py`. If successful, you'll see a directory named `data` in your current directory.
 
@@ -765,7 +765,7 @@ To do this challenge:
     $ python3 download_data.py
     ```
     > Note: You only need to run this script once.
-    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/gpfs/wolf2/olcf/[projid]/scratch/[userid]/pytorch_test` directory)
+    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/lustre/orion/[projid]/scratch/[userid]/pytorch_test` directory)
 
 2. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
 

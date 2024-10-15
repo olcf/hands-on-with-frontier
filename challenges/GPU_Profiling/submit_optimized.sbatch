@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A TRN025
+#SBATCH -A TRN001
 #SBATCH -J profiling_optimized
 #SBATCH -o %x-%j.out
 #SBATCH -N 1
