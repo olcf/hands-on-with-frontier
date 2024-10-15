@@ -1,16 +1,15 @@
 # Agenda
 
-| Time     | Topic                                    | Presenter                                                    |
-|----------|------------------------------------------|--------------------------------------------------------------|
-| 9:00 am  | Sign out Frontier Tokens                | Suzanne Parete-Koon and Chris Fuson, Oak Ridge Leadership Computing Facility |
-| 9:10 am  | Get accounts for Access to Anvil        | Geoffrey Lentner, Rosen Center for Advanced Computing       |
-| 9:20 am  | Why Do HPC and Center Overviews         | John Holmen, Oak Ridge Leadership Computing Facility and Geoffrey Lentner, Rosen Center for Advanced Computing |
-| 9:40 am  | Frontier Overview                       | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility |
-| 10:00 am | Programming Env                         | Logan Gillum, Oak Ridge Leadership Computing Facility       |
-| 10:10 am | Parallel Programming Models             | Elijah Maccarthy, Oak Ridge Leadership Computing Facility    |
-| 10:40 am | Scheduler                               | Subil Abraham, Oak Ridge Leadership Computing Facility      |
-| 10:45 am | Course Certificates and Login           | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility and Geoffrey Lentner, Rosen Center for Advanced Computing |
-| 11:00 am | Work on Challenges                       | Students                                                      |
-| 2:50 pm  | Reminder about due dates and check to make sure people have Anvil accounts | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility and Geoffrey Lentner, Rosen Center for Advanced Computing |
-| 3:00 pm  | Close and return Frontier access Tokens | Students                                                      |
-
+| Time     | Topic                                    | Presenter                                                     |
+|----------|------------------------------------------|---------------------------------------------------------------|
+| 12:00 pm | Sign out Frontier Tokens                 | MacKenzie Bellimam, Oak Ridge Leadership Computing Facility   |
+| 12:10 pm | Why Do HPC and Center Overviews          | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
+| 12:20 pm | Frontier Overview                        | Ryan Landfield, Oak Ridge Leadership Computing Facility       |
+| 12:30 pm | Getting Started Challenges               | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
+| 1:00 pm  | HPC and Machine Learning intro           | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
+| 1:10 pm  | Python and Pytorch Challenges            | All                                                           |
+| 1:30 pm  | break (Turn in tokens)                   | MacKenzie Bellimam, Oak Ridge Leadership Computing Facility   |                                                              
+| 5:30 pm  | Token checkout                           | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
+| 5:40 pm  | HPC and Machine Learning                 | Students                                                      |
+| 5:50 pm  | Work on Challenges                       | All                                                           |
+| 7:00 pm  | Close and return Frontier access Tokens  | Students                                                      |
