@@ -28,7 +28,7 @@ reference materials outside of what's provided in this repository.
 
 
 ### Helpful Links
-[<img src="./images/frontier_logo_2023.png" width="170" alt="Frontier" style="vertical-align:middle;"/> Official Frontier User Guide & Documentation](https://docs.olcf.ornl.gov/systems/summit_user_guide.html)
+[<img src="images/frontier_logo_2023.png" width="170" alt="Frontier" style="vertical-align:middle;"/> Official Frontier User Guide & Documentation](https://docs.olcf.ornl.gov/systems/summit_user_guide.html)
 
 
 #### [<img src="./images/frontier_logo_2023.png" width="170" valign="middle" alt="Frontier"/>   Official Frontier User Guide & Documentation](https://docs.olcf.ornl.gov/systems/summit_user_guide.html)
