@@ -66,7 +66,7 @@ int main()
     /*  arguments to                                                     */
     /*     - copy device array d_C to host array C                       */
     /* ----------------------------------------------------------------- */
-    hipMemcpy(C, d_C, bytes, hipMemcpyDeviceToHost);
+    hipMemcpy(??, ??, bytes, hipMemcpyDeviceToHost);
 
     /* Verify results -------------------------------------------------- */
     for(int i=0; i<N; i++)
