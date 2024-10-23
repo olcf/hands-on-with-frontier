@@ -45,8 +45,8 @@ int main()
     /*     - copy host array A to device array d_A                       */
     /*     - copy host array B to device array d_B                       */
     /* ----------------------------------------------------------------- */
-    hipMemcpy(d_A, A, bytes, hipMemcpyHostToDevice);
-    hipMemcpy(d_B, B, bytes, hipMemcpyHostToDevice);
+    hipMemcpy(??, ??, bytes, hipMemcpyHostToDevice);
+    hipMemcpy(??, ??, bytes, hipMemcpyHostToDevice);
 
     /* -------------------------------------------------------------------
     Set execution configuration parameters
