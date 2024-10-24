@@ -14,7 +14,9 @@ But since we have set α = 1 and β = 0, the problem you are solving is:
 ```       
         C=A×B
 ````
-The `hipblasDgemm` version of Dgemm in the HIPBLAS documentation is of the form:
+## The hipblasDgemm Call
+
+The `hipblasDgemm` version of Dgemm in the (AMD hipblasDgemm documentation)[https://hipblas.readthedocs.io/en/rocm-6.2.2/functions.html#list-of-level-3-blas-functions] is of the form:
 
 ```
 hipblasDgemm(hipblasHandle_t handle, hipblasOperation_t transA, hipblasOperation_t transB, int m, int n, int k, const double *alpha, const double *AP, int lda, const double *BP, int ldb, const double *beta, double *CP, int ldc)
@@ -22,48 +24,29 @@ hipblasDgemm(hipblasHandle_t handle, hipblasOperation_t transA, hipblasOperation
 
 Let's break it down:
 
-`hipblasHandle_t handle`: This variable contains the state of the function. If you wanted to, you could write a test based on this variable to see if the function completed its calculation successfully.
+`hipblasHandle_t handle` : This variable contains the state of the function. If you wanted to, you could write a test based on this variable to see if the function completed its calculation successfully.
 
-`hipblasOperation_t transA` and `hipblasOperation_t transB`: These arguments have specific options that control how you use matrices A and B. For example, you can use them as they are entered or use the transpose of either. Since we are solving C = A × B, we just want to use them as they are. The option for that is `HIPBLAS_OP_N`.
+`hipblasOperation_t transA` and `hipblasOperation_t transB` : These arguments have specific options that control how you use matrices A and B. For example, you can use them as they are entered or use the transpose of either. Since we are solving C = A × B, we just want to use them as they are. The option for that is `HIPBLAS_OP_N`.
 
-`int m`, `int n`, `int k`: These are the dimensions of your matrices.
+`int m`, `int n`, `int k` : These are the dimensions of your matrices.
 
-`const double *alpha`: This is a pointer to the scalar alpha.
+`const double *alpha` : This is a pointer to the scalar alpha.
 
-`const double *AP`:This is a pointer to matrix A on the GPU. 
+`const double *AP` : This is a pointer to matrix A on the GPU. 
 
-`int lda`: This represents the leading dimension of matrix A.
+`int lda` : This represents the leading dimension of matrix A.
 
-`const double *BP`: This is a pointer to matrix B on the GPU.
+`const double *BP` : This is a pointer to matrix B on the GPU.
 
-`int ldb`: This represents the leading dimension of matrix B.
+`int ldb` : This represents the leading dimension of matrix B.
 
-`const double *beta`:This is a pointer to the scalar beta.
+`const double *beta` : This is a pointer to the scalar beta.
 
-`double *CP`: This is a pointer to the double-precision matrix C on the GPU.
+`double *CP` : This is a pointer to the double-precision matrix C on the GPU.
 
-`int ldc`: This represents the leading dimension of matrix C.
+`int ldc` : This represents the leading dimension of matrix C.
 
-Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` explanation.
-
-Hints
-
-* A good place to start is to observe how the variables declared in the code map to the `cblasDgemm` arguments in the CPU version of Dgemm that is already correctly implemented in the code.
-* If you are still unsure how the declared variables map to arguments in the functions, you may want to look up `cblasDgemm` and see how its arguments appear in the documentation, then compare those to the implemented `cblasDgemm` in the code.
-* Next, look for the variable declarations made specifically for the GPU (device). Consider where those might fit in the `hipblasDgemm` arguments.
-Remember that you do not need to perform a transpose operation on the matrices, so the `hipblasOperation_t` arguments should be set to `HIPBLAS_OP_N`.
-* Pointers 
-
-In the code we:
-` /* Allocate memory for d_A, d_B, d_C on GPU ----------------------------------------*/
-    double *d_A, *d_B, *d_C;' `
-
-Here: 
- 1. `d_A` is a pointer to a double, holding the address of matrix A in device memory. This is typically what you pass to the GPU because passing the address takes less time than passing the values of the matrix.
-2. `*d_A` is the dereferenced pointer. It accesses the value stored at the memory address held by `d_A`.
-3. `&d_A` is the address of the pointer itself in memory.
-
-* Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`
+Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` call.
 
 
 
@@ -113,3 +96,29 @@ $ sbatch submit.sbatch
 ```
 
 If the CPU and GPU give the same results, you will see the message `__SUCCESS__` in the output file. If you do not receive this message, try to identify the problem. As always, if you need help, make sure to ask.
+
+
+### Hints
+
+* A good place to start is to observe how the variables declared in the code map to the `cblasDgemm` arguments in the CPU version of Dgemm that is already correctly implemented in the code.
+* If you are still unsure how the declared variables map to arguments in the functions, you may want to look up `cblasDgemm` and see how its arguments appear in the documentation, then compare those to the implemented `cblasDgemm` in the code.
+* Next, look for the variable declarations made specifically for the GPU (device). Consider where those might fit in the `hipblasDgemm` arguments.
+Remember that you do not need to perform a transpose operation on the matrices, so the `hipblasOperation_t` arguments should be set to `HIPBLAS_OP_N`.
+* Pointers 
+
+In the code we:
+```
+ /* Allocate memory for d_A, d_B, d_C on GPU ----------------------------------------*/
+    double *d_A, *d_B, *d_C;'
+```
+
+Here: 
+
+1. `d_A` is a pointer to a double, holding the address of matrix A in device memory. This is typically what you pass to the GPU because passing the address takes less time than passing the values of the matrix.
+2. `*d_A` is the dereferenced pointer. It accesses the value stored at the memory address held by `d_A`.
+3. `&d_A` is the address of the pointer itself in memory.
+
+* Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`
+
+
+
