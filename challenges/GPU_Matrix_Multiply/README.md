@@ -10,13 +10,14 @@ To sum up, a Dgemm type function generally does this:
 ```
         C=α×A×B+β×C`
 ```
-But since we have set α = 1 and β = 0, the problem you are solving is:
+But since we have set α = 1 and β = 0, the problem you are solving is a basic matrix multiplication:
 ```       
         C=A×B
 ````
+
 ## The hipblasDgemm Call
 
-The `hipblasDgemm` version of Dgemm in the (AMD hipblasDgemm documentation)[https://hipblas.readthedocs.io/en/rocm-6.2.2/functions.html#list-of-level-3-blas-functions] is of the form:
+The `hipblasDgemm` version of Dgemm in the [AMD hipblasDgemm documentation](https://hipblas.readthedocs.io/en/rocm-6.2.2/functions.html#list-of-level-3-blas-functions) is of the form:
 
 ```
 hipblasDgemm(hipblasHandle_t handle, hipblasOperation_t transA, hipblasOperation_t transB, int m, int n, int k, const double *alpha, const double *AP, int lda, const double *BP, int ldb, const double *beta, double *CP, int ldc)
