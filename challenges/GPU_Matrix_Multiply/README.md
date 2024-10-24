@@ -29,25 +29,25 @@ Let's break it down:
 
 `hipblasOperation_t transA` and `hipblasOperation_t transB` : These arguments have specific options that control how you use matrices A and B. For example, you can use them as they are entered or use the transpose of either. Since we are solving C = A × B, we just want to use them as they are. The option for that is `HIPBLAS_OP_N`.
 
-`int m`, `int n`, `int k` : These are the dimensions of your matrices.
+`int m`, `int n`, `int k` : These are the values of the dimensions of your matrices. 
 
 `const double *alpha` : This is a pointer to the scalar alpha.
 
 `const double *AP` : This is a pointer to matrix A on the GPU. 
 
-`int lda` : This represents the leading dimension of matrix A.
+`int lda` : This represents the value of the leading dimension of matrix A.
 
 `const double *BP` : This is a pointer to matrix B on the GPU.
 
-`int ldb` : This represents the leading dimension of matrix B.
+`int ldb` : This represents the value of the leading dimension of matrix B.
 
 `const double *beta` : This is a pointer to the scalar beta.
 
 `double *CP` : This is a pointer to the double-precision matrix C on the GPU.
 
-`int ldc` : This represents the leading dimension of matrix C.
+`int ldc` : This represents the value of the leading dimension of matrix C.
 
-Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` call.
+Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` call. You must pay close attention to wheather the varaibles are declared as pointers, doubles, or integers, and you must think about wheather `hipblasDgemm` is expecting a varaible's value or its address in memory. A quick review of [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) may be helpful before you start. 
 
 
 
@@ -101,7 +101,10 @@ If the CPU and GPU give the same results, you will see the message `__SUCCESS__`
 
 ### Hints
 
-* A good place to start is to observe how the variables declared in the code map to the `cblasDgemm` arguments in the CPU version of Dgemm that is already correctly implemented in the code.
+The hints get progressively more helpful as you go down. If you want to challenge yourself, you should only read as far as you need before attempting your next fix and compilation of the challenge code.  
+
+
+* A good place to start is to observe how the variables declared in the code, map to the `cblasDgemm` arguments in the CPU version of Dgemm that is already correctly implemented in the code.
 * If you are still unsure how the declared variables map to arguments in the functions, you may want to look up `cblasDgemm` and see how its arguments appear in the documentation, then compare those to the implemented `cblasDgemm` in the code.
 * Next, look for the variable declarations made specifically for the GPU (device). Consider where those might fit in the `hipblasDgemm` arguments.
 Remember that you do not need to perform a transpose operation on the matrices, so the `hipblasOperation_t` arguments should be set to `HIPBLAS_OP_N`.
@@ -115,10 +118,10 @@ In the code we:
 
 Here: 
 1.  `d_A`, `d_B`, `d_`C are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use `d_A`, `*d_A`, or `&d_A` forms of the variables to accomplish this.  
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `d_A`, `*d_A`, or `&d_A` form of the variables to accomplish this.  
 
 
-* Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use `alpha`, `*alpha`, or &alpha' forms of the variables to accomplish this.
+* Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`.
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or &alpha' form of the variables to accomplish this.
 
 
