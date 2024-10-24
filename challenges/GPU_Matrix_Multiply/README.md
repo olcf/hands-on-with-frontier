@@ -114,12 +114,11 @@ In the code we:
 ```
 
 Here: 
+1.  `d_A`, `d_B`, `d_`C are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use `d_A`, `*d_A`, or `&d_A` forms of the variables to accomplish this.  
 
-1. `d_A` is a pointer to a double, holding the address of matrix A in device memory. This is typically what you pass to the GPU because passing the address takes less time than passing the values of the matrix.
-2. `*d_A` is the dereferenced pointer. It accesses the value stored at the memory address held by `d_A`.
-3. `&d_A` is the address of the pointer itself in memory.
 
 * Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`
-
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use `alpha`, `*alpha`, or &alpha' forms of the variables to accomplish this.
 
 
