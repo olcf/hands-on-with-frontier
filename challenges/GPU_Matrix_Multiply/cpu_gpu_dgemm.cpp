@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     hipblasCreate(&handle);
 
     /************************************************************/
-	/* TODO: Look up the hipblasDgemm routine and add it here to */
+	/* TODO: Add the hipblasDgemm routine here to */
 	/*       perform a matrix multiply on the GPU                */
 	/*                                                           */
 	/* NOTE: This will be similar to the CPU dgemm above but     */ 
