@@ -48,43 +48,16 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC), hdf5 module (necessary for h5py):
 
 ```bash
-$ module load PrgEnv-gnu
-$ module load cray-hdf5-parallel
+$ module load PrgEnv-gnu/8.5.0 
+$ module load cray-hdf5-parallel/1.12.2.9
 $ module load miniforge3
 ```
 
-We are in a "base" conda environment, but we need to create a new environment using the `conda create` command.
-Because h5py depends on NumPy, and our challenge depends on other packages (scipy and matplotlib), we will install all of them at once:
-
-```
-$ conda create -p ~/.conda/envs/h5pympi-frontier python=3.10 numpy scipy matplotlib -c conda-forge
-```
-
->> ---
-> NOTE: As noted in [Conda Basics](../Python_Conda_Basics), it is highly recommended to create new environments in the "Project Home" directory.
-> However, due to the limited disk quota and potential number of training participants on Frontier, we will be creating our environment in the "User Home" directory.
->> ---
-
-After following the prompts for creating your new environment, the installation should be successful, and you will see something similar to:
-
-```
-Preparing transaction: done
-Verifying transaction: done
-Executing transaction: done
-#
-# To activate this environment, use
-#
-#     $ conda activate ~/.conda/envs/h5pympi-frontier
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
-```
-
-Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
+We are in a "base" conda environment, but we need to activate a pre-built conda environment that has `mpi4py` and `h5py`.
+Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our environment:
 
 ```bash
-$ source activate ~/.conda/envs/h5pympi-frontier
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicate that you are currently using that specific conda environment. 
@@ -95,41 +68,16 @@ $ conda env list
 
 # conda environments:
 #
-                      *  /ccs/home/<YOUR_USER_ID>/.conda/envs/h5pympi-frontier
+                      *  /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
 base                     /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 ```
 
-## Installing mpi4py
-
-Now that we have a fresh conda environment, we will next install mpi4py from source into our new environment.
-To make sure that we are building from source, and not a pre-compiled binary, we will be using pip:
-
-```bash
-$ MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
-```
-
-The `MPICC` flag ensures that you are using the correct C wrapper for MPI on the system.
-Building from source typically takes longer than a simple `conda install`, so the download and installation may take a couple minutes.
-If everything goes well, you should see a "Successfully installed mpi4py" message.
-
-## Installing h5py
-
-Next, we are finally ready to install h5py from source:
-
-```bash
-$ HDF5_MPI="ON" CC=cc HDF5_DIR=${HDF5_ROOT} pip install --no-cache-dir --no-binary=h5py h5py
-```
-
-The `HDF5_MPI` flag is the key to telling pip to build h5py with parallel support, while the `CC` flag makes sure that we are using the correct C wrapper for MPI.
-This installation will take much longer than both the mpi4py and NumPy installations (5+ minutes if the system is slow).
-When the installation finishes, you will see a "Successfully installed h5py" message.
 
 ## Testing parallel h5py
 
-Now for the fun part, testing to see if our build was truly successful.
 We will test our build by trying to write an HDF5 file in parallel using 42 MPI tasks.
 
-First, change directories to your Wolf2 scratch area and copy over the python and batch scripts:
+First, change directories to your scratch area and copy over the python and batch scripts:
 
 ```bash
 $ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
@@ -317,6 +265,26 @@ $ python3 generate_animation.py
 
 This will take around a minute to complete, but will result in your own GIF.
 You can then transfer this GIF to your computer with Globus, `scp`, or `sftp` to keep as a "souvenir" from the challenge.
+
+## Environment Information
+
+> WARNING: This is NOT part of the challenge, but just context for how the mpi4py+h5py environment we used was installed
+
+Here's how the h5py+mpi4py environment was built:
+
+```bash
+$ module load PrgEnv-gnu/8.5.0 
+$ module load cray-hdf5-parallel/1.12.2.9
+$ module load miniforge3
+
+$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier python=3.10 numpy scipy matplotlib -c conda-forge
+
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
+
+$ MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
+
+$ HDF5_MPI="ON" CC=cc HDF5_DIR=${HDF5_ROOT} pip install --no-cache-dir --no-binary=h5py h5py
+```
 
 ## Additional Resources
 
