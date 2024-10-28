@@ -21,7 +21,7 @@ $ module reset
 Next, we need to load the gnu compiler module (most Python packages assume use of GCC), and the miniforge module (allows us to create conda environments):
 
 ```bash
-$ module load PrgEnv-gnu
+$ module load PrgEnv-gnu/8.5.0
 $ module load miniforge3
 ```
 
@@ -102,11 +102,12 @@ To build a package from source, use `pip install --no-binary=<package_name> <pac
 
 ```bash
 $ module load openblas
-$ CC=gcc pip install --no-binary=numpy numpy
+$ CC=gcc CXX=g++ pip install --no-binary=numpy numpy --no-cache-dir
 ```
 
 The `CC=gcc` flag will ensure that we are using the proper compiler and wrapper.
 Building from source results in a longer installation time for packages, so you may need to wait a few minutes for the install to finish.
+The `no-cache-dir` flag makes sure that no previously built packages that may exist in your cache are used.
 
 After it is finished building, you should see something similar to:
 

@@ -49,43 +49,17 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC), relevant GPU module (necessary for CuPy):
 
 ```bash
-$ module load PrgEnv-gnu
-$ module load amd-mixed/5.3.0
+$ module load PrgEnv-gnu/8.5.0 
+$ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
-$ module load miniforge3
+$ module load miniforge3 
 ```
 
-We loaded the "base" conda environment, but we need to create a new environment using the `conda create` command:
-
-```
-$ conda create -p ~/.conda/envs/cupy-frontier python=3.10
-```
-
->>  ---
-> NOTE: As noted in [Conda Basics](../Python_Conda_Basics), it is highly recommended to create new environments in the "Project Home" directory.
-> However, due to the limited disk quota and potential number of training participants on Frontier, we will be creating our environment in the "User Home" directory.
->>  ---
-
-After following the prompts for creating your new environment, the installation should be successful, and you will see something similar to:
-
-```
-Preparing transaction: done
-Verifying transaction: done
-Executing transaction: done
-#
-# To activate this environment, use
-#
-#     $ conda activate ~/.conda/envs/cupy-frontier
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
-```
-
+We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has CuPy.
 Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate ~/.conda/envs/cupy-frontier
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -96,40 +70,10 @@ $ conda env list
 
 # conda environments:
 #
-                      * /ccs/home/<YOUR_USER_ID>/.conda/envs/cupy-frontier
+                      * /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
 base                    /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 ```
 
-CuPy depends on NumPy, so let's install an optimized version of NumPy into our fresh conda environment:
-
-```bash
-$ conda install numpy scipy
-```
-
-After following the prompts, NumPy and its linear algebra dependencies should successfully install.
-
-We also installed SciPy, which is an optional dependency, but it will allow us to use the additional SciPy-based routines in CuPy.
-
-Finally, we will install CuPy from source into our environment.
-To make sure that we are building from source, and not a pre-compiled binary, we will be using pip:
-
-```bash
-$ export CUPY_INSTALL_USE_HIP=1
-$ export ROCM_HOME=/opt/rocm-5.3.0
-$ export HCC_AMDGPU_TARGET=gfx90a
-$ CC=gcc pip install --no-cache-dir --no-binary=cupy cupy==12.3.0
-```
-
-The `CUPY_INSTALL_USE_HIP` flag makes sure that we are using HIP instead of CUDA, and the `CC` flag ensures that we are passing the correct compiler wrapper.  
-
-This installation takes, on average, 20 minutes to complete (due to building everything from scratch), so don't panic if it looks like the install timed-out.
-Eventually you should see output similar to:
-
-```
-Successfully installed cupy-12.3.0 fastrlock-0.8.1
-```
-
-Congratulations, you just installed CuPy on Frontier!
 
 &nbsp;
 
@@ -364,6 +308,35 @@ To do this challenge:
     ```
 
 If you got the script to successfully run, then congratulations!
+
+## Environment Information
+
+> WARNING: This is NOT part of the challenge, but just context for how the CuPy environment we used was installed
+
+Here's how the CuPy environment was built:
+
+```bash
+$ module load PrgEnv-gnu/8.5.0 
+$ module load rocm/6.1.3
+$ module load craype-accel-amd-gfx90a
+$ module load miniforge3/23.11.0-0 
+
+$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier python=3.10 numpy=1.26 scipy -c conda-forge
+
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
+
+$ git clone --recursive https://github.com/cupy/cupy
+
+$ export CUPY_INSTALL_USE_HIP=1
+$ export ROCM_HOME=/opt/rocm-6.1.3
+$ export HCC_AMDGPU_TARGET=gfx90a
+$ export CC=cc
+$ export CXX=CC
+
+$ python3 setup.py bdist_wheel
+
+$ pip install dist/*.whl
+```
 
 ## Additional Resources
 
