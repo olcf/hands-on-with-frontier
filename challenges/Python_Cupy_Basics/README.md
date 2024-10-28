@@ -28,7 +28,7 @@ In this challenge, you will:
 
 &nbsp;
 
-## Installing CuPy
+## Setting up our environment
 
 >>  ---
 > Before setting up your environment, you must exit and log back in so that you have a fresh login shell. This is to ensure that no previously activated environments exist in your $PATH environment variable. Additionally, you should execute module reset.
