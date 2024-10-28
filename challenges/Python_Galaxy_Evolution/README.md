@@ -80,7 +80,7 @@ We will test our build by trying to write an HDF5 file in parallel using 42 MPI 
 First, change directories to your scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
+$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
 $ mkdir h5py_test
 $ cd h5py_test
 $ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/hello_mpi.py .
@@ -180,7 +180,7 @@ The results of the simulation will look something like this:
 First, similar to before, change directories to your Lustre scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /gpfs/wolf2/olcf/trn025/scratch/${USER}
+$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
 $ mkdir galaxy_challenge
 $ cd galaxy_challenge
 $ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/galaxy.py .
