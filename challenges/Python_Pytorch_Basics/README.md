@@ -45,6 +45,7 @@ Table of Contents:
 	* [Testing Loop](#test-loop)
 * [Challenge: Tuning a CNN](#chall)
 	* [Leaderboard](#leaderboard)
+* [Environment Information](#install)
 * [Additional Resources](#resources)
 
 &nbsp;
@@ -66,43 +67,17 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC) and the GPU module (necessary for using PyTorch on the GPU):
 
 ```bash
-$ module load PrgEnv-gnu
-$ module load amd-mixed/5.6.0
+$ module load PrgEnv-gnu/8.5.0
+$ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3
 ```
 
-We loaded the "base" conda environment, but we need to create a new environment using the conda create command:
-
-```bash
-$ conda create -p ~/.conda/envs/torch-frontier python=3.10 imagemagick -c conda-forge
-```
-
->>  ---
-> NOTE: As noted in [Conda Basics](../Python_Conda_Basics), it is highly recommended to create new environments in the "Project Home" directory.
-> However, due to the limited disk quota and potential number of training participants on Frontier, we will be creating our environment in the "User Home" directory.
->>  ---
-
-After following the prompts for creating your new environment, the installation should be successful, and you will see something similar to:
-
-```
-Preparing transaction: done
-Verifying transaction: done
-Executing transaction: done
-#
-# To activate this environment, use
-#
-#     $ conda activate ~/.conda/envs/torch-frontier
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
-```
-
+We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PyTorch.
 Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate ~/.conda/envs/torch-frontier
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -113,19 +88,9 @@ $ conda env list
 
 # conda environments:
 #
-                      * /ccs/home/<YOUR_USER_ID>/.conda/envs/torch-frontier
+                      * /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 base                    /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
 ```
-
-Finally, we can install PyTorch using `pip` in our new conda environment:
-
-```bash
-$ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.6
-$ pip install matplotlib
-```
-
-As opposed to other challenges in this repository, here we used `pip` to install a pre-compiled binary instead of using it to build PyTorch from source.
-Note that we also installed matplotlib as it will be needed for plotting functions in the CNN.
 
 &nbsp;
 
@@ -720,7 +685,7 @@ You'll be submitting a job to run on a compute node to train your network.
 However, before asking for a compute node, change into your scratch directory and copy over the relevant files.
 
 ```bash
-$ cd /lustre/orion/trn001/scratch/${USER}
+$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
 $ mkdir pytorch_test
 $ cd pytorch_test
 $ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
@@ -757,7 +722,7 @@ After you complete the challenge, you can transfer these plots to your computer 
 
 To do this challenge:
 
-0. Make sure you copied over the scripts and are in your `/lustre/orion/trn001/scratch/${USER}/pytorch_test` directory (see beginning of this section).
+0. Make sure you copied over the scripts and are in your `/lustre/orion/PROJECT_ID/scratch/${USER}/pytorch_test` directory (see beginning of this section).
 
 1. Run the `download_data.py` script to download the CIFAR-10 dataset. This is necessary because the compute nodes won't be able to download it during your batch job when running `cnn.py`. If successful, you'll see a directory named `data` in your current directory.
 
@@ -795,7 +760,7 @@ To do this challenge:
 Thanks for following along and attempting the challenge!
 If you liked this challenge, I suggest exploring [Distributed Training with PyTorch](https://pytorch.org/tutorials/beginner/dist_overview.html) and [PyTorch's Distributed Tutorial](https://pytorch.org/tutorials/intermediate/dist_tuto.html) for speeding up training.
 Our OLCF analytics team also made some nice overview examples of [Distributed Deep Learning on Summit](https://code.ornl.gov/olcf-analytics/summit/distributed-deep-learning-examples/).
-If you liked PyTorch I also suggest taking a loot at [PyTorch Lightning](https://www.pytorchlightning.ai/). 
+If you liked PyTorch I also suggest taking a look at [PyTorch Lightning](https://www.pytorchlightning.ai/). 
 
 ### 5.1 <a name="leaderboard"></a>Leaderboard
 
@@ -833,8 +798,28 @@ Top Speed:
 | 10.   | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
 
 
+## 6. <a name="install"></a>Environment Information
 
-## 6. <a name="resources"></a>Additional Resources
+> WARNING: This is NOT part of the challenge, but just context for how the PyTorch environment we used was installed
+
+Here's how the PyTorch environment was built:
+
+```bash
+$ module load PrgEnv-gnu/8.5.0 
+$ module load rocm/6.1.3
+$ module load craype-accel-amd-gfx90a
+$ module load miniforge3/23.11.0-0
+
+$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier python=3.10 imagemagick -c conda-forge
+
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
+
+$ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
+
+$ pip install matplotlib
+```
+
+## 7. <a name="resources"></a>Additional Resources
 
 Info relevant to this challenge:
 
@@ -847,6 +832,7 @@ Info relevant to this challenge:
 
 Extra information:
 
+* [PyTorch on Frontier](https://docs.olcf.ornl.gov/software/python/pytorch_frontier.html)
 * [Distributed Training with PyTorch](https://pytorch.org/tutorials/beginner/dist_overview.html)
 * [PyTorch's Distributed Tutorial](https://pytorch.org/tutorials/intermediate/dist_tuto.html)
 * [Distributed Deep Learning on Summit](https://code.ornl.gov/olcf-analytics/summit/distributed-deep-learning-examples/)

@@ -10,10 +10,10 @@ unset SLURM_EXPORT_ENV
 
 date
 
-module load PrgEnv-gnu
-module load cray-hdf5-parallel
+module load PrgEnv-gnu/8.5.0 
+module load cray-hdf5-parallel/1.12.2.9
 module load miniforge3
 
-source activate ~/.conda/envs/h5pympi-frontier
+source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
 
 srun -n8 python3 -u galaxy.py
