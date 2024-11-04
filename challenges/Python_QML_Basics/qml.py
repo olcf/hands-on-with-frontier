@@ -331,8 +331,8 @@ if __name__ == "__main__":
     os.environ['LOCAL_RANK'] = "0"
 
     master_addr = os.environ["MASTER_ADDR"]
-    os.environ['MASTER_ADDR'] = master_addr #'localhost'
+    os.environ['MASTER_ADDR'] = master_addr
     os.environ['MASTER_PORT'] = '29500'
-    os.environ['NCCL_SOCKET_IFNAME'] = 'hsn0' #added
+    os.environ['NCCL_SOCKET_IFNAME'] = 'hsn0'
     print(f'Total GPUs being used this run: {world_size}')
     setup(rank, world_size)

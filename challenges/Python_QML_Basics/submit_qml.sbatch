@@ -30,6 +30,7 @@ mkdir -p ${MIOPEN_USER_DB_PATH}
 
 # Get address of head node
 export MASTER_ADDR=$(hostname -i)
+export NCCL_SOCKET_IFNAME=hsn0 # necessary NCCL socket for Frontier
 
 export OMP_NUM_THREADS=1
 
