@@ -566,7 +566,7 @@ To do this challenge:
     $ cd qml_test
     $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/qml.py ./qml.py
     $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
-```
+    ```
 
 1. Use your favorite editor to change `-n` to distribute the network over a specific amount of tasks (pick an integer in the range from 1 to 8):
 
