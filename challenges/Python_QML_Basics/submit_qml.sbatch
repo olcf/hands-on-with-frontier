@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A XXXYYY
+#SBATCH -A TRN001
 #SBATCH -J qml_basics
 #SBATCH -o %x-%j.out
 #SBATCH -N 1
@@ -17,9 +17,7 @@ date
 module load PrgEnv-gnu/8.5.0 
 module load rocm/6.1.3
 module load craype-accel-amd-gfx90a
-module load cmake/3.27.9
 module load kokkos/4.3.00-omp
-module load gcc-native/12.3
 module load miniforge3/23.11.0-0
 
 source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier

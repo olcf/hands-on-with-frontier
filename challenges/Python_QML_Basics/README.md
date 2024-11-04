@@ -590,7 +590,7 @@ To do this challenge:
 
 5. Figure out why the most optimal number of GPUs per node is less than 8 (spoiler)
 
-## Additional Resource
+## Additional Resources
 
 * Although we used PennyLane in this demo, one of the leading quantum computing libraries is called Qiskit. Qiskit's website has a lot of introductory material to not only their library, but to quantum computing in general: https://learning.quantum.ibm.com/
 * PennyLane docs: https://docs.pennylane.ai/en/stable/
