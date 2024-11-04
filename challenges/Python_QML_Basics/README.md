@@ -518,6 +518,7 @@ Once the data is in the correct format, we start the actual training and validat
             "\nTraining completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
         )
         print("Best average loss: {:.4f} | Best average accuracy: {:.4f}".format(best_loss, best_acc))
+        print(f"Speed to accuracy ratio: {time_elapsed/best_acc}")
 
     return
     
@@ -586,7 +587,11 @@ To do this challenge:
     $ sbatch --export=NONE submit_qml.sbatch
     ```
 
-3. Look at the statistics printed in your `qml_basics-<JOB_ID>.out` file after the job completes to see the job stats and output.
+3. Look at the statistics printed in your `qml_basics-<JOB_ID>.out` file after the job completes to see the job stats and output. The line you should look for is this message at the bottom of the file:
+
+    ```
+    Speed to accuracy ratio: [some value here]
+    ```
  
 4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code on 1 node. Which configuration leads to the smallest speed to accuracy ratio?
 
