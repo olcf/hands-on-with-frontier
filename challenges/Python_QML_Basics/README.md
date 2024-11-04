@@ -32,7 +32,7 @@ $ module load PrgEnv-gnu/8.5.0
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load kokkos/4.3.00-omp
-$ module load miniforge3/23.11.0-0
+$ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PennyLane and PyTorch.
@@ -351,7 +351,7 @@ Most of the next lines are defining the correct starting point for the training 
     scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=gamma_lr_scheduler)
 ```
 
-Finally here is where the data is analyzed. Assuming that the data is loaded correctly as mentioned above, this takes the pictures from the folder and resizes them, among other transformations, to allow for the neural network to interface with them correctly. This is because unlike some datasets, there are many different image sizes in ImageNet, which otherwise would result in errors with the NN if analyzed as it started. More info can be found [here](https://towardsdatascience.com/how-to-train-cnns-on-imagenet-ab8dd48202a9). 
+Finally here is where the data is analyzed. This takes the pictures from the folder and resizes them, among other transformations, to allow for the neural network to interface with them correctly. This is because unlike some datasets, there are many different image sizes in ImageNet, which otherwise would result in errors with the NN if analyzed as it started. More info can be found [here](https://towardsdatascience.com/how-to-train-cnns-on-imagenet-ab8dd48202a9). 
 
 ```python
     data_transforms = {
@@ -574,6 +574,8 @@ To do this challenge:
     $ vi submit_qml.sbatch
     ```
 
+    The default `srun` looks like this (note, you'll ONLY have to change the `-n` value):
+
     ```bash
     srun -n1 -c7 --gpus-per-task=1 --gpu-bind=closest python3 -W ignore -u qml.py
     ```
@@ -586,9 +588,9 @@ To do this challenge:
 
 3. Look at the statistics printed in your `qml_basics-<JOB_ID>.out` file after the job completes to see the job stats and output.
  
-4. Compare and determine which number of GPUs (tasks) is optimal for the code on 1 node.
+4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code on 1 node. Which configuration leads to the smallest speed to accuracy ratio?
 
-5. Figure out why the most optimal number of GPUs per node is less than 8 (spoiler)
+5. Optional bonus fun: Try changing `n_qubits` in `qml.py` to see what happens! (stay within 1-10 qubits).
 
 ## Additional Resources
 

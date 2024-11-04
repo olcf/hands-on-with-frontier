@@ -3,7 +3,7 @@
 #SBATCH -J qml_basics
 #SBATCH -o %x-%j.out
 #SBATCH -N 1
-#SBATCH -t 0:10:00
+#SBATCH -t 0:30:00
 #SBATCH -p batch
 
 # Only necessary if submitting like: sbatch --export=NONE ... (recommended)
@@ -18,7 +18,7 @@ module load PrgEnv-gnu/8.5.0
 module load rocm/6.1.3
 module load craype-accel-amd-gfx90a
 module load kokkos/4.3.00-omp
-module load miniforge3/23.11.0-0
+module load miniforge3
 
 source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier
 
@@ -33,4 +33,4 @@ export MASTER_ADDR=$(hostname -i)
 
 export OMP_NUM_THREADS=1
 
-srun -n3 -c7 --gpus-per-task=1 --gpu-bind=closest python3 -W ignore -u qml.py
+srun -n1 -c7 --gpus-per-task=1 --gpu-bind=closest python3 -W ignore -u qml.py
