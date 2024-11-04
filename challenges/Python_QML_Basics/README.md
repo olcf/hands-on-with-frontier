@@ -1,5 +1,7 @@
 # Quantum Machine Learning Basics
 
+> Written by: Samuel Bieberich
+
 One of the most promising forms of unconventional computing is Quantum Computing, utilizing quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in digital computers, however, they are able to exploit some different properties, including:
 
 1. Superposition - the ability of a qubit to be in more than one state at once, measured as a "1" or "0" only a percentage of the time. 
@@ -518,7 +520,6 @@ Once the data is in the correct format, we start the actual training and validat
             "\nTraining completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
         )
         print("Best average loss: {:.4f} | Best average accuracy: {:.4f}".format(best_loss, best_acc))
-        print(f"Speed to accuracy ratio: {time_elapsed/best_acc}")
 
     return
     
@@ -590,10 +591,11 @@ To do this challenge:
 3. Look at the statistics printed in your `qml_basics-<JOB_ID>.out` file after the job completes to see the job stats and output. The line you should look for is this message at the bottom of the file:
 
     ```
-    Speed to accuracy ratio: [some value here]
+    Training completed in ...
+    Best average loss: ... | Best average accuracy: ...
     ```
  
-4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code on 1 node. Which configuration leads to the smallest speed to accuracy ratio?
+4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code on 1 node. **Which configuration leads to the fastest training, but with the greatest "Best average accuracy" reported?**
 
 5. Optional bonus fun: Try changing `n_qubits` in `qml.py` to see what happens! (stay within 1-10 qubits).
 

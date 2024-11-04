@@ -308,7 +308,6 @@ def train_model(rank, world_size): #model, criterion, optimizer, scheduler, num_
             "\nTraining completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
         )
         print("Best average loss: {:.4f} | Best average accuracy: {:.4f}".format(best_loss, best_acc))
-        print(f"Speed to accuracy ratio: {time_elapsed/best_acc}")
 
     return
 

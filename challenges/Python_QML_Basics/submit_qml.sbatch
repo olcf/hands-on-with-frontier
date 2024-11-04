@@ -3,7 +3,7 @@
 #SBATCH -J qml_basics
 #SBATCH -o %x-%j.out
 #SBATCH -N 1
-#SBATCH -t 0:30:00
+#SBATCH -t 0:20:00
 #SBATCH -p batch
 
 # Only necessary if submitting like: sbatch --export=NONE ... (recommended)
