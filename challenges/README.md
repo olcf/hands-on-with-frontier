@@ -27,6 +27,7 @@ Python exercies and Machine Learning
 10. [Python_Conda_Basics](Python_Conda_Basics) (Required before attemping any of the Python challenges below)
 11. [Python_Pytorch_Basics](Python_Pytorch_Basics)
 12. [Python_Galaxy_Evolution](Python_Galaxy_Evolution)
+13. [Python_QML_Basics](Python_QML_Basics) (Frontier only)
 
 After completing 6 of the above challenges, feel free to "choose your own adventure" by completing the rest of the challenges in any order you prefer.
 
