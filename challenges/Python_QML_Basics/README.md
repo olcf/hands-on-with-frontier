@@ -62,11 +62,11 @@ Before we run the code, it is important to understand the process of what the co
 
 ### Qubits
 
-In classical computing there are "Bits", while quantum computing has Quantum Bits or "Qubits". Although they are both used to represent information, they are different.
+In classical computing there are "Bits", while quantum computing has Quantum Bits or "Qubits". Although they are both used to represent information, they are quite different.
 
-A Bit is the smallest unit of measuring information in classical computing and it can have only two values: 0 or 1. (i.e., a binary digit)
+* A **Bit** is the smallest unit of measuring information in classical computing and it can only have one of two values: 0 or 1. (i.e., a binary digit)
 
-A Qubit is the smallest unit of information measurement in quantum computing. Unlike, classical bits, a quantum bit can have multiple states at the same time. Meaning, a quantum bit can have a combination of 0 and 1 simultaneously. This property of Qubits is known as **superposition**.
+* A **Qubit** is the smallest unit of information measurement in quantum computing. Unlike, classical bits, a quantum bit can have multiple states at the same time. Meaning, a quantum bit can have a combination of 0 and 1 simultaneously. This property of Qubits is known as **superposition**.
 
 A classical binary bit can only represent a single binary value, such as 0 or 1, meaning that it can only be in one of two possible states. A qubit, however, can represent a 0, a 1, or any proportion of 0 and 1 in superposition of both states, with a certain probability of being a 0 and a certain probability of being a 1.
 
@@ -595,7 +595,7 @@ To do this challenge:
     Best average loss: ... | Best average accuracy: ...
     ```
  
-4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code on 1 node. **Which configuration leads to the fastest training, but with the greatest "Best average accuracy" reported?**
+4. By varying `-n` in step 1, compare and determine which number of GPUs (tasks) is optimal for the code. **Which configuration leads to the fastest training, but with the greatest "Best average accuracy" reported?**
 
 5. Optional bonus fun: Try changing `n_qubits` in `qml.py` to see what happens! (stay within 1-10 qubits).
 
