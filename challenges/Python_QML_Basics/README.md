@@ -1,6 +1,6 @@
 # Quantum Machine Learning Basics
 
-> Written by: Samuel Bieberich
+> Written by: Samuel T. Bieberich (@Sam-Bieberich) and Michael A. Sandoval (@michael-sandoval)
 
 One of the most promising forms of unconventional computing is Quantum Computing, utilizing quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in digital computers, however, they are able to exploit some different properties, including:
 
