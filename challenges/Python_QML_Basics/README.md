@@ -2,16 +2,18 @@
 
 > Written by: Samuel T. Bieberich (@Sam-Bieberich) and Michael A. Sandoval (@michael-sandoval)
 
-One of the most promising forms of unconventional computing is Quantum Computing, utilizing quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in digital computers, however, they are able to exploit some different properties, including:
+One of the most promising forms of unconventional computing is Quantum Computing (QC), which utilizes quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in classical computers, however, they are able to exploit some different properties, including:
 
 1. Superposition - the ability of a qubit to be in more than one state at once, measured as a "1" or "0" only a percentage of the time. 
 2. Entanglement - the ability of two qubits to connect to one another across theoretically infinite amounts of space, making them directly related. 
 
-Quantum Computers specifically are well equipped to handle processes like those in Convolutional Neural Networks, optimized for computing linear algebra matrix calculations and weighted cost functions. 
+Quantum Computers are well equipped to handle processes like those in Convolutional Neural Networks and machine learning (ML), optimized for computing linear algebra matrix calculations and weighted cost functions. Combining quantum computing with ML results in quantum machine learning (QML). This scientific domain is currently in its infancy, but as soon as more effective quantum computers are built, Quantum Processing Units (QPUs) may be working on the same scale as GPUs and TPUs in the ML-space.
 
-They also are much more scalable than current HPC infrastructure, slowed by the steady decline of Moore's Law.  Given this over-idealized outlook, the question remains, why would HPC need to be involved at all? 
+In theory, quantum computers are much more scalable than current HPC infrastructure, slowed by the steady decline of [Moore's Law](https://en.wikipedia.org/wiki/Moore%27s_law). Given this over-idealized outlook, the question remains, ***why would HPC need to be involved at all?***
 
-Combining this with machine learning (ML), one of the most talked-about parts of computer science lately, quantum machine learning (QML) is born. This science is currently in its infancy, but as soon as more effective quantum computers are built, Quantum Processing Units (QPUs) may be working on the same scale as GPUs and TPUs in the ML space. 
+**The general answer is**: At this stage, instead of viewing QC as completely replacing classical HPC, the goal is integrating QC into a "hybrid" QC/HPC ecosystem. The two can work together to accomplish tasks that they're *each* good at, similar to how a GPU works along CPUs for specific tasks and not for others. So, similar to how a GPU is used to accelerate certain parts of codes, we can view a QPU as an accelerator that can speed up certain demanding, exponential-scaling calculations in a scientific code.
+
+This tutorial will highlight a "hybrid" QC/HPC ecosystem, where you will use a virtual (simulated) QPU to train an ML model using transfer learning. The challenge problem itself focuses on how to efficiently distribute parallel tasks, so you won't need to know any of the quantum theory, but this allows you to get a glimpse of the quantum computing world.
 
 ## Setting Up Our Environment
 
@@ -605,6 +607,7 @@ To do this challenge:
 * PennyLane docs: https://docs.pennylane.ai/en/stable/
 * "Hello World" in seven Quantum Computing languages: https://ionq.com/docs/hello-many-worlds-seven-quantum-languages
 * Quantum Transfer Learning PennyLane Tutorial (what our tutorial was based on): https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning/
+* ORNL QC/HPC paper: https://www.sciencedirect.com/science/article/pii/S0167739X24003583
 
 ## Environment Information
 
