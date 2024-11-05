@@ -63,15 +63,11 @@ $ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/c
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
-If you check with `conda env list`, you should see that the `*` marker is next to your new environment, which means that it is currently active:
+If you check with `which python3`, you should see that you're properly in the new environment:
 
 ```bash
-$ conda env list
-
-# conda environments:
-#
-                      * /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
-base                    /autofs/nccs-svm1_sw/frontier/miniforge3/23.11.0
+$ which python3
+/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier/bin/python3
 ```
 
 
