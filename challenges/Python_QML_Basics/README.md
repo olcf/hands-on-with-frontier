@@ -133,7 +133,7 @@ Now, onto the actual tutorial!
 
 ## Looking at the code
 
-Next, we will analyze the `qml.py` code and determine how it works before running. 
+Our `qml.py` code replaces the final layer of a pre-trained network with a special quantum computing layer. We will analyze the `qml.py` code and determine how it works before running. 
 
 First, the imports:
 
@@ -163,16 +163,19 @@ torch.manual_seed(42)
 np.random.seed(42)
 ```
 
-Obviously, some such as time and os are used to check the runtime of the circuit for the output to be in a format we can read.
+Obviously, some such as `time` and `os` are used to check the runtime of the circuit for the output to be in a format we can read.
 
-All of the PyTorch imports allow for the ML part of the QML implementation. Like the section covering PyTorch in the [Python_Pytorch_Basics](../Python_Pytorch_Basics) tutorials, PyTorch will be used to set up a neural network. The DDP import is important, ensuring that the code can be run in parallel on multiple GPUs on the Frontier compute node. As you know, Frontier has 8 GPUs on each node, so optimizing all of these for one job should offer a significant power boost compared to just running on the CPU (or 1 GPU) as per the defaults. 
+All of the PyTorch imports allow for the ML part of the QML implementation. Like the section covering PyTorch in the [Python_Pytorch_Basics](../Python_Pytorch_Basics) tutorial, PyTorch will be used to set up a neural network. The `DDP` import is important, ensuring that the code can be run in parallel on multiple GPUs or nodes.
 
-Pennylane is a Python library for designing quantum circuits or programs from Xanadu, a Canadian quantum computing company. Pennylane has some great documentation, which can be found [online](https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning). Much of this demo is based on their docs.
+[PennyLane](https://pennylane.ai/) is a Python library for designing quantum circuits or programs from Xanadu, a Canadian quantum computing company. Pennylane has some great [demos](https://pennylane.ai/qml/demonstrations/) , and much of our OLCF tutorial is based on a version of their [Quantum Transfer Learning](https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning) demo.
 
-Lastly, setting the "seed" makes sure the script is reproducible upon re-execution and is consistently using the same random data sampling.
+Lastly, setting the "seed" for both NumPy and PyTorch makes sure the script is reproducible upon re-execution and is consistently using the same random data sampling.
 
 ### Hyperparameters
-One of the most important parts of an ML program is the definition of hyperparameters. The most important hyperparameter in QML involves the number of qubits being used in the program. The default in the code is 4, but it can be anywhere from 1-30 on the backend we are using before it breaks. When you are running the code, you can experiment by changing this value around and seeing how it affects the output. Keep in mind, the code is designed to run at 4 qubits, so results may be misleading when changing that parameter.
+
+One of the most important parts of an ML program is the definition of hyperparameters. The most important hyperparameter in QML involves the number of qubits being used in the program. The default in this example is 4, but it can be anywhere from 1-30 based on the backend we are using (before you run into memory errors). When you are running the `qml.py` code, you can experiment by changing the `n_qubits` value and seeing how it affects the output. Keep in mind, the code is designed to run at 4 qubits, so results may be misleading when changing that parameter.
+
+> Warning: the challenge problem itself should be run at 4 qubits
 
 ```python
 # Need to define quantum stuff outside the main function
@@ -185,7 +188,7 @@ q_delta = 0.01              # Initial spread of random quantum weights
 
 There are a lot of functions in this code, so we will be covering them one by one below!
 
-This function sets up the process group, it is what tells PyTorch to prep for distributed training. This group will then call the `train_model` function to train the model (described further below).
+The `setup` function sets up the process group, it is what tells PyTorch to prep for distributed training. This group will then call the `train_model` function to train the model (described further below).
 
 ```python
 def setup(rank, world_size):
@@ -194,7 +197,7 @@ def setup(rank, world_size):
     train_model(rank,world_size)
 ```
 
-The next three layers define much of the quantum-related part of the code. The first puts the qubits into superposition. As defined above, this means that the qubits are initialized to have an output of either 1 or 0 with 50% odds. This weighting changes depending on the operations of other gates later in the circuit. Already sounds like a Convolutional Neural Network right? H or Hadamard gates are the gates needed to put a qubit in superposition, so the `H_layer` function just does that for each qubit. 
+The next three layers define much of the quantum-related part of the code. The first `H_layer` puts the qubits into superposition. As defined above, this means that the qubits are initialized to have an output of either 1 or 0 with 50% odds. This weighting changes depending on the operations of other gates later in the circuit. Already sounds like a Convolutional Neural Network right? H or Hadamard gates are the gates needed to put a qubit in superposition, so the `H_layer` function just does that for each qubit. 
 
 ```python
 def H_layer(nqubits):
@@ -204,7 +207,7 @@ def H_layer(nqubits):
         qml.Hadamard(wires=idx)
 ```
 
-The second quantum layer is the RY layer. As noted above, any additional gates in the circuit are adjusting the weights of the qubits. This layer applies an RY gate to each qubit, rotating the qubit. What does that mean?
+The second quantum layer is the `RY_layer`. As noted above, any additional gates in the circuit are adjusting the weights of the qubits. This layer applies an RY gate to each qubit, rotating the qubit. What does that mean?
 
 The best representation we have designed for qubits is the [Bloch Sphere](https://en.wikipedia.org/wiki/Bloch_sphere). This representation defines the qubit as a point on the outside of a 3D unit sphere. A rotation around the y axis is perpendicular to the H gate rotation, allowing for weighting without removing the qubit from the superposition state that it is in. 
 
@@ -216,7 +219,7 @@ def RY_layer(w):
         qml.RY(element, wires=idx)
 ```
 
-The last function in this section covering the quantum circuit initialization is the entangling layer. This layer uses CNOT gates to entangle qubits together. But what's a CNOT gate?
+The last function in this section covering the quantum circuit initialization is the `entangling_layer`. This layer uses CNOT gates to entangle qubits together. But what's a CNOT gate?
 
 CNOT gates take the value from one qubit and use it to determine the value of another. The full name is "Controlled-NOT," meaning that if a control is registered as HIGH (1), then receiving qubit is set to LOW (0), hence the NOT. This connects the qubits, setting it so that by knowing the value of the control you know the value of the other later in time. 
 
@@ -233,14 +236,16 @@ def entangling_layer(nqubits):
         qml.CNOT(wires=[i, i + 1])
 ```
 
-The next two lines of code define the backend for the PennyLane part of the code. The first sets the dev variable to the `lightning.kokkos` device/simulator. Quantum simulators are a classical computer's way of simulating a quantum computer. The `kokkos` simulator allows us to run this code on AMD GPUs using the [Kokkos](https://kokkos.org/kokkos-core-wiki/) programming model (as opposed to something like CUDA or HIP). Yes, this code works on real quantum backends, and this is the line of code where you can make that happen, but it is extremely inefficient due to queueing latency to cloud-based backends -- especially when multiple GPUs would need to wait in the queue (i.e., that latency problem is a bit better when only using 1 GPU, but still has non-negligible overhead). The next line tells the simulator that torch (PyTorch) will be used in the code, so the interface is reset to allow for the various PyTorch commands. Whether you are using a real quantum backend or not, this line would be needed. 
+The next two lines of code define the backend for the PennyLane part of the code. The first sets the `dev` variable to a specific PennyLane "device" or "backend" to run the Quantum portions on. In this case we're using the `lightning.kokkos` simulator. Quantum simulators are a classical computer's way of simulating a quantum computer. The `lightning.kokkos` simulator allows us to run this code on AMD GPUs using the [Kokkos](https://kokkos.org/kokkos-core-wiki/) programming model (as opposed to something like CUDA or HIP). Yes, this code works on real quantum backends, and this is the line of code where you can make that happen, but it is extremely inefficient due to queueing latency to cloud-based backends -- especially when multiple GPUs would need to wait in the queue (i.e., that latency problem is a bit better when only using 1 GPU, but still has non-negligible overhead).
+
+The next line tells the simulator that `torch` (PyTorch) will be used in the code, so the interface is set to allow for PennyLane to integrate with the various PyTorch data structures and commands. Whether you are using a real quantum backend or not, this line would be needed, as the non-quantum portions of the code will be using PyTorch. 
 
 ```python
 dev = qml.device("lightning.kokkos", wires=n_qubits)
 @qml.qnode(dev, interface="torch")
 ```
 
-The next function combines the previous three to make a quantum network. This function, as will be shown later in the code, takes inputs from the data and previous layers and put them back into the quantum circuit. More will be noted below. 
+The next `quantum_net` function combines the previous three to make a quantum network. This function, as will be shown later in the code, takes inputs from the data and previous layers and puts them back into the quantum circuit. More will be noted below. 
 
 ```python
 def quantum_net(q_input_features, q_weights_flat):
@@ -267,7 +272,7 @@ def quantum_net(q_input_features, q_weights_flat):
     return tuple(exp_vals)
 ```
 
-Finally, something that PyTorch people will recognize, here is the Torch module for the Dressed Quantum Network. With the staple init and forward functions defined inside, this is the equivalent quantum code that will be used in place of the CNN in the other tutorials from the HPC crash course. 
+Finally, something that PyTorch users will recognize, here is the Torch class for our custom `DressedQuantumNet` network. With the staple `init` and `forward` functions defined inside, this is the equivalent quantum code that will be used in place of something like the `ConvNet` CNN class you see in [PyTorch Basics](../Python_PyTorch_Basics) or similar CNN tutorials. 
 
 ```python
 class DressedQuantumNet(nn.Module):
@@ -313,9 +318,9 @@ class DressedQuantumNet(nn.Module):
 
 The last part of the code is the training section, which is the largest by far. We will cover it piece by piece below:
 
-As you may notice, at the top there are a few more hyperparameters that were not in the main part of the code. `batch_size` and `num_epochs` can also be changed to allow for optimization of the runtime. These two parameters are common to PyTorch classes and modules, so more info can be found externally [here](https://machinelearningmastery.com/difference-between-a-batch-and-an-epoch/).
+As you may notice, at the top there are a few more hyperparameters that were not in the main part of the code. `batch_size` and `num_epochs` can also be changed to allow for optimization of the runtime. These two parameters are common to PyTorch classes and modules, so more info can be found externally [here](https://machinelearningmastery.com/difference-between-a-batch-and-an-epoch/). We will **not** be modifying those parameters in this tutorial.
 
-Additionally, we setup for DDP to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Frontier (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0
+Additionally, we setup for `DDP` to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Frontier (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0, even if you run with 8 GPUs per node.
 
 ```python
 def train_model(rank, world_size): 
@@ -330,15 +335,15 @@ def train_model(rank, world_size):
     start_time = time.time()    # Start of the computation timer
 ```
 
-The next line takes in the pre-trained resnet18 ImageNet dataset. ImageNet is a very large database with thousands of images, but we will be using a very small dataset (images of ants and bees). More information about how to download the dataset is explained in the next section. 
+The next line takes in the pre-trained resnet18 ImageNet dataset. ImageNet is a very large database with thousands of images, but we will be using a very small dataset (images of ants and bees).
 
-When we say that the model is pre-trained, that just means that everything but the bottom few layers of the dataset has been computed already. This method, called Transfer Learning, allows for very small subsets to be analyzed accurately, as there is some precedent for the weighting the neurons will need. 
+When we say that the model is pre-trained, that just means that everything but the bottom few layers of the dataset has been computed already. This method, called "Transfer Learning", allows for very small subsets to be analyzed accurately, as there is some precedent for the weighting the neurons will need. We will be replacing the last layer of our model with our custom Quantum layer.
 
 ```python
     model = torchvision.models.resnet18(pretrained=True)
 ```
 
-Most of the next lines are defining the correct starting point for the training still, and then noting which GPU will be analyzing which part of the subset.
+Most of the next lines are defining the correct starting point for the training still, and then noting which GPU will be analyzing which part of the subset. However, one thing of note is the `model.fc` variable. Modifying `model.fc` changes the final fully connected layer of ResNet18; here, this is where we integrate our custom Quantum network into the model (i.e., we replace the final layer with `DressedQuantumNet`).
 
 ```python
     for param in model.parameters():
@@ -355,7 +360,7 @@ Most of the next lines are defining the correct starting point for the training 
     scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=gamma_lr_scheduler)
 ```
 
-Finally here is where the data is analyzed. This takes the pictures from the folder and resizes them, among other transformations, to allow for the neural network to interface with them correctly. This is because unlike some datasets, there are many different image sizes in ImageNet, which otherwise would result in errors with the NN if analyzed as it started. More info can be found [here](https://towardsdatascience.com/how-to-train-cnns-on-imagenet-ab8dd48202a9). 
+Finally, here is where the data is processed. This takes the ants and bees images from a directory and resizes them, among other transformations, to allow for the neural network to interface with them correctly. This is because there are many different image sizes in ImageNet, which otherwise would result in errors with the NN if analyzed without pre-processing them. More info can be found [here](https://towardsdatascience.com/how-to-train-cnns-on-imagenet-ab8dd48202a9). 
 
 ```python
     data_transforms = {
@@ -529,7 +534,7 @@ Once the data is in the correct format, we start the actual training and validat
 
 Finally, there is one more part of the code and, coincidentally, it is what would be run first!
 
-The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. The rest of the main function just prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the top of the "Functions" section above. 
+The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to setup proper communication between tasks on Frontier (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the very top of the "Functions" section above. 
 
 ```python
 if __name__ == "__main__":
@@ -554,11 +559,11 @@ if __name__ == "__main__":
     setup(rank, world_size)
 ```
 
-Thanks for taking the deep dive into the code!
+Thanks for taking the deep dive into the code, now to tackle the challenge itself!
 
 ## Running the Challenge
 
-Now for the fun part, simulating quantum computing to train the network!
+Now for the fun part, simulating quantum computing to train the model!
 
 To do this challenge:
 
