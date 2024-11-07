@@ -12,7 +12,7 @@
 | 10:25 am | HPC Programming Models                   | Elijah Maccarthy, Oak Ridge Leadership Computing Facility      |
 | 11:00 am  | Hands-on Parallel Programming            | All                                                      |
 | 12:00 pm  | Working Lunch                            | All                                                           |
-| 1:00 pm  | Introduction to AI /Quantum               | Michael Sandoval,Oak Ridge Leadership Computing Facility       |
+| 1:00 pm  | Introduction to AI /Quantum               | Michael Sandoval, Oak Ridge Leadership Computing Facility       |
 | 1:15 pm  | Intro to Jupyer Notebooks                 | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  | 
 |2:00 pm   | Hands-On AI/Quantum/Other                 | All                                                           | 
-|3:25 pm   | Turn in Frontier Tokens and close          | All                                                           |
+|3:25 pm   | Turn in Frontier Tokens and Close          | All                                                           |
