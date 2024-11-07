@@ -1,9 +1,9 @@
 # Agenda
 
-| Time     | Topic                                    | Presenter                                                     |
-|----------|------------------------------------------|---------------------------------------------------------------|
-| 12:00 pm | Sign out Frontier Tokens                 | MacKenzie Bellimam, Oak Ridge Leadership Computing Facility   |
-| 12:10 pm | Why Do HPC and Center Overviews          | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
+| Time     | Topic                                    | Presenter                                                                 |
+|----------|------------------------------------------|---------------------------------------------------------------------------|
+| 8:30 pm  | Welcome  and Center Overviews            | Suzanne Parete-Koon, Chris Fuson Oak Ridge Leadership Computing Facility  |
+| 12:10 pm | Why Do HPC                               | Geoffrey Lentner, Rosen Center for Advanced Computing and Trey White, Oak Ridge Leadership Computing Facility  |
 | 12:20 pm | Frontier Overview                        | Ryan Landfield, Oak Ridge Leadership Computing Facility       |
 | 12:30 pm | Getting Started Challenges               | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
 | 1:00 pm  | HPC and Machine Learning intro           | Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
