@@ -5,7 +5,7 @@
 Each challenge is a stand-alone, self-guided tutorial that includes a `README.md` file to walk you through the content. The first challenge is to complete [Access_Frontier_and_Clone_Repo](Access_Frontier_and_Clone_Repo), which will show you how to clone this repository.
 
 To complete the requirements for your certificate,
-pick any 6 of the challenges in any of the sections below. (High School students need only 3). For all challenges other than the first one, which we will do together, you will turn in your work by entering the path to one of the challenge's output file in this [google sheet](https://bit.ly/3Ua4shu/) as directed by your instructor. 
+pick any 6 of the challenges in any of the sections below. (High School students need only 3). For all challenges other than the first one, which we will do together, you will turn in your work by entering the path to one of the challenge's output files or code files in this [google sheet](https://bit.ly/3Ua4shu/) as directed by your instructor. For the AI_Basics challenge, simply note that you did it in the spreadsheet. 
 
 Getting started: 
 
@@ -28,10 +28,10 @@ Python exercies and Machine Learning
 11. [Python_Pytorch_Basics](Python_Pytorch_Basics)
 12. [Python_Galaxy_Evolution](Python_Galaxy_Evolution)
 13. [Python_QML_Basics](Python_QML_Basics) (Frontier only)
+14. [AI_Basics](AI_Basics) (Jupyter Notebook) 
 
 After completing 6 of the above challenges, feel free to "choose your own adventure" by completing the rest of the challenges in any order you prefer.
 
-- [Python_Cupy_Basics](Python_Cupy_Basics) (Frontier only) 
 - [GPU_Profiling](GPU_Profiling) (Frontier only) 
 - [Jobs_in_Time_Window](Jobs_in_Time_Window)
 
