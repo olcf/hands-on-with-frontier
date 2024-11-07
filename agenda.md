@@ -8,7 +8,7 @@
 | 9:15 am | Hands-on:Token setup, Login, and Certificate Requirements  | All and Suzanne Parete-Koon, Oak Ridge Leadership Computing Facility  |
 | 9:30 am  | Frontier Overview                        | Subil Abraham, Oak Ridge Leadership Computing Facility  |
 | 9:45 am  | Hands-on Getting Started Challenges      | All                                                           |
-| 10:15 am | break                                    | All  |                                                              
+| 10:15 am | Break                                    | All  |                                                              
 | 10:25 am | HPC Programming Models                   | Elijah Maccarthy, Oak Ridge Leadership Computing Facility      |
 | 11:00 am  | Hands-on Parallel Programming            | All                                                      |
 | 12:00 pm  | Working Lunch                            | All                                                           |
