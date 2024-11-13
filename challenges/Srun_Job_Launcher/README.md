@@ -36,7 +36,7 @@ We will use a code called `hello_mpi_omp` written by Tom Papatheodore as our tes
 To begin, make sure you are in the directory for the challenge by doing: 
 
 ```
-cd ~/hands-on-with-frontier/challenges/srun_Job_Launcher
+cd ~/hands-on-with-frontier/challenges/Srun_Job_Launcher
 
 ```
 
