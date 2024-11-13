@@ -13,6 +13,13 @@ for(int i=0; i<N; i++)
 ```
 
 ## Step 1: Setting Up Your Programming Environment
+
+First, make sure you are sitting in the Basic_Workflow directory. You can change to the Basic_Workflow directory using the `cd` command with the path to the directory, like so:
+
+```bash
+[userid@login1.frontier ~]$ cd ~/hands-on-with-frontier/challenges/Basic_Workflow
+```
+
 Many software packages and scientific libraries are pre-installed on Frontier for users to take advantage of. Several packages are loaded by default when a user logs in to the system and additional packages can be loaded using environment modules. To see which packages are currently loaded in your environment, run the following command:
 
 ```
