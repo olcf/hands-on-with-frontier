@@ -1,8 +1,8 @@
 COMP = hipcc
-CFLAGS = --amdgpu-target=gfx90a
+CFLAGS = --offload-arch=gfx90a
 
-INCLUDES  = -I${OLCF_OPENBLAS_ROOT}/include
-LIBRARIES = -L${OLCF_OPENBLAS_ROOT}/lib -lopenblas  -L${ROCM_PATH}/lib -lhipblas
+INCLUDES  = -I${OLCF_OPENBLAS_ROOT}/include -I${ROCM_PATH}/include
+LIBRARIES = -L${OLCF_OPENBLAS_ROOT}/lib -lopenblas  -L${ROCM_PATH}/lib -lhipblas -L${ROCM_PATH}/lib -lamdhip64
 
 cpu_gpu_dgemm: cpu_gpu_dgemm.o
 	${COMP} ${LFLAGS} ${LIBRARIES} cpu_gpu_dgemm.o -o cpu_gpu_dgemm
