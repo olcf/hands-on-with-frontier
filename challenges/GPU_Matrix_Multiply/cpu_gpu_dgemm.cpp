@@ -6,7 +6,7 @@ Written by Tom Papatheodore
 
 #include <stdio.h>
 #include <cblas.h>
-#include <hipblas.h>
+#include <hipblas/hipblas.h>
 
 // Macro for checking errors in HIP API calls
 #define gpuErrorCheck(call)                                                              \
