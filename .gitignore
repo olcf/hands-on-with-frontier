@@ -1,3 +1,12 @@
 .DS_Store
 [#]*[#]
+*.o
+*.out
+metrics_matrix_sums*
+run
 *~
+challenges/GPU_Profiling/matrix_sums_optimized
+challenges/GPU_Profiling/matrix_sums_unoptimized
+challenges/MPI_Basics/bcast/mpi_bcast
+challenges/OpenMP_Offload/matrix_multiply
+challenges/Srun_Job_Launcher/hello_mpi_omp

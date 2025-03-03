@@ -1,11 +1,9 @@
 #!/bin/bash
-#SBATCH -A TRN001
 #SBATCH -J profiling_optimized
 #SBATCH -o %x-%j.out
 #SBATCH -N 1
 #SBATCH -t 00:15:00
 
-module load PrgEnv-amd
 
 srun -n1 -c1 --gpus-per-task=1 rocprof --stats  -o metrics_matrix_sums_optimized.csv ./matrix_sums_optimized
 

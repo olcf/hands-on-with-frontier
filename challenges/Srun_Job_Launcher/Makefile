@@ -1,4 +1,4 @@
-COMP  = cc
+COMP  = mpicc
 FLAGS = -fopenmp
 
 hello_mpi_omp: hello_mpi_omp.o

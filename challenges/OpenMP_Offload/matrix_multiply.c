@@ -43,6 +43,9 @@ int main(int argc, char *argv[]){
     --------------------------------------------------------------- */
     start = omp_get_wtime();
 
+    #pragma omp target map(to:A[:N*N],B[:N*N]) map(tofrom:C[:N*N])
+    {
+    #pragma omp teams distribute parallel for collapse(2)
     for(int row=0; row<N; row++){
         for(int col=0; col<N; col++){
             for(int k=0; k<N; k++){
@@ -52,6 +55,7 @@ int main(int argc, char *argv[]){
 
             }
         }
+    }
     }
 
     stop = omp_get_wtime();
