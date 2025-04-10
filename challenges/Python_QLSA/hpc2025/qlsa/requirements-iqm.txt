@@ -1,0 +1,12 @@
+PyYAML
+qiskit                               
+qiskit-iqm
+qiskit-algorithms
+
+jupyterlab
+matplotlib
+python-dotenv
+-e ../../quantum_linear_solvers
+
+
+
