@@ -10,6 +10,10 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
+# Apr. 2025 The following code made minor syntax modifications from
+# the original work.
+
+
 """Hamiltonian simulation of tridiagonal Toeplitz symmetric matrices."""
 
 from typing import Tuple, List

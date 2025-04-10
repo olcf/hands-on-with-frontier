@@ -10,6 +10,9 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
+# Apr 2025 The following code made minor modifications from the syntax of the 
+# origial work.
+
 """The HHL algorithm."""
 
 from typing import Optional, Union, List, Callable, Tuple

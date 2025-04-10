@@ -1,5 +1,5 @@
 PyYAML
--e ../../quantum_linear_solvers
+-e ../../OLCF_QLS
 
 qiskit
 qiskit-aer                    
