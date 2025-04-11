@@ -27,15 +27,11 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 2. Load Python environment:
     * When targeting real quantum backends, you must go through a [proxy server for connecting outside OLCF](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#batch-jobs) due to the Odo compute nodes being closed off from the internet by default. 
       ```
-      export all_proxy=socks://proxy.ccs.ornl.gov:3128/
-      export ftp_proxy=ftp://proxy.ccs.ornl.gov:3128/
-      export http_proxy=http://proxy.ccs.ornl.gov:3128/
-      export https_proxy=http://proxy.ccs.ornl.gov:3128/
-      export no_proxy='localhost,127.0.0.0/8,*.ccs.ornl.gov'
+      source proxies.sh
       ```
     * First, load the relevant conda module:
       ```
-      module load miniforge3/23.11.0
+      module load miniforge3
       ```
       How to activate the environment needed for circuit generation (the environment used in "Step 3"):
       ```
@@ -60,11 +56,16 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 4. Run the QLSA solver: [`solver.py`](solver.py)
     ```
-    srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000
+    srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata
     ```
-    * **NOTE:** Before running the code, deactivate the circuit generation env (`qlsa-circuit`) and activate the solver env (`qlsa-solver`).
+    * **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
     * Make sure to have your `qlsa-solver` conda environment activated.
     * Experiment with different parameters in the code.
+
+5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
+    ```
+    python plot_fidelity_vs_shots.py
+    ```
   
 > Note: Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments.
 
@@ -85,7 +86,9 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 # Visualization
 
-See the following Jupyter notebooks for example scripts on how to generate plots:
+For your convience, we have provided a plotting script [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) to complete the HPC Crash Course challenges.
+
+However, please see the following Jupyter notebooks for example scripts on how to generate other plots:
 
 > Note: Although you won't be using OLCF's JupyterHub as part of the HPC Crash Course, these notebooks act as a examples for incorporating the proper python syntax into standalone python scripts.
 
@@ -116,19 +119,17 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
     ```
 </details>
 
-Since the [QLSA circuit generator](https://github.com/anedumla/quantum_linear_solvers) requires an older version of Qiskit (which includes `qiskit-terra`), we need to create two envs:
-1. To generate the circuit using older version of Qiskit
-2. To run the circuit using Qiskit 1.0
-
-## 1. Install Libraries to Generate the HHL Circuit
+## 1. Install Libraries to Generate the HHL Circuit and the Solver to run the HHL Circuit
 1. Make custom conda env
       ```
-      conda create --name qlsa-circuit python=3.11
-      source activate qlsa-circuit
+      conda create --name qlsa-solver python=3.11
+      source activate qlsa-solver
       ```
-2. Install Qiskit and [quantum linear solver](https://github.com/anedumla/quantum_linear_solvers) package
+2. Install Qiskit and quantum linear solver package
+* **NOTE:** The original implementation of the quantum linear solvers package was obtained from here: https://github.com/anedumla/quantum_linear_solvers
+* The current implementation is a fork of the original and maintained by OLCF staff.
       ```
-      pip install -r requirements_circuit.txt --no-cache-dir
+      pip install -r requirements.txt --no-cache-dir
       ```
 3. [Optional but recommended] Test the quantum linear solver package: [`test_linear_solver.py`](test_linear_solver.py)
       ```
@@ -197,20 +198,7 @@ Since the [QLSA circuit generator](https://github.com/anedumla/quantum_linear_so
       ```
       </details>
 
-## 2. Install Libraries for the Solver Used to Run the HHL Circuit
-
-**NOTE:** Before installing or using the solver environment, deactivate (`source deactivate`) the circuit generation env `qlsa-circuit`.
-
-1. Make custom conda env
-      ```
-      conda create --name qlsa-solver python=3.11
-      source activate qlsa-solver
-      ```
-2. Install Qiskit and other packages
-      ```
-      pip install -r requirements_solver.txt --no-cache-dir
-      ```
-3. [Optional but recommended] Test Qiskit installation: [`test_qiskit_installation.py`](test_qiskit_installation.py)
+5. [Optional but recommended] Test Qiskit installation: [`test_qiskit_installation.py`](test_qiskit_installation.py)
       ```
       python test_qiskit_installation.py -backtyp ideal
       ```
@@ -229,31 +217,23 @@ Since the [QLSA circuit generator](https://github.com/anedumla/quantum_linear_so
                             0  1 
       ```
       </details>
-      
+
       * Change `-backtyp` for different backends. Make sure to test all backend options offered.
       * **NOTE:** To run using IBM Provider (or IQM Resonance), you need to add your IBM Quantum Computing (or IQM) API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
-4. Install GPU version of Aer simulator. Needs NVIDIA GPUs (skip for OLCF Odo or systems without NVIDIA GPUs):
-      ```
-      pip install qiskit-aer-gpu==0.15.1 --no-cache-dir
-      ```
-      * [Optional but recommended] Test the installation:
-      ```
-      python -c "from qiskit_aer import AerSimulator; simulator = AerSimulator(); print(simulator.available_devices())"
-      ```
-      * [Optional but recommended] Test the installation with the sample code provided: [`test_gpu.py`](test_gpu.py)
 
-      ```
-      python test_gpu.py -nq 2 --gpu
-      ```
-      <details><summary>Sample output from the test code:</summary>
+## 2. Run the HHL Circuit
 
+1. Generate a circuit: [`circuit_HHL.py`](circuit_HHL.py)
       ```
-      Simulator: aer_simulator_statevector_gpu
-      N qubits: 2; GPU: True; multiple-GPU: False;
-      Time elapsed 1:  0 min 0.49 sec
-      Time elapsed 2:  0 min 0.01 sec
+      python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
       ```
-      </details>
+2. Run the circuit on a backend of your choosing: [`solver.py`](solver.py)
+      * ***NOTE:*** Make sure to source your API tokens from the keys.sh file.
+      ```
+      python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata --backend real-iqm --backend-method garnet:mock
+      ```
+
+
 
 > Warning: For our purposes, we "hacked" Qiskit's `backend_sampler_v2.py` to workaround IQM returning results in raw strings instead of bytes. The fixed routine is here: `/gpfs/wolf2/olcf/trn037/world-shared/backend_sampler_v2.py`. (in original lines 211/212, switched `num_bytes` to be the length of the string instead)
 

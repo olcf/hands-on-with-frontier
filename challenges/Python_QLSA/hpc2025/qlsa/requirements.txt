@@ -11,4 +11,5 @@ qiskit-iqm
 jupyterlab
 matplotlib
 python-dotenv
+numpy
 
