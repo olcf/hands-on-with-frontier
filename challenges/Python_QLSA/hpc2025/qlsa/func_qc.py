@@ -225,12 +225,15 @@ def qc_circ(n_qubits_matrix, classical_solution, args, input_vars):
                         'counts_vector'             : counts_vector,
                         'counts_solution_vector'    : counts_solution_vector,
                         'classical_solution'        : classical_solution,
-                        't_run'                     : t_run}
+                        't_run'                     : t_run,
+                        'shots'                     : shots,
+                        'fidelity'                  : fidelity(counts_solution_vector, classical_solution)
+                        }
+        # save results
         with open(f"{savefilename}.pkl", "wb") as file:
             pickle.dump(save_data, file)
-        # save results
-        with open(f"{savefilename}_result.json", "w") as file:
-            json.dump(result, file, cls=RuntimeEncoder)
+        # with open(f"{savefilename}_result.json", "w") as file:
+        #     json.dump(result, file, cls=RuntimeEncoder)
         print("===========Full data saved===========")
 
     # return job
@@ -243,13 +246,22 @@ def get_ancillaqubit(counts, nq):
         counts   counts from the simulator
         nq       number of qubits used to represent the system or solution vector
     Output:
-        counts_ancill     acounts of the measurements where ancilla qubit = 1
-        other metricis for combination of nq qubits = 1
+        counts_ancill     accounts of the measurements where ancilla qubit = 1
+        other metrics for combination of nq qubits = 1
     """
-    # add 0-count measurements results
-    bits_prefix = "1" + (len(next(iter(counts))) - nq - 1) * "0"
+    if not counts:
+        # Handle empty input counts
+        num_states = 2**nq
+        return [], 0, np.zeros(num_states), np.zeros(num_states)
 
-    def printTheArray(arr, n):
+    # Determine the expected prefix for relevant states (Ancilla=1, Work=0...0)
+    total_qubits = len(next(iter(counts)))
+    num_work_qubits = total_qubits - nq - 1
+    if num_work_qubits < 0:
+        raise ValueError("Inconsistent qubit counts: total_qubits < num_solution_qubits + 1")
+    bits_prefix = "1" + "0" * num_work_qubits
+
+    def _print_the_array(arr, n):
         cache = ""
         for i in range(0, n):
             cache += str(arr[i])
@@ -257,25 +269,25 @@ def get_ancillaqubit(counts, nq):
             counts[bits_prefix + cache] = 0
 
     # Function to generate all binary strings
-    def generateAllBinaryStrings(n, arr, i):
+    def _generate_all_binary_strings(n, arr, i):
         if i == n:
-            printTheArray(arr, n)
+            _print_the_array(arr, n)
             return
         # First assign "0" at ith position
         # and try for all other permutations
         # for remaining positions
         arr[i] = 0
-        generateAllBinaryStrings(n, arr, i + 1)
+        _generate_all_binary_strings(n, arr, i + 1)
         # And then assign "1" at ith position
         # and try for all other permutations
         # for remaining positions
         arr[i] = 1
-        generateAllBinaryStrings(n, arr, i + 1)
+        _generate_all_binary_strings(n, arr, i + 1)
 
     arr = [None] * len(next(iter(counts)))
 
     # Print all binary strings
-    generateAllBinaryStrings(nq, arr, 0)
+    _generate_all_binary_strings(nq, arr, 0)
 
     counts_list = list(counts.items())
     counts_ancilla = []
@@ -305,9 +317,24 @@ def get_ancillaqubit(counts, nq):
     # compute solution vectors
     probs_vector = []
     counts_vector = []
+    tick = 1
     for i in range(num_state):
-        probs_vector += (counts_ancilla[i][1] / (1.0 * counts_total),)
-        counts_vector += (np.sqrt(counts_ancilla[i][1] / (1.0 * counts_total)),)
+        try:
+            probs_vector += (counts_ancilla[i][1] / (1.0 * counts_total),)
+            counts_vector += (np.sqrt(counts_ancilla[i][1] / (1.0 * counts_total)),)
+        except ZeroDivisionError:
+            print(f"\
+                *****************WARNING************************\n\
+                    ZeroDivisionError: counts_ancilla[{i}] = {counts_ancilla[i]}\n\
+                    Could be a result of bad simulator results. Generating fake probs_vector\n\
+                    and counts_vector...")
+            if tick%2 == 0:
+                probs_vector += (1.0,)
+                counts_vector += (1.0,)
+            else:
+                probs_vector += (0.0,)
+                counts_vector += (0.0,)
+            tick += 1
     return counts_ancilla, counts_total, np.array(probs_vector), np.array(counts_vector)
 
 # function to compute fidelity of the solution

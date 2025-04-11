@@ -16,9 +16,8 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 0. Clone the repository and `cd` into the `qlsa` directory (if you have not already)
     ```
-    git clone https://github.com/olcf/wciscc2025.git
-    cd wciscc2025
-    cd qlsa
+    git clone https://github.com/olcf/hands-on-with-odo.git
+    cd hands-on-with-odo/challenges/Python_QLSA/hpc2025/qlsa
     ```
 1. Start interactive job
     ```
@@ -72,7 +71,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 ## Running on real hardware
 
-**NOTE:** To run using IQM machines, you need to add your IQM API KEY to the [`keys.sh`](keys.sh) file and `source` it. Although we will not be using IBM Quantum in the Winter Classic, this is the file you would put your IBM Quantum API key as well.
+**NOTE:** To run using IQM machines, you need to add your IQM API KEY to the [`keys.sh`](keys.sh) file and `source` it. Although we will not be using IBM Quantum in the HPC Crash Course, this is the file you would put your IBM Quantum API key as well.
 
 * Make sure to export key variables in your key file: `source keys.sh` . If you log out then log back in, you will need to do this again.
 * Make sure to use the relevant `--backend_type` and `--backend_method` flags:
@@ -88,7 +87,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 See the following Jupyter notebooks for example scripts on how to generate plots:
 
-> Note: Although you won't be using OLCF's JupyterHub as part of the Winter Classic, these notebooks act as a examples for incorporating the proper python syntax into standalone python scripts.
+> Note: Although you won't be using OLCF's JupyterHub as part of the HPC Crash Course, these notebooks act as a examples for incorporating the proper python syntax into standalone python scripts.
 
 * [solver_getjob.ipynb](solver_getjob.ipynb): for retrieving jobs from online portal of IBM and IQM.
 * [plot_compare-backends.ipynb](plot_compare-backends.ipynb): visualizing the results from various backends.
@@ -97,7 +96,7 @@ See the following Jupyter notebooks for example scripts on how to generate plots
 
 # Not Required: Installation
 
-> WARNING: You do not need to follow these instructions for the Winter Classic. We provide instructions below for the sake of completeness and if you ever want to explore installing from scratch outside of Odo / the Winter Classic. Skip to the [Running the code](#running) section for getting started running the code.
+> WARNING: You do not need to follow these instructions for the HPC Crash Course. We provide instructions below for the sake of completeness and if you ever want to explore installing from scratch outside of Odo / the HPC Crash Course. Skip to the [Running the code](#running) section for getting started running the code.
 
 All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_user_guide.html) and macOS. Based on steps in [OLCF Docs](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#qiskit).
 
