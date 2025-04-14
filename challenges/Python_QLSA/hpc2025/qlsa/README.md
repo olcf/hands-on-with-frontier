@@ -126,7 +126,7 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
       source activate qlsa-solver
       ```
 2. Install Qiskit and quantum linear solver package
-* **NOTE:** The original implementation of the quantum linear solvers package was obtained from here: https://github.com/anedumla/quantum_linear_solvers
+> **NOTE:** The original implementation of the quantum linear solvers package was obtained from here: https://github.com/anedumla/quantum_linear_solvers
 * The current implementation is a fork of the original and maintained by OLCF staff.
       ```
       pip install -r requirements.txt --no-cache-dir
@@ -232,8 +232,6 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
       ```
       python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata --backend real-iqm --backend-method garnet:mock
       ```
-
-
 
 > Warning: For our purposes, we "hacked" Qiskit's `backend_sampler_v2.py` to workaround IQM returning results in raw strings instead of bytes. The fixed routine is here: `/gpfs/wolf2/olcf/trn037/world-shared/backend_sampler_v2.py`. (in original lines 211/212, switched `num_bytes` to be the length of the string instead)
 

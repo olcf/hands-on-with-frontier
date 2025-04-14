@@ -98,3 +98,4 @@ if __name__ == "__main__":
         plt.title("Fidelity vs Number of Shots")
         plt.legend()
     plt.savefig("fidelity_vs_shots.png", format='png')
+    print("DONE! Plot saved as 'fidelity_vs_shots.png'")

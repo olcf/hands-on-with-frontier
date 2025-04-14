@@ -1,7 +1,7 @@
 ---
 # Case 0: Sample system - tridiagonal matrix
 case_name: Sample tridiagonal
-NQ_MATRIX: 1       # Numer of qubits to determine size of linear system of quations being solved. A matrix size = 2^NQ_MATRIX.
+NQ_MATRIX: 1       # Numer of qubits to determine size of linear system of equations being solved. A matrix size = 2^NQ_MATRIX.
 savedir: models
 savefilename: "{savedir}/sample_HHL"
 
