@@ -1,8 +1,9 @@
 # Quantum Linear Systems Algorithm
 
-A sample implementation of a Quantum Linear Systems Algorithm (QLSA), the [Harrow–Hassidim–Lloyd (HHL)](https://doi.org/10.1103/PhysRevLett.103.150502) algorithm, using [Qiskit's HHL implementation](https://learn.qiskit.org/course/ch-applications/solving-linear-systems-of-equations-using-hhl-and-its-qiskit-implementation). The implementation uses Python scripts and Jupyter notebooks that utilize Qiskit libraries. The codes are designed to run the QLSA circuit on different quantum hardwares:
-1. [IBM quantum-computing](https://quantum-computing.ibm.com/)
-2. [IQM](https://www.meetiqm.com/)
+A sample implementation of a Quantum Linear Systems Algorithm (QLSA), the [Harrow–Hassidim–Lloyd (HHL)](https://doi.org/10.1103/PhysRevLett.103.150502) algorithm, using [Qiskit's HHL implementation](https://github.com/Qiskit/textbook/blob/main/notebooks/ch-applications/hhl_tutorial.ipynb). The implementation uses Python scripts and Jupyter notebooks that utilize Qiskit libraries. The codes are designed to run the QLSA circuit on different quantum hardwares:
+1. [IQM](https://www.meetiqm.com/) (used in the crash course)
+2. [IBM quantum-computing](https://quantum-computing.ibm.com/)
+
 
 An application to fluid dynamics is also provided. The fluid dynamics use case follows the work of [Bharadwaj & Srinivasan (2020)](https://www.sto.nato.int/publications/STO%20Educational%20Notes/STO-EN-AVT-377/EN-AVT-377-01.pdf) and [Gopalakrishnan Meena et al. (2024)](https://doi.org/10.1063/5.0231929). 
 
@@ -127,7 +128,7 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
       ```
 2. Install Qiskit and quantum linear solver package
 > **NOTE:** The original implementation of the quantum linear solvers package was obtained from here: https://github.com/anedumla/quantum_linear_solvers
-* The current implementation is a fork of the original and maintained by OLCF staff.
+* The current implementation is adapted from a more update-to-date [version](https://github.com/agallojr/quantum_linear_solvers) and currently maintained by OLCF staff.
       ```
       pip install -r requirements.txt --no-cache-dir
       ```
@@ -177,7 +178,7 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
       </details>
 4. Install GPU version of Aer simulator. Needs NVIDIA GPUs (skip for OLCF Odo or systems without NVIDIA GPUs):
       ```
-      pip install qiskit-aer-gpu==0.14.2 --no-cache-dir
+      pip install qiskit-aer-gpu==0.15.1 --no-cache-dir
       ```
       * [Optional but recommended] Test the installation:
       ```
@@ -237,7 +238,7 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
 
 # References
 * A. W. Harrow, A. Hassidim, and S. Lloyd, "Quantum algorithm for linear systems of equations," [Phys. Rev. Lett. 103, 150502](https://doi.org/10.1103/PhysRevLett.103.150502) (2009).
-* S. S. Bharadwaj and K. R. Sreenivasan, "Quantum computation of fluid dynamics," [arXiv:2007.09147](arXiv:2007.09147) (2020).
+* S. S. Bharadwaj and K. R. Sreenivasan, "Quantum computation of fluid dynamics," [arXiv:2007.09147](https://doi.org/10.48550/arXiv.2007.09147) (2020).
 * M. Gopalakrishnan Meena, K. C. Gottiparthi, J. G. Lietz, A. Georgiadou, and E. A. Coello Pérez, "Solving the Hele-Shaw flow using the Harrow-Hassidim-Lloyd algorithm on superconducting devices: A study of efficiency and challenges," [Physics of Fluids, 36 (10): 101705](https://doi.org/10.1063/5.0231929), (2024). ([preprint](http://arxiv.org/abs/2409.10857), [code](https://doi.org/10.5281/zenodo.13738192) - the current repo is adapted from this code)
 * [Qiskit - Getting started](https://qiskit.org/documentation/getting_started.html)
 * [Qiskit on IQM](https://iqm-finland.github.io/qiskit-on-iqm/user_guide.html)
@@ -251,5 +252,6 @@ All developments were done on [OLCF Odo](https://docs.olcf.ornl.gov/systems/odo_
 
 * Murali Gopalakrishnan Meena (Oak Ridge National Laboratory)
 * Michael Sandoval (Oak Ridge National Laboratory)
+* Jordan Winetrout (Oak Ridge National Laboratory)
 
 Contact: gopalakrishm@ornl.gov

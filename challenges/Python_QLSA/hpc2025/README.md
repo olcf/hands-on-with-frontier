@@ -1,8 +1,8 @@
-# WCISCC2025 - ORNL Challenge
+# HPC Crash Course 2025 - ORNL Challenge
 
-Welcome to ORNL's challenge for the 2025 Winter Classic Invitational Student Cluster Competition! The challenge is based on quantum computing and you will use REAL quantum hardware to solve the problem. Clone this repo to get started!
+Welcome to ORNL's hands-on quantum computing experience for the 2025 HPC Crash Course! The exercise is based on quantum computing and you will use REAL quantum hardware to solve the problem. Clone this repo to get started!
 ```
-git clone https://github.com/olcf/wciscc2025.git
+git clone https://github.com/olcf/hands-on-with-odo.git
 ```
 
 # Presentations & Docs
