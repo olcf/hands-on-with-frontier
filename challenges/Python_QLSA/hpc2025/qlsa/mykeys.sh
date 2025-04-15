@@ -1,7 +1,0 @@
-#!/bin/bash
-
-export IBMQ_API_KEY="d15f0f10ea3a5a4b671f4366d1b02ca1b435d703530a9e960eed2bfa61c982c9b5771ef7aaafd63c7a449862ae68ea17984b9583d15fdf1306f6d8d96a64a013"
-export IBMQ_INSTANCE="ibm-q-ornl/ornl/stf007"
-export IQM_API_KEY="zNycabGNZSdEY/oZFk9Yz7zCUVAIHnj3PvODZsU2UmYGf4EeTo5zBIAABPym8e7g"
-
-
