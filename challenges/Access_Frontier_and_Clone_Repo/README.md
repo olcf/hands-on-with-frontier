@@ -9,7 +9,7 @@ Follow the instructions below to login to OLCF's Odo compute system and grab a c
 ## Get started by logging into Odo using SSH. 
 Use the userid and passcode that you setup for Odo to login. 
 ```bash
-ssh userid@login1.odo.olcf.ornl.gov
+ssh userid@odo.olcf.ornl.gov
 ```
 &nbsp;
 
