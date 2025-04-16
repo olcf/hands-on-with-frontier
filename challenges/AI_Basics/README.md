@@ -14,12 +14,12 @@ In this course we will explore how to use a subset of artificial intelligence ca
 
 ## Setting up Jupyter Notebooks on Odo
 
-We will be using Jupyter notebooks on Odo in this course (opposed to directly intefacing with Odo like in other challenges). However, you will first need to make sure this repository is in your home directory on Odo before beginning. If you have not already done this please refer to [`Access_Odo_and_Clone_Repo`](../Access_Odo_and_Clone_Repo)
+We will be using Jupyter notebooks on Odo in this course (opposed to directly intefacing with Odo like in other challenges). However, you will first need to make sure this repository is in your home directory on Odo before beginning. If you have not already done this, please refer to [`Access_Odo_and_Clone_Repo`](../Access_Odo_and_Clone_Repo)
 
 ### Logging in to the JupyterHub
 
 1. Navigate to: https://jupyter-open.olcf.ornl.gov/hub/login
 2. Log in with the same XCAMS username and password you used for logging into Odo.
-3. In the folder explorer (left sidebar) navigate to where you cloned the repository
+3. In the folder explorer (left sidebar) navigate to the challenge directory.
     * `/ccsopen/home/userid/hands-on-with-odo/challenges/AI_Basics`
 4. Open the "Tutorial.ipynb" to get started!
