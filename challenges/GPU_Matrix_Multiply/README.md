@@ -122,6 +122,6 @@ See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blo
 
 
 * Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`.
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or `&alpha' form of the variables to accomplish this.
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or `&alpha` form of the variables to accomplish this.
 
 
