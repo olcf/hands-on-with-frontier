@@ -117,11 +117,11 @@ In the code we:
 ```
 
 Here: 
-1.  `d_A`, `d_B`, `d_`C are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
+1.  `d_A`, `d_B`, `d_C` are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
 See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `d_A`, `*d_A`, or `&d_A` form of the variables to accomplish this.  
 
 
 * Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`.
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or &alpha' form of the variables to accomplish this.
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or `&alpha' form of the variables to accomplish this.
 
 
