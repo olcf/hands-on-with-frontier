@@ -12,7 +12,7 @@ The Command Line (also called a command prompt) is a text interface for a comput
 
 Below is the command line prompt, you can run programs and navigate through files just like you would with Windows Explorer on Windows or Finder on MacOS.
 ```bash
-[userid@login1.frontier ~]$
+[userid@login1.odo ~]$
 ```
 >> ---
 > This example system has been set up so the userid, the login node, and the system are displayed in brackets before the prompt. Some systems will only start with the "$".
@@ -20,7 +20,7 @@ Below is the command line prompt, you can run programs and navigate through file
 
 As an example, print your userid by typing `whoami` into the command line and pressing `Enter`. 
 ```bash
-[userid@login1.frontier ~]$ whoami
+[userid@login1.odo ~]$ whoami
 userid
 ```
 
@@ -34,26 +34,26 @@ To put us all in the same starting place, we will issue the `cd` command. This w
 
 Type
 ```
-[userid@login1.frontier ~]$ cd
+[userid@login1.odo ~]$ cd
 ```
 Then hit `return`.
 
 The commands in a command line are always executed from the directory you are currently in. You can find out what directory you are currently in with the 'present working directory' command, `pwd`.
 ```bash
-[userid@login1.frontier ~]$ pwd
-/ccs/home/userid
+[userid@login1.odo ~]$ pwd
+/ccsopen/home/userid
 ```
 
-You should be in the `/ccs/home/<userid>` directory, where `<userid>` is replaced with your userid. This directory is where you will land by default when you first log in on the terminal. 
+You should be in the `/ccsopen/home/<userid>` directory, where `<userid>` is replaced with your userid. This directory is where you will land by default when you first log in on the terminal. 
 
-The string with forward slashes like e.g. `/ccs/home/userid` is a called a _path_. If you are not already in this directory, you can use the `cd` command to navigate here as we will see next.
+The string with forward slashes like e.g. `/ccsopen/home/userid` is a called a _path_. If you are not already in this directory, you can use the `cd` command to navigate here as we will see next.
 
-Use the `cd` command to 'change directory'. On the command line, type `cd` followed by the _path_ of the target directory. If `pwd` does not show that you are in your `/ccs/home/<userid>` directory, we can use `cd` followed by the path to get there.
+Use the `cd` command to 'change directory'. On the command line, type `cd` followed by the _path_ of the target directory. If `pwd` does not show that you are in your `/ccsopen/home/<userid>` directory, we can use `cd` followed by the path to get there.
 
 ```bash
-[userid@login1.frontier ~]$ cd /ccs/home/userid
-[userid@login1.frontier ~]$ pwd
-/ccs/home/userid
+[userid@login1.odo ~]$ cd /ccsopen/home/userid
+[userid@login1.odo ~]$ pwd
+/ccsopen/home/userid
 ```
 >> ---
 > Make sure you replace `userid` with your actual userid. We are just using `userid` as an example.
@@ -61,12 +61,12 @@ Use the `cd` command to 'change directory'. On the command line, type `cd` follo
 
 &nbsp;
 
-If you have not already cloned the repository, execute `git clone https://github.com/olcf/hands-on-with-frontier/` on the command line to download the 'Hands On With Frontier' repository. 
+If you have not already cloned the repository, execute `git clone https://github.com/olcf/hands-on-with-odo/` on the command line to download the 'Hands On With Odo' repository. 
 
 The output should look something like:
 ```bash
-[userid@login1.frontier ~]$ git clone https://github.com/olcf/hands-on-with-frontier/
-Cloning into 'hands-on-with-frontier'...
+[userid@login1.odo ~]$ git clone https://github.com/olcf/hands-on-with-odo/
+Cloning into 'hands-on-with-odo'...
 remote: Enumerating objects: 1486, done.
 remote: Counting objects: 100% (445/445), done.
 remote: Compressing objects: 100% (248/248), done.
@@ -78,43 +78,43 @@ Resolving deltas: 100% (829/829), done.
 
 Use the `ls` command to see what files and directories are present in your current directory. You should see something similar to this:
 ```bash
-[userid@login1.frontier ~]$ ls
-hands-on-with-frontier
+[userid@login1.odo ~]$ ls
+hands-on-with-odo
 ```
 
-From here, lets try using `cd` to get to the `Basic_Unix_Vim` challenge directory in the `hands-on-with-frontier` repository.
+From here, lets try using `cd` to get to the `Basic_Unix_Vim` challenge directory in the `hands-on-with-odo` repository.
 ```bash
-[userid@login1.frontier ~]$ cd ~/hands-on-with-frontier/challenges/Basic_Unix_Vim
+[userid@login1.odo ~]$ cd ~/hands-on-with-odo/challenges/Basic_Unix_Vim
 ```
 
-This is the path _relative to your current directory_ (which would be `/ccs/home/<userid>`). You can also use the _absolute path_ with `cd` i.e. the path string starting with `/` is called a absolute path. This will take you to the same directory.
+This is the path _relative to your current directory_ (which would be `/ccsopen/home/<userid>`). You can also use the _absolute path_ with `cd` i.e. the path string starting with `/` is called a absolute path. This will take you to the same directory.
 ```bash
-[userid@login1.frontier ~]$ cd /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim
+[userid@login1.odo ~]$ cd /ccsopen/home/<userid>/hands-on-with-odo/challenges/Basic_Unix_Vim
 ```
 
 Execute `pwd` to check if you're in the right place, and execute `ls` to see what files are available in this directory. 
 
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ pwd 
-/ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim
-[userid@login1.frontier Basic_Unix_Vim]$ ls
+[userid@login1.odo Basic_Unix_Vim]$ pwd 
+/ccsopen/home/<userid>/hands-on-with-odo/challenges/Basic_Unix_Vim
+[userid@login1.odo Basic_Unix_Vim]$ ls
 images README.md text_file.txt
 ```
 
-If you want to go back to where you were, remember the previous path you had and use `cd` to navigate there. e.g. `cd /ccs/home/<userid>` . 
+If you want to go back to where you were, remember the previous path you had and use `cd` to navigate there. e.g. `cd /ccsopen/home/<userid>` . 
 
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ cd /ccs/home/userid
-[userid@login1.frontier ~]$ pwd
-/ccs/home/userid
+[userid@login1.odo Basic_Unix_Vim]$ cd /ccsopen/home/userid
+[userid@login1.odo ~]$ pwd
+/ccsopen/home/userid
 ```
 
 Let us now learn how to create a new directory. Now that you are in the `Basic_Unix_Vim` directory, create a new directory by executing the `mkdir` command followed by the name of the directory. 
 
 For example, create a directory named 'mydirectory' by do the following:
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ mkdir mydirectory 
-[userid@login1.frontier Basic_Unix_Vim]$ ls
+[userid@login1.odo Basic_Unix_Vim]$ mkdir mydirectory 
+[userid@login1.odo Basic_Unix_Vim]$ ls
 images mydirectory README.md text_file.txt
 ```
 
@@ -122,17 +122,17 @@ Now we can use that directory to hold files. Lets try using the `cp` command to 
 
 Try to copy the file `text_file.txt` to the newly created `mydirectory` directory using this command:
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ cp test_file.txt mydirectory
+[userid@login1.odo Basic_Unix_Vim]$ cp test_file.txt mydirectory
 ```
 
 Remember that specifying the full path for the file or directory will also work.
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ cp /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim/text_file.txt /ccs/home/<userid>/hands-on-with-frontier/challenges/Basic_Unix_Vim/mydirectory
+[userid@login1.odo Basic_Unix_Vim]$ cp /ccsopen/home/<userid>/hands-on-with-odo/challenges/Basic_Unix_Vim/text_file.txt /ccsopen/home/<userid>/hands-on-with-odo/challenges/Basic_Unix_Vim/mydirectory
 ```
 
 You can check the contents of a directory with `ls` without first using `cd` to go to that directory, by using `ls` followed by the path or directory name.
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ ls mydirectory
+[userid@login1.odo Basic_Unix_Vim]$ ls mydirectory
 text_file.txt
 ```
 
@@ -148,7 +148,7 @@ line. It provides the quickest way to view and modify files when you don't have 
 You should be familiar with the command format by now. To open a file in Vim, execute the `vim` command with the name of the file. Try to open the file `text_file.txt` with Vim.
 
 ```bash
-[userid@login1.frontier Basic_Unix_Vim]$ vim text_file.txt
+[userid@login1.odo Basic_Unix_Vim]$ vim text_file.txt
 ```
 
 This will open a window that looks like this:
