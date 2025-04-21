@@ -1,5 +1,4 @@
-Slurm
------
+# Slurm
 
 **Goals:** 
 
@@ -29,8 +28,8 @@ Some common Slurm commands are summarized in the table below.
 
 This challenge will guide you through using `sbatch` the command to send a job to the scheduler, `srun` the parallel job launcher and `squeue`, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
 
-Compiling the Test code
------------------------
+# Compiling the Test code
+
 We will use a code called `hello_mpi_omp` written by Tom Papatheodore as our test example. This code's output will display where each process runs on the compute node. 
 
 To begin, make sure you are in the directory for the challenge by doing: 
@@ -55,8 +54,8 @@ If all goes right, you will see that this produces an executable file called `he
 Now that we have an executable to run, let’s modify and use a batch script to run it!
 
 
-Batch Scripts
--------------
+# Batch Scripts
+
 The most common way to interact with the batch system is via batch scripts. A batch script is simply a shell script with added directives to request various resources from or provide certain information to the scheduling system.  Aside from these directives, the batch script is simply the series of commands needed to set up and run your job.
 
 To submit a batch script, use the command ``sbatch submit.sl``, but don't do that just yet, because you will need to customize the example batch script, `submit.sl` first. 
@@ -124,12 +123,11 @@ sbatch submit.sl
 To see what state your job is in use: 
 ```
 squeue -u <your_user_id>
-````
+```
 The sections below will help you understand how to read the output that is given.
 
 
-Job States
-----------
+# Job States
 
 A job will transition through several states during its lifetime. Common ones include:
 
@@ -152,8 +150,8 @@ The filename will be composed of the name that your chose for your job in the ba
 srun_SPK-397601.out
 ```
 
-Srun Results Example
---------------------------
+# Srun Results Example
+
 Let's examine the output of your job and use that example to begin to understand how to use `srun` commands to organize work on the compute node. To interpret the results, you need to understand some basics of the node hardware, and the parallel programming models utilized by hello_mpi_omp, called MPI and OpenMP.
 
 *Compute Node*
@@ -173,7 +171,7 @@ The blue portion of the pictured node is the CPU. You can see that it has severa
 
  If you are running this tutorial on a different computer, the details of the node may look a little different, but the basic elements of cores and hardware threads will be similar for the CPU.   
 
-*Programming Models* 
+***Programming Models***
 
 To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on, in a variable and then write that information to the output file. 
 
@@ -233,8 +231,8 @@ MPI 000 - OMP 000 - HWT 001 - Node odo035
 retrace your steps or ask for help from the instructors. 
 
 
-Multiple MPI Tasks Exercise 
--------------------
+# Multiple MPI Tasks Exercise 
+
 OK now let’s run with 7 MPI tasks. 
 
 Here is what we have learned about `srun` so far: 
@@ -269,8 +267,8 @@ MPI 006 - OMP 000 - HWT 049 - Node odo143
 ```
 If so, you successfully ran 7 MPI tasks per node. 
 
-Multiple OpenMP Processes Exercise 
-----------------------------------
+# Multiple OpenMP Processes Exercise 
+
 
 Let's now try to run two OpenMP processes per MPI task. 
 
@@ -319,15 +317,14 @@ Remember:
 Make that change and submit the job again. Check your output to see if the warning is gone and if each OMP process has a unique HWT ID number associated with it in the output. 
 
 
-Putting It All Together Exercise
---------------------------------
+# Putting It All Together Exercise
 
 You can see that with just a few of the possible `srun` options, we have a lot of control at the runtime of our program over how its work is laid out on the node! 
 
 For your final exercise in the challenge, see if you can setup and run the following job layouts for hello_mpi_omp without getting errors. Check your output.  
 
-1.)  2 MPI tasks with 3 OpenMP processes each, on one node. (Your output file should have 6 lines) 
-2.)  8 MPI tasks with 4 OpenMP processes each, on one node. (Your output file should have 32 lines) 
+1. 2 MPI tasks with 3 OpenMP processes each, on one node. (Your output file should have 6 lines)
+2. 8 MPI tasks with 4 OpenMP processes each, on one node. (Your output file should have 32 lines) 
 
 When you are done, copy the path to one of those output files to the google sheet to show that you have done the exercise.
 
