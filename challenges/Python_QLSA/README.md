@@ -10,8 +10,19 @@ Here we provide a sample implementation of a QLSA, the [Harrow–Hassidim–Lloy
 An application to fluid dynamics is also provided. The fluid dynamics use case follows the work of [Bharadwaj & Srinivasan (2020)](https://www.sto.nato.int/publications/STO%20Educational%20Notes/STO-EN-AVT-377/EN-AVT-377-01.pdf) and [Gopalakrishnan Meena et al. (2024)](https://doi.org/10.1063/5.0231929). 
 
 ## Significance of the HHL Algorithm
-The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in exponential (O(2^n)) computational costs. In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver a polynomial (O(n^2)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
-Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this course, we will explore the foundational principles and mathematical theory behind the QLSA. For specifics on how quantum computing works, please see our (Python_QML_Basics)[../Python_QML_Basics] challenge.]
+&nbsp; The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in exponential (O(2<sup>n</sup>)) computational costs. In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver a polynomial (O(n<sup>2</sup>)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
+
+&nbsp; Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this course, we will explore the foundational principles and mathematical theory behind the HHL algorithm. For specifics on how quantum computing works, please see our (Python_QML_Basics)[../Python_QML_Basics] challenge.
+
+## Quantum Algorithms Primer
+
+It may be prudent to discuss the differences between classical and quantum algorithms before jumping into specifics. In fact, one common misconception is that quantum computers will outright replace classical computers. The truth is actually much more nuanced! Quantum algorithms are not designed to replace traditional computing algorithms; instead, they excel at solving specific types of problems that classical computers struggle with. See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the differences between classical and quantum computing! Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers.
+
+The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot.
+
+
+
+## The HHL Algorithm Code
 
 ## Setting Up Our Environment
 First, we will move to the challenge directory, unload all current modules you may have previously loaded on Odo, and deactivate any previously loaded environments. 
@@ -32,32 +43,29 @@ source activate /gpfs/wolf2/olcf/stf007/proj-shared/jwine/qlsa_testing/qsla-solv
 ```
 You should now see (qlsa-solver) at the beginning of your terminal prompt.
 
-## Quantum Algorithms Primer
-
-## The HHL Algorithm Code
 
 ## HPC Crash Course Challenges
 
 1. Shots-based study
-– Objective: Determine the convergence of the accuracy (fidelity) with the number of shots.
-– Try changing the shots parameter and see how the fidelity of the results changes.
-– Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
-– Run on simulator only (i.e. --backend-method garnet:mock).
+* Objective: Determine the convergence of the accuracy (fidelity) with the number of shots.
+* Try changing the shots parameter and see how the fidelity of the results changes.
+* Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
+* Run on simulator only (i.e. --backend-method garnet:mock).
 
-– **Task:**
+* **Task:**
 Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2. Shot range from 100 to 1, 000, 000.
 Report your deduction of the converged shot value.
 
 2. Backend evaluation
-– Objective: Compare the results for running the circuits on simulators, emulators, and real devices.
-– Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
-– Use IQM’s emulator and real device.
+* Objective: Compare the results for running the circuits on simulators, emulators, and real devices.
+* Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
+* Use IQM’s emulator and real device.
 
-– **Task:**
+* **Task:**
 Compare fidelity and uncertainty quantification for various backends (matrix size 2 × 2). Use guidance from `Task
 1`. 
 
-**Hint:** (`plot_fidelity_vs_shots.py`)[plot_fidelity_vs_shots.py] can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
+**Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
 
 ## Running the Code
 
