@@ -17,12 +17,12 @@ This tutorial will highlight a "hybrid" QC/HPC ecosystem, where you will use a v
 
 ## Setting Up Our Environment
 
-First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Odo and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-frontier/challenges/Python_QML_Basics
-$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-odo/challenges/Python_QML_Basics
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -40,10 +40,10 @@ $ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PennyLane and PyTorch.
-Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
+Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -51,7 +51,7 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier/bin/python3
+/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo/bin/python3
 ```
 
 ## Quantum Primer
@@ -316,11 +316,11 @@ The last part of the code is the training section, which is the largest by far. 
 
 As you may notice, at the top there are a few more hyperparameters that were not in the main part of the code. `batch_size` and `num_epochs` can also be changed to allow for optimization of the runtime. These two parameters are common to PyTorch classes and modules, so more info can be found externally [here](https://machinelearningmastery.com/difference-between-a-batch-and-an-epoch/). We will **not** be modifying those parameters in this tutorial.
 
-Additionally, we setup for `DDP` to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Frontier (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0, even if you run with 8 GPUs per node.
+Additionally, we setup for `DDP` to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Odo (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0, even if you run with 8 GPUs per node.
 
 ```python
 def train_model(rank, world_size): 
-    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Frontier
+    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Odo
     device = torch.cuda.current_device()
     print(f"Rank {rank} is using device {torch.cuda.current_device()}")
 
@@ -381,7 +381,7 @@ Finally, here is where the data is processed. This takes the ants and bees image
         ),
     }
 
-    data_dir = '/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/hymenoptera_data'
+    data_dir = '/gpfs/wolf2/olcf/stf007/world-shared/9b8/hymenoptera_data'
 ```
 
 Once the data is in the correct format, we start the actual training and validation. After splitting the dataset in two to make training and validation stages, you can take in the data loader (also used in regular CNNs) and then start going through each of the epochs. Each epoch takes in the weights from before and runs the quantum functions we defined above. The whole time it is keeping track of how long each stage is, how accurate it was, and the total loss. This is split across each GPU, and later it will be combined so we can see the totals across all of the GPUs in each run. 
@@ -530,7 +530,7 @@ Once the data is in the correct format, we start the actual training and validat
 
 Finally, there is one more part of the code and, coincidentally, it is what would be run first!
 
-The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to setup proper communication between tasks on Frontier (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the very top of the "Functions" section above. 
+The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to setup proper communication between tasks on Odo (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the very top of the "Functions" section above. 
 
 ```python
 if __name__ == "__main__":
@@ -563,14 +563,14 @@ Now for the fun part, simulating quantum computing to train the model!
 
 To do this challenge:
 
-0. Make sure you copy over the scripts and are in your `/lustre/orion/PROJECT_ID/scratch/${USER}/qml_test` directory:
+0. Make sure you copy over the scripts and are in your `/gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/qml_test` directory:
 
     ```bash
-    $ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
+    $ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
     $ mkdir qml_test
     $ cd qml_test
-    $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/qml.py ./qml.py
-    $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
+    $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/qml.py ./qml.py
+    $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
     ```
 
 1. Use your favorite editor to change `-n` in `submit_qml.sbatch` to distribute the network over a specific amount of tasks (pick an integer in the range from 1 to 8):
@@ -617,38 +617,39 @@ To do this challenge:
 Here's how the PennyLane and PyTorch environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load rocm/6.1.3
-$ module load craype-accel-amd-gfx90a
-$ module load cmake/3.27.9
-$ module load kokkos/4.3.00-omp
-$ module load gcc-native/12.3
-$ module load miniforge3/23.11.0-0
+module load PrgEnv-gnu/8.6.0 
+module load rocm/6.1.3
+module load craype-accel-amd-gfx90a
+module load cmake/3.30.0
+module load gcc-native/14.2
+module load miniforge3/23.11.0
 
-$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier python=3.10 toml ninja -c conda-forge
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier
-
-# Install PyTorch
-$ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
-
-# Install PennyLane (w/ Lightning Kokkos plugin)
-$ export CC=cc
-$ export CXX=CC
-$ git clone https://github.com/PennyLaneAI/pennylane-lightning.git
-$ cd pennylane-lightning
-
-$ PL_BACKEND="lightning_qubit" python scripts/configure_pyproject_toml.py
-
-$ SKIP_COMPILATION=True python3 setup.py bdist_wheel
-
-$ pip install dist/PennyLane_Lightning-0.39.0.dev52-py3-none-any.whl
-
-$ PL_BACKEND="lightning_kokkos" python scripts/configure_pyproject_toml.py
-
-$ CMAKE_ARGS="-DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_HIP=ON -DCMAKE_CXX_COMPILER=CC" python3 setup.py bdist_wheel
-
-$ pip install dist/PennyLane_Lightning_Kokkos-0.39.0.dev52-cp310-cp310-linux_x86_64.whl
+conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo python=3.10 toml ninja -c conda-forge
+source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo
 
 # Install mpi4py
-$ MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
+MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
+
+# Install PyTorch
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
+
+# Install PennyLane (w/ Lightning Kokkos plugin)
+# Clone latest Lightning repository
+git clone -b v0.41.0 https://github.com/PennyLaneAI/pennylane-lightning.git
+cd pennylane-lightning
+sed -i -e 's/RelWithDebInfo/Release/g' setup.py # Force Release build for better performance
+
+# Install dependencies (will also install PennyLaneLightning 0.41.0 w/ Lightning_qubit)
+pip install pennylane==0.41.0 pennylane_lightning==0.41.0 --no-cache-dir 
+
+# Install (but skip compilation step for) Lightning-Qubit
+# Necessary if swapping to a different branch, but already installed lightning_qubit for 0.41.0 release we installed above  
+#PL_BACKEND="lightning_qubit" python scripts/configure_pyproject_toml.py
+#SKIP_COMPILATION=True python3 setup.py bdist_wheel
+#pip install dist/*.whl
+
+# Install Lightning-Kokkos for AMD GPU 
+PL_BACKEND="lightning_kokkos" python scripts/configure_pyproject_toml.py
+CMAKE_ARGS="-DKokkos_ENABLE_HIP=ON -DKokkos_ARCH_AMD_GFX90A=ON -DCMAKE_CXX_COMPILER=amdclang++ -DCMAKE_CXX_FLAGS='--gcc-install-dir=/opt/cray/pe/gcc/11.2.0/snos/lib/gcc/x86_64-suse-linux/11.2.0/' -DCATALYST_GIT_TAG='v0.11.0' " python3 setup.py bdist_wheel
+pip install dist/pennylane_lightning_kokkos-0.41.0-cp310-cp310-linux_x86_64.whl
 ```
