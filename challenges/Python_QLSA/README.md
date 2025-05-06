@@ -59,7 +59,7 @@ QPE works by:
 
 ###########################
 (STOLEN SO MAYBE MAKE OUR OWN)
-[image-1.png]
+[image.png]
 ##########################
 
 ## The HHL Algorithm Code
