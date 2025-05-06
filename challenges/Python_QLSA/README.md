@@ -29,32 +29,32 @@ One way of doing this is by using one of the most important subroutines in quant
 QPE works by:
 
 1. ***Setup*** 
-      1. Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
-      * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
-      2. This means that **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where θ is the phase we want to estimate.
+      * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
+          * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
+      * This means that **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where θ is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
-      1. The **ancilla register** used to store the phase estimation and is initialized to ∣0⟩ states.
-      * The more qubits that are in the ancilla register, the higher the precision of our measurement.
-      2. The eignestate register ∣ψ⟩ is the target state we want to measure the phase of.
-      * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
-      3. This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
-      4. The next step will create the necessary superposition to perform interference.
+      * The **ancilla register** used to store the phase estimation and is initialized to ∣0⟩ states.
+          * The more qubits that are in the ancilla register, the higher the precision of our measurement.
+      * The eignestate register ∣ψ⟩ is the target state we want to measure the phase of.
+          * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
+      * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
+      * The next step will create the necessary superposition to perform interference.
 3. ***Hadamard Transformation***
-      1. Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
-      2. This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
-      3. Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
+      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
+      * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
+      * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
-      1. For each qubit **a** in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
-      2. In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
-      3. After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
-      4. This step is necessary so that the information about θ is accessible for measurement.
+      * For each qubit **a** in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
+      * In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
+      * After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
+      * This step is necessary so that the information about θ is accessible for measurement.
 5. ***Inverse Quantum Fourier Transform (IQFT)***
-      1. At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
-      2. The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
+      * At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
+      * The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
 6. ***Measure the ancilla qubit register***
-      1. The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
-      2. Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
-      3. When the ancilla qubit is measured, it collapses to one of the basis states with a probability given by the square of the amplitude
+      * The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
+      * Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
+      * When the ancilla qubit is measured, it collapses to one of the basis states with a probability given by the square of the amplitude
 
 
 ###########################
