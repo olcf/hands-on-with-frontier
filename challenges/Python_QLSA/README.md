@@ -59,7 +59,9 @@ QPE works by:
 
 ###########################
 (STOLEN SO MAYBE MAKE OUR OWN)
-[image.png]
+<p align="center" width="100%">
+    <img width="70%" src="image.png">
+</p>
 ##########################
 
 ## The HHL Algorithm Code
