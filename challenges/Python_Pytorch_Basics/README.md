@@ -67,7 +67,7 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC) and the GPU module (necessary for using PyTorch on the GPU):
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0
+$ module load PrgEnv-gnu/8.6.0
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3
@@ -779,13 +779,11 @@ $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3/23.11.0
 
-$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo python=3.10 imagemagick -c conda-forge
+$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo python=3.10 imagemagick matplotlib -c conda-forge
 
 $ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo
 
-$ pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/rocm6.1
-
-$ pip install matplotlib
+$ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/rocm6.1
 ```
 
 ## 7. <a name="resources"></a>Additional Resources
