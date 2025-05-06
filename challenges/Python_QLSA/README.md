@@ -10,56 +10,56 @@ Here we provide a sample implementation of a QLSA, the [Harrow–Hassidim–Lloy
 An application to fluid dynamics is also provided. The fluid dynamics use case follows the work of [Bharadwaj & Srinivasan (2020)](https://www.sto.nato.int/publications/STO%20Educational%20Notes/STO-EN-AVT-377/EN-AVT-377-01.pdf) and [Gopalakrishnan Meena et al. (2024)](https://doi.org/10.1063/5.0231929). 
 
 ## Significance of the HHL Algorithm
-&nbsp; The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in exponential (O(2<sup>n</sup>)) computational costs. In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver a polynomial (O(n<sup>2</sup>)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
+The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in exponential (O(2<sup>n</sup>)) computational costs. In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver a polynomial (O(n<sup>2</sup>)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
 
-&nbsp; Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this challenge, we will explore the foundational principles and mathematical theory behind the HHL algorithm. For specifics on how quantum computing works, please see our [Python_QML_Basics](../Python_QML_Basics) challenge.
+Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this challenge, we will explore the foundational principles and mathematical theory behind the HHL algorithm. For specifics on how quantum computing works, please see our (Python_QML_Basics)[../Python_QML_Basics] challenge.
 
 ## Quantum Algorithms Primer
 
-It may be prudent to discuss the differences between classical and quantum algorithms before jumping into specifics. In fact, one common misconception is that quantum computers will outright replace classical computers. The truth is actually much more nuanced! Quantum algorithms are not designed to replace traditional computing algorithms; instead, they excel at solving specific types of problems that classical computers struggle with. 
+Before we jump into the coding section, let's discuss the differences between classical and quantum algorithms. In fact, one common misconception is that quantum computers will outright replace classical computers. The truth is actually much more nuanced! Quantum algorithms are not designed to replace traditional computing algorithms; instead, they excel at solving specific types of problems that classical computers struggle with. 
 
 It's probably easier to liken a QPU to an accelerator like a GPU! See our (`Python_QML_Basics`)[../Python_QML_Basics] for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers.
 
 The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot.
 
-One way of doing this is with quantum phase estimation (QPE). QPE is a foundational technique in quantum algorithms, including the HHL algorithm in this course, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. 
+One way of doing this is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. 
 
 > **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please see our section on (`quantum vocabulary`) [../qm_vocab]**
 
 QPE works by:
 
 1. ***Setup*** 
-      * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**
-            * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
-      * This means that **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where θ is the phase we want to estimate.
+      1. Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
+      * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
+      2. This means that **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where θ is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
       1. The **ancilla register** used to store the phase estimation and is initialized to ∣0⟩ states.
-            * The more qubits that are in the ancilla register, the higher the precision of our measurement.
+      * The more qubits that are in the ancilla register, the higher the precision of our measurement.
       2. The eignestate register ∣ψ⟩ is the target state we want to measure the phase of.
-            * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
-      * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
-      * The next step will create the necessary superposition to perform interference.
+      * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
+      3. This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
+      4. The next step will create the necessary superposition to perform interference.
 3. ***Hadamard Transformation***
-      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
-      * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
-      * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
+      1. Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
+      2. This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
+      3. Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
-      * For each qubit **a** in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
-      * In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
-      * After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
-      * This step is necessary so that the information about θ is accessible for measurement.
+      1. For each qubit **a** in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
+      2. In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
+      3. After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
+      4. This step is necessary so that the information about θ is accessible for measurement.
 5. ***Inverse Quantum Fourier Transform (IQFT)***
-      * At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
-      * The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
+      1. At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
+      2. The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
 6. ***Measure the ancilla qubit register***
-      * The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
-      * Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
-      * When the ancilla qubit is measured, it collapses to one of the basis states with a probability given by the square of the amplitude
+      1. The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
+      2. Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
+      3. When the ancilla qubit is measured, it collapses to one of the basis states with a probability given by the square of the amplitude
 
 
 ###########################
 (STOLEN SO MAYBE MAKE OUR OWN)
-![alt text](image-1.png)
+[image-1.png]
 ##########################
 
 ## The HHL Algorithm Code
