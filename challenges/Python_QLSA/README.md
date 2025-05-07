@@ -24,27 +24,27 @@ The focus of quantum algorithms is to leverage quantum prinicples such as superp
 
 One way of doing this is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. 
 
-> **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please see our section on (`quantum vocabulary`) [../qm_vocab]**
+> **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please reach out if any topics are not clear!**
 
 QPE works by:
 
 1. ***Setup*** 
       * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
           * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
-      * This means that **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where θ is the phase we want to estimate.
+          * Additionally, using a unitary operator is essential to preserve information about our state. See the section on "Gates" in (Python_QML_Basics)[../Python_QML_Basics] for more information.
+      * The function looks like this **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where e<sup>2πiθ</sup> is the eigenvalue of |ψ⟩, **i** represents the imaginary component of the complex amplitude, and **θ** is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
       * The **ancilla register** used to store the phase estimation and is initialized to ∣0⟩ states.
-          * The more qubits that are in the ancilla register, the higher the precision of our measurement.
-      * The eignestate register ∣ψ⟩ is the target state we want to measure the phase of.
+          * The more qubits that are in the **ancilla register**, the higher the precision of our measurement.
+      * The **target register**, ∣ψ⟩, is the register from which we want to extract phase information.
           * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
       * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
-      * The next step will create the necessary superposition to perform interference.
 3. ***Hadamard Transformation***
       * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
       * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
       * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
-      * For each qubit **a** in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
+      * For each qubit **a** (also known as control qubit) in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
       * In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
       * After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
       * This step is necessary so that the information about θ is accessible for measurement.
