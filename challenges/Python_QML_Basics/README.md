@@ -29,13 +29,12 @@ $ module reset
 The `source deactivate_envs.sh` command is only necessary if you already have existing conda environments active.
 The script unloads all of your previously activated conda environments, and no harm will come from executing the script if that does not apply to you.
 
-Next, we will load the gnu compiler module (most Python packages assume GCC), the GPU module, and the Kokkos module (required by our code to run on AMD GPUs using the Kokkos programming model):
+Next, we will load the gnu compiler module (most Python packages assume GCC), the GPU module:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
+$ module load PrgEnv-gnu/8.6.0 
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
-$ module load kokkos/4.3.00-omp
 $ module load miniforge3
 ```
 
