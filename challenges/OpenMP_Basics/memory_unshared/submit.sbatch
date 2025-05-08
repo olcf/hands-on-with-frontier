@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A LRN039
+#SBATCH -A TRN039
 #SBATCH -J vec_add_seq
 #SBATCH -o %x-%j.out
 #SBATCH -t 0:10:00
