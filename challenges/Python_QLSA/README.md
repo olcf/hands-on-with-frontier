@@ -258,6 +258,7 @@ Run the HHL Circuit
     * The above example uses 1000 shots (e.g., `-s 1000`)
 
     > **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
+    
     > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
