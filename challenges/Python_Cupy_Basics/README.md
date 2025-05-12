@@ -16,7 +16,7 @@ Most operations provide an immediate speed-up out of the box, and some operation
 
 Compute nodes equipped with NVIDIA GPUs will be able to take full advantage of CuPy’s capabilities on the system, providing significant speedups over NumPy-written code. CuPy with AMD GPUs is still being explored, and the same performance is not guaranteed (especially with larger data sizes).  
 
-Instructions for Frontier are available in this guide, but users must note that the CuPy developers have labeled this method as experimental and has limitations.
+Instructions for Odo are available in this guide, but users must note that the CuPy developers have labeled this method as experimental and has limitations.
 
 &nbsp;
 
@@ -34,12 +34,12 @@ In this challenge, you will:
 > Before setting up your environment, you must exit and log back in so that you have a fresh login shell. This is to ensure that no previously activated environments exist in your $PATH environment variable. Additionally, you should execute module reset.
 >>  ---
 
-First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Odo and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-frontier/challenges/Python_Cupy_Basics
-$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-odo/challenges/Python_Cupy_Basics
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -49,17 +49,17 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC), relevant GPU module (necessary for CuPy):
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load rocm/6.1.3
+$ module load PrgEnv-gnu/8.6.0 
+$ module load rocm/5.7.1
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3 
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has CuPy.
-Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
+Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/cupy-odo
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -67,7 +67,7 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier/bin/python3
+/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/cupy-odo/bin/python3
 ```
 
 
@@ -82,10 +82,10 @@ $ which python3
 
 Before we start testing the CuPy scripts provided in this repository, let's go over some of the basics.
 The developers provide a great introduction to using CuPy in their user guide under the [CuPy Basics](https://docs.cupy.dev/en/stable/user_guide/basic.html) section.
-We will be following this walkthrough on Frontier.
-This is done to illustrate the basics, but participants should **NOT** explicitly follow along (as resources are limited on Frontier and interactive jobs will clog up the queue).
+We will be following this walkthrough on Odo.
+This is done to illustrate the basics, but participants should **NOT** explicitly follow along (as resources are limited on Odo and interactive jobs will clog up the queue).
 
-The syntax below assumes being in a Python shell with access to 4 GPUs; however, Frontier interactive nodes have 8 GPUs allocated to CuPy by default. 
+The syntax below assumes being in a Python shell with access to 4 GPUs; however, Odo interactive nodes have 8 GPUs allocated to CuPy by default. 
 
 As is the standard with NumPy being imported as "np", CuPy is often imported in a similar fashion:
 
@@ -213,11 +213,11 @@ Now let's apply what you've learned.
 Before asking for a compute node, let's change into our scratch directory and copy over the relevant files.
 
 ```
-$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
+$ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
 $ mkdir cupy_test
 $ cd cupy_test
-$ cp ~/hands-on-with-frontier/challenges/Python_Cupy_Basics/data_transfer.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Cupy_Basics/submit_data.sbatch .
+$ cp ~/hands-on-with-odo/challenges/Python_Cupy_Basics/data_transfer.py .
+$ cp ~/hands-on-with-odo/challenges/Python_Cupy_Basics/submit_data.sbatch .
 ```
 
 When a kernel call is required in CuPy, it compiles a kernel code optimized for the shapes and data types of given arguments, sends it to the GPU device, and executes the kernel. 
@@ -312,26 +312,20 @@ If you got the script to successfully run, then congratulations!
 Here's how the CuPy environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load rocm/6.1.3
+$ module load PrgEnv-gnu/8.6.0 
+$ module load rocm/5.7.1
 $ module load craype-accel-amd-gfx90a
-$ module load miniforge3/23.11.0-0 
+$ module load miniforge3 
 
-$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier python=3.10 numpy=1.26 scipy -c conda-forge
+$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/cupy-odo python=3.10 numpy=1.26.4 scipy -c conda-forge
 
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/cupy-frontier
-
-$ git clone --recursive https://github.com/cupy/cupy
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/cupy-odo
 
 $ export CUPY_INSTALL_USE_HIP=1
-$ export ROCM_HOME=/opt/rocm-6.1.3
+$ export ROCM_HOME=${ROCM_PATH}
 $ export HCC_AMDGPU_TARGET=gfx90a
-$ export CC=cc
-$ export CXX=CC
 
-$ python3 setup.py bdist_wheel
-
-$ pip install dist/*.whl
+$ CC=gcc CXX=g++ pip install --no-cache-dir --no-binary=cupy cupy==12.3.0
 ```
 
 ## Additional Resources
