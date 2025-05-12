@@ -213,7 +213,7 @@ It is also advisable to test the code first to ensure the environment is setup c
       </details>
 
       * Change `-backtyp` for different backends. Make sure to test all backend options offered.
-      > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.  sh`](keys.sh) file and source activate it.
+      > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
 
 
 ### Production Run
@@ -254,9 +254,10 @@ Run the HHL Circuit
     ```
     srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata
     ```
-    > **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
-    * Make sure to have your `qlsa-solver` conda environment activated.
     * Experiment with different parameters in the code.
+    * The above example uses 1000 shots (e.g., `-s 1000`)
+
+    > **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
     > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
@@ -264,9 +265,9 @@ Run the HHL Circuit
     python plot_fidelity_vs_shots.py
     ```
   
-> Note: Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments.
+> **Note:** Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments.
 
-> Warning: For our purposes, we "hacked" Qiskit's `backend_sampler_v2.py` to workaround IQM returning results in raw strings instead of bytes. The fixed routine is here: `/gpfs/wolf2/olcf/trn037/world-shared/backend_sampler_v2.py`. (in original lines 211/212, switched `num_bytes` to be the length of the string instead)
+> **Warning:** For our purposes, we "hacked" Qiskit's `backend_sampler_v2.py` to workaround IQM returning results in raw strings instead of bytes. The fixed routine is here: `/gpfs/wolf2/olcf/trn037/world-shared/backend_sampler_v2.py`. (in original lines 211/212, switched `num_bytes` to be the length of the string instead)
 
 
 
