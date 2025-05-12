@@ -12,59 +12,67 @@ An application to fluid dynamics is also provided. The fluid dynamics use case f
 ## Significance of the HHL Algorithm
 The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in exponential (O(2<sup>n</sup>)) computational costs. In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver a polynomial (O(n<sup>2</sup>)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
 
-Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this challenge, we will explore the foundational principles and mathematical theory behind the HHL algorithm. For specifics on how quantum computing works, please see our (Python_QML_Basics)[../Python_QML_Basics] challenge.
+Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this challenge, we will explore the foundational principles and mathematical theory behind subroutines in the HHL algorithm. For specifics on how quantum computing works, please see our [`Python_QML_Basics`](../Python_QML_Basics) challenge.
 
 ## Quantum Algorithms Primer
 
 Before we jump into the coding section, let's discuss the differences between classical and quantum algorithms. In fact, one common misconception is that quantum computers will outright replace classical computers. The truth is actually much more nuanced! Quantum algorithms are not designed to replace traditional computing algorithms; instead, they excel at solving specific types of problems that classical computers struggle with. 
 
-It's probably easier to liken a QPU to an accelerator like a GPU! See our (`Python_QML_Basics`)[../Python_QML_Basics] for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers.
+See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers.
 
 The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot.
 
-One way of doing this is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. 
+One way of doing this is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see get a gentle introduction to the nuances of developing a quantum algorithms compared to classical!
 
 > **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please reach out if any topics are not clear!**
 
-QPE works by:
+### Quantum Phase Estimation (QPE) Steps
 
 1. ***Setup*** 
       * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
           * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
-          * Additionally, using a unitary operator is essential to preserve information about our state. See the section on "Gates" in (Python_QML_Basics)[../Python_QML_Basics] for more information.
+          * Additionally, using a unitary operator is necessary to preserve information about our state. See the section on "Gates" in [`Python_QML_Basics`](../Python_QML_Basics) for more information.
       * The function looks like this **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where e<sup>2πiθ</sup> is the eigenvalue of |ψ⟩, **i** represents the imaginary component of the complex amplitude, and **θ** is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
-      * The **ancilla register** used to store the phase estimation and is initialized to ∣0⟩ states.
+      * The **ancilla register** is used to store the phase estimation and is initialized to ∣0⟩ states.
           * The more qubits that are in the **ancilla register**, the higher the precision of our measurement.
       * The **target register**, ∣ψ⟩, is the register from which we want to extract phase information.
           * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
       * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
 3. ***Hadamard Transformation***
-      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion. 
+      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion representing all possibilties of our quantum system. 
       * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
       * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
       * For each qubit **a** (also known as control qubit) in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
-      * In other words, the unitary operation is only applied when the **a**-th ancillary quibit equals |1⟩.
-      * After applying these controlled operations, the state of the system encodes the phase information θ in the coefficients of the superposition states.
-      * This step is necessary so that the information about θ is accessible for measurement.
+      * In other words, the unitary operation is only applied to the target register when the **a**-th ancillary quibit equals |1⟩.
+      * After performing the controlled unitary operation, the overall state of the quantum system can be thought of a mix of different possibilities (i.e., a superposition) for the ancilla qubits, each corresponding to a piece of phase information related to the target qubit's eigenstate.
 5. ***Inverse Quantum Fourier Transform (IQFT)***
       * At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
+      * Essentially, the most probable states in the ancilla register would constructively interfere with one another leading them to have higher amplitudes.
       * The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
 6. ***Measure the ancilla qubit register***
       * The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
       * Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
-      * When the ancilla qubit is measured, it collapses to one of the basis states with a probability given by the square of the amplitude
+      * When the ancilla qubit is measured, it collapses to one of the basis states (i.e., |0⟩ or |1⟩) with a probability given by the square of the amplitudes.
+      * The measured outcome, **k**, relates to the phase, **θ** as follows: θ = **k**/2<sup>**a**</sup>, where **a** is the number qubits in the ancilla register.
 
+Here's how the above description might look as a quantum circuit:
 
-###########################
-(STOLEN SO MAYBE MAKE OUR OWN)
+The following example is a QPE circuit for a Z-gate using 3 ancilla qubits.
 <p align="center" width="100%">
-    <img width="70%" src="image.png">
+    <img width="90%" src="quantum_phase_estimation_z_gate.png">
 </p>
-##########################
 
-## The HHL Algorithm Code
+### Implications of quantum algorithms
+
+One final thing to note before diving into the code, is the significance of probabilistic computing. Imagine you used your phone to take a photo of the beautiful smoky mountains, but when you went show your friends, you couldn't find the photo! The next day you contemplate how odd that was, so you look once more in your photos folder and the smoky mountains are magically there! You repeat this over and over, but the photo only shows up some of the time. If you measured how often you saw the photo, you would notice that there is a probability associated with its appearance (maybe around 50%). Afterwards, you'd throw your phone away with 100% probability because that's no way to maintain a filesystem!
+
+Hopefully this idea cements why quantum computers will never out-right replace classical; however, this "weird" behavior does mean that we have to carefully consider how we interpret our calculations. To obtain reliable estimates, we need to run the quantum circuits multiple times. We call each iteration of our run a "**shot**". To obtain statistically relevant results, the more shots of our circuit we run, the better! 
+
+For example, if you'd flip a coin 3 times (i.e., 3 shots), and got heads each time, you might say you'd have a 100% probability of getting heads if you stopped there. We know this isn't true! In fact, if you flipped the coin 1000 times (1000 shots), you'd see the probability of getting heads or tails is roughly 50%, as expected.
+
+In this crash course we will observe the affects the number of shots has on our final results. So without further ado, let's begin coding!
 
 ## Setting Up Our Environment
 First, we will move to the challenge directory, unload all current modules you may have previously loaded on Odo, and deactivate any previously loaded environments. 
