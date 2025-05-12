@@ -97,21 +97,21 @@ You should now see (qlsa-solver) at the beginning of your terminal prompt.
 ## HPC Crash Course Challenges
 
 1. Shots-based study
-* Objective: Determine the convergence of the accuracy (fidelity) with the number of shots.
+**Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
 * Try changing the shots parameter and see how the fidelity of the results changes.
 * Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
 * Run on simulator only (i.e. --backend-method garnet:mock).
 
-* **Task:**
+**Task:**
 Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2. Shot range from 100 to 1, 000, 000.
 Report your deduction of the converged shot value.
 
 2. Backend evaluation
-* Objective: Compare the results for running the circuits on simulators, emulators, and real devices.
+**Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
 * Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
 * Use IQM’s emulator and real device.
 
-* **Task:**
+**Task:**
 Compare fidelity and uncertainty quantification for various backends (matrix size 2 × 2). Use guidance from `Task
 1`. 
 
@@ -129,7 +129,7 @@ Before running the code, it is important to obtain your IQM token so that you ca
 
 3. Generate a new token and copy it. 
 
-4. Open the (`keys.sh`)[keys.sh] file, and replace "my_iqm_api_key" with the token you just copied. (Note: make sure your token is encapsulated by the double-quotes)
+4. Open the [`keys.sh`](keys.sh) file, and replace "my_iqm_api_key" with the token you just copied. (Note: make sure your token is encapsulated by the double-quotes)
 
 5. Save and close the `keys.sh` file. 
 
