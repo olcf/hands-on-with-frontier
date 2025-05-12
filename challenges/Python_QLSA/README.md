@@ -18,11 +18,16 @@ Understanding the HHL algorithm not only showcases the unique advantages of quan
 
 Before we jump into the coding section, let's discuss the differences between classical and quantum algorithms. In fact, one common misconception is that quantum computers will outright replace classical computers. The truth is actually much more nuanced! Quantum algorithms are not designed to replace traditional computing algorithms; instead, they excel at solving specific types of problems that classical computers struggle with. 
 
-See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers.
+See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers. In fact, it is partially because of this that we can "simulate" quantum computers classically, which you will be doing in this course. 
 
-The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot.
+In this course we will be using:
+1. Simulators - which mimic QPUs using classical computing.
+2. Emulators - which are like simulators, but they add noise calibrated from the real hardware.
+3. Real hardware (QPU) - actual quantum computing hardware provided by IQM. 
 
-One way of doing this is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see get a gentle introduction to the nuances of developing a quantum algorithms compared to classical!
+The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot. 
+
+One way of leveraging quantum mechanics for computing is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see get a gentle introduction to the nuances of developing a quantum algorithms compared to classical!
 
 > **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please reach out if any topics are not clear!**
 
@@ -115,7 +120,7 @@ Report your deduction of the converged shot value.
 Compare fidelity and uncertainty quantification for various backends (matrix size 2 × 2). Use guidance from `Task
 1`. 
 
-**Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
+> **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
 
 ## Running the Code
 
@@ -208,7 +213,7 @@ It is also advisable to test the code first to ensure the environment is setup c
       </details>
 
       * Change `-backtyp` for different backends. Make sure to test all backend options offered.
-      * **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
+      > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.  sh`](keys.sh) file and source activate it.
 
 
 ### Production Run
@@ -241,7 +246,7 @@ Run the HHL Circuit
     mkdir models
     srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
     ```
-    * **NOTE:** Make sure to save the circuit.
+    > **NOTE:** Make sure to save the circuit.
     * Make sure to have your `qlsa-circuit` conda environment activated.
     * Try different case settings in the case file [`input_vars.yaml`](input_vars.yaml).
 
@@ -249,10 +254,10 @@ Run the HHL Circuit
     ```
     srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata
     ```
-    * **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
+    > **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
     * Make sure to have your `qlsa-solver` conda environment activated.
     * Experiment with different parameters in the code.
-    * **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
+    > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
     ```
