@@ -1,6 +1,6 @@
-# Quantum Linear Solver Algorithm Challenges for HPC Crash Course 2025!
+# Quantum Linear Solver Algorithm Challenge
 
-Welcome to the ORNL 2025 Crash Course on Quantum Linear Solver Algorithms (QLSA) and their implications for the future of quantum computing! As we stand on the brink of a new era in computational technology, understanding the concepts and applications of quantum algorithms has never been more critical. This course is designed to equip you with the knowledge and skills necessary to navigate the evolving landscape of quantum computing and give you experience with running circuits on REAL quantum devices! 
+Welcome to the ORNL Crash Course on Quantum Linear Solver Algorithms (QLSA) and their implications for the future of quantum computing! As we stand on the brink of a new era in computational technology, understanding the concepts and applications of quantum algorithms has never been more critical. This course is designed to equip you with the knowledge and skills necessary to navigate the evolving landscape of quantum computing and give you experience with running circuits on REAL quantum devices! 
 
 Here we provide a sample implementation of a QLSA, the [Harrow–Hassidim–Lloyd (HHL)](https://doi.org/10.1103/PhysRevLett.103.150502) algorithm, using [Qiskit's HHL implementation](https://github.com/Qiskit/textbook/blob/main/notebooks/ch-applications/hhl_tutorial.ipynb). The implementation uses Python scripts that take advantage of Qiskit libraries. The codes are designed to run the QLSA circuit on REAL quantum devices:
 
@@ -97,8 +97,8 @@ Next, we will load our miniforge module (analagous to an open source minconda), 
 $ module load miniforge3
 $ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver
 ```
-The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
-If you check with which python3, you should see that you're properly in the new environment:
+The path to the environment should now be displayed in `"( )"` at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
+If you check with `which python3`, you should see that you're properly in the new environment:
 
 ```
 $ which python3
@@ -208,7 +208,7 @@ It is also advisable to test the code first to ensure the environment is setup c
       ```
       </details>
       Running the test script more than once shows the inherent randomness of Quantum Computing!
-      Notice how the `Total count` changes if you test the script more than once!
+      Notice how the "Total count" changes if you test the script more than once!
 
 ### Running the QLSA Code
 
@@ -238,12 +238,12 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 3. Run QLSA circuit generator script: [`circuit_HHL.py`](circuit_HHL.py)
    Before we running the solver in step #4, we first have to generate the circuit that will be used.
     ```
-    $ srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
+    $ srun -N1 -n1 -c1 python3 circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
     ```
 4. Run the QLSA solver: [`solver.py`](solver.py)
    Running the `solver.py` code uses the circuit previously generated and runs the QLSA on a specific backend for a given amount of shots.
     ```
-    $ srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata -backtyp ideal
+    $ srun -N1 -n1 -c2 python3 solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata -backtyp ideal
     ```
     * The above example uses 1000 shots (e.g., `-s 1000`) and the `-backtyp ideal` (simulator) backend.
     * To run the script on actual hardware, use the `-backtyp real-iqm -backmet garnet` flags.
@@ -254,7 +254,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
     $ python3 plot_fidelity_vs_shots.py
     ```
   
-> **Note:** Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments.
+> **Note:** Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments (like shot count).
 
 # References
 * A. W. Harrow, A. Hassidim, and S. Lloyd, "Quantum algorithm for linear systems of equations," [Phys. Rev. Lett. 103, 150502](https://doi.org/10.1103/PhysRevLett.103.150502) (2009).
