@@ -1,12 +1,10 @@
 #!/bin/bash
-#SBATCH -A trn037
+#SBATCH -A TRN039
 #SBATCH -J qlsa
-#SBATCH -o "%x_%j"
+#SBATCH -o "%x_%j".out
 #SBATCH -N 1
 #SBATCH -p batch
 #SBATCH -t 00:10:00
-
-# Odo is a smaller HPC system at Oak Ridge. The following project paths are examples.
 
 # Only necessary if submitting this job script like: sbatch --export=NONE ... (recommended)
 # Do NOT include this line when submitting without --export=NONE
@@ -22,16 +20,15 @@ export no_proxy='localhost,127.0.0.0/8,*.ccs.ornl.gov'
 module load miniforge3
 
 # HHL circuit generator
-source activate /gpfs/wolf2/olcf/trn037/proj-shared/81a/software/miniconda3-odo/envs/qlsa-circuit
-mkdir models
+source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver 
 srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
 
-# Run circuit
-srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000
+# Run on simulator
+srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp ideal --savedata
 
 # Run on real device
 source keys.sh 
-srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet garnet:mock --savedata
+#srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet garnet --savedata
 
 # Plot results
 srun -N1 -n1 -c1 python plot_fidelity_vs_shots.py

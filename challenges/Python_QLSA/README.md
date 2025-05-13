@@ -110,11 +110,11 @@ $ which python3
 1. Shots-based study. **Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
      * Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2 (default `input_vars`). Shot range from 100 to 1,000,000.
      * Report your deduction of the converged shot value (how does the fidelity of the results change when you vary the shots parameter? when does the fidelity start being pretty consistent?).
-     * Run on simulator only (i.e., `--backend-type=ideal`).
+     * Run on simulator only (i.e., `-backtyp ideal`).
 
 2. Backend evaluation. **Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
      * Compare fidelity to `Objective 1` above on actual quantum hardware.
-     * Use IQM’s real device (i.e., `--backend-type=real-iqm --backend-method=garnet`).
+     * Use IQM’s real device (i.e., `-backtyp real-iqm -backmet garnet`).
 
 > **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
 
@@ -207,10 +207,8 @@ It is also advisable to test the code first to ensure the environment is setup c
                             0  1 
       ```
       </details>
-
-      * Change `-backtyp` for different backends.
-      > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
-
+      Running the test script more than once shows the inherent randomness of Quantum Computing!
+      Notice how the `Total count` changes if you test the script more than once!
 
 ### Running the QLSA Code
 
@@ -226,7 +224,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 2. Load Python environment:
     * When targeting real quantum backends, you must go through a [proxy server for connecting outside OLCF](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#batch-jobs) due to the Odo compute nodes being closed off from the internet by default. 
       ```
-      $ source proxies.sh
+      $ source ~/hands-on-with-odo/misc_scripts/proxies.sh
       ```
     * First, load the relevant conda module:
       ```
@@ -245,10 +243,10 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 4. Run the QLSA solver: [`solver.py`](solver.py)
    Running the `solver.py` code uses the circuit previously generated and runs the QLSA on a specific backend for a given amount of shots.
     ```
-    $ srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata --backend-type=ideal
+    $ srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata -backtyp ideal
     ```
-    * The above example uses 1000 shots (e.g., `-s 1000`) and the `--backend-type=ideal` (simulator) backend.
-    * To run the script on actual hardware, use the `--backend-type=real-iqm --backend-method=garnet` flags.
+    * The above example uses 1000 shots (e.g., `-s 1000`) and the `-backtyp ideal` (simulator) backend.
+    * To run the script on actual hardware, use the `-backtyp real-iqm -backmet garnet` flags.
     > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
