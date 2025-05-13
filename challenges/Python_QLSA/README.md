@@ -35,6 +35,7 @@ One way of leveraging quantum mechanics for computing is by using one of the mos
 
 1. ***Setup*** 
       * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
+          * An "eigenstate" (i.e., a specific type of "eigenvector") is a type of quantum state that represents the possible results of measuring a physical quantity (like energy or momentum). The possible results that can be measured are known as "eigenvalues".
           * It is essential to begin this way, so that the phase accumulation in step 4 is predictable and the final measurement in step 6 is efficient.
           * Additionally, using a unitary operator is necessary to preserve information about our state. See the section on "Gates" in [`Python_QML_Basics`](../Python_QML_Basics) for more information.
       * The function looks like this **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where e<sup>2πiθ</sup> is the eigenvalue of |ψ⟩, **i** represents the imaginary component of the complex amplitude, and **θ** is the phase we want to estimate.
@@ -45,7 +46,7 @@ One way of leveraging quantum mechanics for computing is by using one of the mos
           * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
       * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
 3. ***Hadamard Transformation***
-      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion representing all possibilties of our quantum system. 
+      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion representing all possibilties of our quantum system (which makes all possibilities have equal probability). 
       * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
       * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
@@ -83,18 +84,18 @@ In this crash course we will observe the affects the number of shots has on our 
 First, we will move to the challenge directory, unload all current modules you may have previously loaded on Odo, and deactivate any previously loaded environments. 
 ```
 # Move to the challenge directory (assuming you cloned the repo in your home directory)
-cd ~/hands-on-with-odo/challenges/Python_QLSA/
+$ cd ~/hands-on-with-odo/challenges/Python_QLSA/
 
 # Unloads any active conda envs (if applicable)
-source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 
 # Resets to default modules
-module reset
+$ module reset
 ```
 Next, we will load our miniforge module (analagous to an open source minconda), and activate the appropriate conda environment for this exercise.
 ```
-module load miniforge3
-source activate /gpfs/wolf2/olcf/stf007/proj-shared/jwine/qlsa_testing/qlsa-solver
+$ module load miniforge3
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver
 ```
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
 If you check with which python3, you should see that you're properly in the new environment:
@@ -106,32 +107,22 @@ $ which python3
 
 ## HPC Crash Course Challenges
 
-1. Shots-based study
-**Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
-* Try changing the shots parameter and see how the fidelity of the results changes.
-* Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
-* Run on simulator only (i.e. --backend-method garnet:mock).
+1. Shots-based study. **Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
+     * Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2 (default `input_vars`). Shot range from 100 to 1,000,000.
+     * Report your deduction of the converged shot value (how does the fidelity of the results change when you vary the shots parameter? when does the fidelity start being pretty consistent?).
+     * Run on simulator only (i.e., `--backend-type=ideal`).
 
-**Task:**
-Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2. Shot range from 100 to 1, 000, 000.
-Report your deduction of the converged shot value.
-
-2. Backend evaluation
-**Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
-* Complete the following tasks to solve the tridiagonal Toeplitz matrix problem.
-* Use IQM’s emulator and real device.
-
-**Task:**
-Compare fidelity and uncertainty quantification for various backends (matrix size 2 × 2). Use guidance from `Task
-1`. 
+2. Backend evaluation. **Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
+     * Compare fidelity to `Objective 1` above on actual quantum hardware.
+     * Use IQM’s real device (i.e., `--backend-type=real-iqm --backend-method=garnet`).
 
 > **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
 
-## Running the Code
-
-Before running the code, it is important to obtain your IQM token so that you can run the circuits on actual quantum devices.
+## Overview of How to Run
 
 ### Obtaining your IQM Key
+
+Before running the code, it is important to obtain your IQM token so that you can run the circuits on actual quantum devices.
 
 1. Log in to your IQM account at https://resonance.meetiqm.com
 
@@ -154,7 +145,7 @@ It is also advisable to test the code first to ensure the environment is setup c
 
 1. Test the quantum linear solver package: [`test_linear_solver.py`](test_linear_solver.py)
       ```
-      python test_linear_solver.py -nq 2
+      $ python3 test_linear_solver.py -nq 2
       ```
       <details><summary>Sample output from the test code:</summary>
       
@@ -199,7 +190,7 @@ It is also advisable to test the code first to ensure the environment is setup c
 
 2. Test Qiskit installation: [`test_qiskit_installation.py`](test_qiskit_installation.py)
       ```
-      python test_qiskit_installation.py -backtyp ideal
+      $ python3 test_qiskit_installation.py -backtyp ideal
       ```
       <details><summary>Sample output from the test code:</summary>
 
@@ -221,62 +212,51 @@ It is also advisable to test the code first to ensure the environment is setup c
       > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
 
 
-### Production Run
+### Running the QLSA Code
 
 The instructions below are mainly for **running interactively** on OLCF Odo. The first time you run the Python scripts, it may take some time to load the libraries.
 
 The general workflow is to 1) Start an interactive job (or batch job) to use Odo's compute nodes, 2) Load the appropriate Python `conda` environment, 3) Generate the circuit, 4) Run the QLSA solver with the circuit you just generated, 5) Analyze your results
-Run the HHL Circuit
 
 1. Start interactive job
     ```
-    salloc -A trn037 -p batch -N 1 -t 1:00:00
+    $ salloc -A PROJECT_ID -p batch -N 1 -t 1:00:00
     ```
 
 2. Load Python environment:
     * When targeting real quantum backends, you must go through a [proxy server for connecting outside OLCF](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#batch-jobs) due to the Odo compute nodes being closed off from the internet by default. 
       ```
-      source proxies.sh
+      $ source proxies.sh
       ```
     * First, load the relevant conda module:
       ```
-      source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
-      module load miniforge3
+      $ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+      $ module load miniforge3
       ```
-      How to activate the environment needed for circuit generation and solution:
+      Activate the environment needed for circuit generation and solution:
       ```
-      source activate /gpfs/wolf2/olcf/trn037/proj-shared/81a/software/miniconda3-odo/envs/qlsa-circuit 
+      $ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver 
       ```
 3. Run QLSA circuit generator script: [`circuit_HHL.py`](circuit_HHL.py)
+   Before we running the solver in step #4, we first have to generate the circuit that will be used.
     ```
-    mkdir models
-    srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
+    $ srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
     ```
-    > **NOTE:** Make sure to save the circuit.
-    * Make sure to have your `qlsa-circuit` conda environment activated.
-    * Try different case settings in the case file [`input_vars.yaml`](input_vars.yaml).
-
 4. Run the QLSA solver: [`solver.py`](solver.py)
+   Running the `solver.py` code uses the circuit previously generated and runs the QLSA on a specific backend for a given amount of shots.
     ```
-    srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata
+    $ srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 --savedata --backend-type=ideal
     ```
-    * Experiment with different parameters in the code.
-    * The above example uses 1000 shots (e.g., `-s 1000`)
-
-    > **NOTE:** Before running the code activate the solver env (`qlsa-solver`).
-    
+    * The above example uses 1000 shots (e.g., `-s 1000`) and the `--backend-type=ideal` (simulator) backend.
+    * To run the script on actual hardware, use the `--backend-type=real-iqm --backend-method=garnet` flags.
     > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
     ```
-    python plot_fidelity_vs_shots.py
+    $ python3 plot_fidelity_vs_shots.py
     ```
   
 > **Note:** Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments.
-
-> **Warning:** For our purposes, we "hacked" Qiskit's `backend_sampler_v2.py` to workaround IQM returning results in raw strings instead of bytes. The fixed routine is here: `/gpfs/wolf2/olcf/trn037/world-shared/backend_sampler_v2.py`. (in original lines 211/212, switched `num_bytes` to be the length of the string instead)
-
-
 
 # References
 * A. W. Harrow, A. Hassidim, and S. Lloyd, "Quantum algorithm for linear systems of equations," [Phys. Rev. Lett. 103, 150502](https://doi.org/10.1103/PhysRevLett.103.150502) (2009).
