@@ -22,12 +22,12 @@ See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the di
 
 In this course we will be using:
 1. Simulators - which mimic QPUs using classical computing.
-2. Emulators - which are like simulators, but they add noise calibrated from the real hardware.
+2. Emulators - which are like simulators, but they add a noise profile calibrated from the real hardware.
 3. Real hardware (QPU) - actual quantum computing hardware provided by IQM. 
 
 The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot. 
 
-One way of leveraging quantum mechanics for computing is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or eigenvalue) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see get a gentle introduction to the nuances of developing a quantum algorithms compared to classical!
+One way of leveraging quantum mechanics for computing is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or even eigenvalue itself) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see get a gentle introduction to the nuances of developing a quantum algorithms compared to classical!
 
 > **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please reach out if any topics are not clear!**
 
@@ -35,7 +35,7 @@ One way of leveraging quantum mechanics for computing is by using one of the mos
 
 1. ***Setup*** 
       * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
-          * It is essential to begin this way, so that the phase accumliation in step 4 is predictable and the final measurement in step 6 is efficient.
+          * It is essential to begin this way, so that the phase accumulation in step 4 is predictable and the final measurement in step 6 is efficient.
           * Additionally, using a unitary operator is necessary to preserve information about our state. See the section on "Gates" in [`Python_QML_Basics`](../Python_QML_Basics) for more information.
       * The function looks like this **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where e<sup>2πiθ</sup> is the eigenvalue of |ψ⟩, **i** represents the imaginary component of the complex amplitude, and **θ** is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
@@ -85,19 +85,24 @@ First, we will move to the challenge directory, unload all current modules you m
 # Move to the challenge directory (assuming you cloned the repo in your home directory)
 cd ~/hands-on-with-odo/challenges/Python_QLSA/
 
-# Run only if a previous environment was loaded
-source deactivate
+# Unloads any active conda envs (if applicable)
+source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 
-# Run regardless of loaded environment
+# Resets to default modules
 module reset
 ```
 Next, we will load our miniforge module (analagous to an open source minconda), and activate the appropriate conda environment for this exercise.
 ```
 module load miniforge3
-source activate /gpfs/wolf2/olcf/stf007/proj-shared/jwine/qlsa_testing/qsla-solver
+source activate /gpfs/wolf2/olcf/stf007/proj-shared/jwine/qlsa_testing/qlsa-solver
 ```
-You should now see (qlsa-solver) at the beginning of your terminal prompt.
+The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
+If you check with which python3, you should see that you're properly in the new environment:
 
+```
+$ which python3
+/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver/bin/python3
+```
 
 ## HPC Crash Course Challenges
 
@@ -134,7 +139,7 @@ Before running the code, it is important to obtain your IQM token so that you ca
 
 3. Generate a new token and copy it. 
 
-4. Open the [`keys.sh`](keys.sh) file, and replace "my_iqm_api_key" with the token you just copied. (Note: make sure your token is encapsulated by the double-quotes)
+4. Open the [`keys.sh`](keys.sh) file, and replace `IQM_API_KEY="my_iqm_api_key"` with the token you just copied. (Note: make sure your token is encapsulated by the double-quotes)
 
 5. Save and close the `keys.sh` file. 
 
@@ -212,7 +217,7 @@ It is also advisable to test the code first to ensure the environment is setup c
       ```
       </details>
 
-      * Change `-backtyp` for different backends. Make sure to test all backend options offered.
+      * Change `-backtyp` for different backends.
       > **NOTE:** To run using IQM Resonance, you need to add your  IQM API KEY and instance to the [`keys.sh`](keys.sh) file and source activate it.
 
 
@@ -235,6 +240,7 @@ Run the HHL Circuit
       ```
     * First, load the relevant conda module:
       ```
+      source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
       module load miniforge3
       ```
       How to activate the environment needed for circuit generation and solution:
