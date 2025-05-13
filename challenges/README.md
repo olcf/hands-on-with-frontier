@@ -30,6 +30,7 @@ Python exercies and Machine Learning
 13. [Python_Galaxy_Evolution](Python_Galaxy_Evolution)
 14. [Python_QML_Basics](Python_QML_Basics) (Odo only)
 15. [Python_Cupy_Basics](Python_Cupy_Basics) (Odo only)
+16. [Python_QLSA](Python_QLSA)
 
 After completing 6 of the above challenges, feel free to "choose your own adventure" by completing the rest of the challenges in any order you prefer.
 
