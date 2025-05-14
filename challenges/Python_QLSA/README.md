@@ -36,7 +36,7 @@ One way of leveraging quantum mechanics for computing is by using one of the mos
 1. ***Setup*** 
       * Start with a quantum state, usually in the form of |ψ⟩, that is an eigenstate of a unitary operator **U**.
           * An aside: An "eigenstate" (or "eigenvector") is a type of quantum state that represents a specific result of measuring a physical quantity (like energy, or spin, or momentum). The possible result itself that can be measured is known as an "eigenvalue". For example, if I'm measuring the energy (`E`), maybe some of the values I could measure are `E_1`,`E_2`, `E_3`, etc. (those are the possible "eigenvalues" or outcomes of my system). If my quantum state (|ψ⟩) is an eigsenstate representing `E_1`, for example, then that means when I go and measure the energy then I will expect to measure the `E_1` value with 100% certainty.
-          * It is essential to begin this way, so that the phase accumulation in step 4 is predictable and the final measurement in step 6 is efficient.
+          * In QPE, it is essential to begin this way, so that the phase accumulation in step 4 is predictable and the final measurement in step 6 is efficient.
           * Additionally, using a unitary operator is necessary to preserve information about our state. See the section on "Gates" in [`Python_QML_Basics`](../Python_QML_Basics) for more information.
       * The function looks like this **U**|ψ⟩ = e<sup>2πiθ</sup>|ψ⟩, where e<sup>2πiθ</sup> is the eigenvalue of |ψ⟩, **i** represents the imaginary component of the complex amplitude, and **θ** is the phase we want to estimate.
 2. ***Quantum Registers***: Prepare two quantum registers (i.e., sets of qubits):
@@ -116,7 +116,7 @@ $ which python3
      * Compare fidelity to `Objective 1` above on actual quantum hardware.
      * Use IQM’s real device (i.e., `-backtyp real-iqm -backmet garnet`).
 
-> **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Tasks 1 and 2.
+> **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Objective 1 and 2.
 
 ## Overview of How to Run
 
@@ -247,7 +247,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
     ```
     * The above example uses 1000 shots (e.g., `-s 1000`) and the `-backtyp ideal` (simulator) backend.
     * To run the script on actual hardware, use the `-backtyp real-iqm -backmet garnet` flags.
-    > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the tasks.
+    > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the objectives.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
     ```
