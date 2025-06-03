@@ -58,6 +58,10 @@ int main()
 
     /* Launch kernel --------------------------------------------------- */
     /* hip add_vectors<<< wg_in_grid, thr_per_wg >>>(d_A, d_B, d_C); */
+    /* 0,0 represents stream ID and shared memory size respectively. */
+    /* Both are set to 0 meaning the default stream will be used     */
+    /* with no shared memory allocation. This may change with        */
+    /* asynchronous execution, but for now 0s are ok.                 */
      hipLaunchKernelGGL(add_vectors,wg_in_grid,thr_per_wg,0,0,d_A,d_B,d_C);
 
     /* Copy data from device array d_C to host array C ----------------- */

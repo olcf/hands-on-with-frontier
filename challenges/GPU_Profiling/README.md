@@ -1,6 +1,6 @@
 # GPU Kernel Profiling Using ROCm
 
-ROCm provides useful profiling tools on Frontier to profile HIP
+ROCm provides useful profiling tools on Odo (and Frontier) to profile HIP
 performance with their ROCProfiler API. We will be using the rocprof command-line tool to generate stats on all kernels being run, the number of times they are run, the total duration and the average duration (in nanoseconds) of the kernel, and the GPU usage percentage. There are numerous ways to use these tools, we encourage you to read more about ROCm Profiling tools
 [here](https://docs.amd.com/bundle/ROCProfiler-User-Guide-v5.1/page/Introduction_to_ROCProfiler_User_Guide.html).
 
@@ -45,7 +45,8 @@ If you look inside the batch script, you will see that the program is being run 
 ROCm profiler `rocprof --stats`. This starts the profiler and attaches it to the
 program. Check the output file `profiling_unoptimized-JOBID.out` and you will see the
 basic profiling output in plain text for the `row_sums` and `column_sums` kernels (scroll
-down to get past the loading text). Look at the Kernel Statistics section. Notice the
+down to get past the loading text). You can see the statistics in the local output file
+`metrics_matrix_sums_unoptimized.stats.csv`. Notice the
 difference in their duration? The column sum is a lot faster than the row sum. Why is
 that? `column_sums` is faster because it takes advantage of _coalesced memory access_. You
 can check out [this video](https://www.youtube.com/watch?v=_qSP455IekE) for a brief
@@ -78,7 +79,9 @@ $ sbatch submit_optimized.sbatch
 ```
 
 This also runs the rocprof profiler, same as before. Open the output file
-`profiling_optimized-JOBID.out` and check the duration. You can see that the duration
+`profiling_optimized-JOBID.out` and you can see basic information on profiling again.
+Now, open the locally available output file `metrics_matrix_sums_optimized.stats.csv`.
+You can see that the duration
 for the `row_sums` is nearly equal to the `column_sums` kernel. Compare this with our
 previous output file and you can see it is much faster than the `row_sums` of our previous
 code. What causes this?  This is because of the way the `row_sums` was rewritten. It now

@@ -6,22 +6,24 @@ Various Python installations and scientific packages need to be installed to ana
 Conda allows users to easily install different versions of binary software packages and any required libraries appropriate for their computing platform.
 The versatility of conda allows a user to essentially build their own isolated Python environment, without having to worry about clashing dependencies and other system installations of Python.
 
-This hands-on challenge will introduce a user to installing Conda on Frontier, the basic workflow of using conda environments, as well as providing an example of how to create a conda environment that uses a different version of Python than the base environment uses on Frontier.
+This hands-on challenge will introduce a user to installing Conda on Odo, the basic workflow of using conda environments, as well as providing an example of how to create a conda environment that uses a different version of Python than the base environment uses on Odo.
 
 &nbsp;
 
 ## Inspecting and setting up the environment
 
-First, we will unload all the current modules that you may have previously loaded on Frontier:
+First, we will unload all the current modules that you may have previously loaded on Odo:
 
 ```bash
+$ cd ~/hands-on-with-odo/challenges/Python_Conda_Basics
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
 Next, we need to load the gnu compiler module (most Python packages assume use of GCC), and the miniforge module (allows us to create conda environments):
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0
+$ module load PrgEnv-gnu/8.6.0
 $ module load miniforge3
 ```
 
@@ -30,16 +32,17 @@ Typical best practice is to not install new things into the `base` environment, 
 So, next, we will create a new environment using the `conda create` command:
 
 ```bash
-$ conda create -p /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py39-frontier python=3.9
+$ conda create -p /ccsopen/proj/<YOUR_PROJECT_ID>/${USER}/conda_envs/odo/py39-odo python=3.9
 ```
 
 The "`-p`" flag specifies the desired path and name of your new virtual environment.
 The directory structure is case sensitive, so be sure to insert "<YOUR_PROJECT_ID>" as lowercase.
+The `${USER}` environment variable is a shortcut for accessing your username.
 Directories will be created if they do not exist already (provided you have write-access in that location).
 Instead, one can solely use the `--name <your_env_name>` flag which will automatically use your `$HOME` directory.
 
 >>  ---
-> NOTE: It is highly recommended to create new environments in the "Project Home" directory (on Frontier, this is `/ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>`).
+> NOTE: It is highly recommended to create new environments in the "Project Home" directory (on Odo, this is `/ccsopen/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>`).
 > This space avoids purges and allows for potential collaboration within your project.
 > It is also recommended, for convenience, that you use environment names that indicate the hostname, as virtual environments created on one system will not necessarily work on others.
 >>  ---
@@ -54,18 +57,18 @@ Executing transaction: done
 #
 # To activate this environment, use
 #
-#     $ conda activate /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py39-frontier
+#     $ conda activate /ccsopen/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/odo/py39-odo
 #
 # To deactivate an active environment, use
 #
 #     $ conda deactivate
 ```
 
-Due to the specific nature of conda on Frontier, we will be using `source activate` and `source deactivate` instead of `conda activate` and `conda deactivate`.
+Due to the specific nature of conda on Odo, we will be using `source activate` and `source deactivate` instead of `conda activate` and `conda deactivate`.
 Let's activate our new environment:
 
 ```bash
-$ source activate /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py39-frontier
+$ source activate /ccsopen/proj/<YOUR_PROJECT_ID>/${USER}/conda_envs/odo/py39-odo
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicate that you are currently using that specific conda environment.
@@ -76,7 +79,7 @@ $ conda env list
 
 # conda environments:
 #
-                      *  /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py39-frontier
+                      *  /ccsopen/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/odo/py39-odo
 base                     /autofs/nccs-svm1_sw/odo/miniforge3/23.11.0
 ```
 
@@ -97,7 +100,7 @@ Pip is available to use after installing Python into your conda environment, whi
 >>  ---
 
 Building from source means you need to take care of some of the dependencies yourself, especially for optimization.
-In Frontier's case, this means we need to load the `openblas` module.
+In Odo's case, this means we need to load the `openblas` module.
 To build a package from source, use `pip install --no-binary=<package_name> <package_name>`:
 
 ```bash
@@ -114,7 +117,7 @@ After it is finished building, you should see something similar to:
 ```
 Successfully built numpy
 Installing collected packages: numpy
-Successfully installed numpy-1.26.1
+Successfully installed numpy-2.0.2
 ```
 
 Congratulations, you have built NumPy from source in your conda environment!  
@@ -132,7 +135,7 @@ However, because we are using Miniforge, installing packages checks the [Conda-f
 Let's do this to install NumPy:
 
 ```bash
-$ conda install numpy
+$ conda install numpy -c conda-forge
 ```
 
 Conda handles dependencies when installing pre-built binaries, so  it will automatically install all of the packages NumPy needs for optimization.   
@@ -155,11 +158,11 @@ It is always highly recommended to run on the compute nodes (through the use of 
 Make sure you're in the correct directory and execute the example Python script:
 
 ```
-$ cd ~/hands-on-with-frontier/challenges/Python_Conda_Basics/
+$ cd ~/hands-on-with-odo/challenges/Python_Conda_Basics/
 $ python3 hello.py
 
-Hello from Python 3.9.18!
-You are using NumPy 1.26.0
+Hello from Python 3.9.22!
+You are using NumPy 2.0.2
 ```
 
 Congratulations, you have just created your own Python environment and ran on one of the fastest computers in the world!
@@ -177,11 +180,11 @@ Congratulations, you have just created your own Python environment and ran on on
     It is not recommended to try to install new packages into the base environment.
     Instead, you can clone the base environment for yourself and install packages into the clone.
     To clone an environment, you must use the `--clone <env_to_clone>` flag when creating a new conda environment.
-    An example for cloning the base environment into your `$HOME` directory on Frontier is provided below:
+    An example for cloning the base environment into your `$HOME` directory on Odo is provided below:
 
     ```bash
-    $ conda create -p /ccs/home/<YOUR_USER_ID>/.conda/envs/baseclone-frontier --clone base
-    $ source activate /ccs/home/<YOUR_USER_ID>/.conda/envs/baseclone-frontier
+    $ conda create -p /ccsopen/home/${USER}/.conda/envs/baseclone-odo --clone base
+    $ source activate /ccsopen/home/${USER}/.conda/envs/baseclone-odo
     ```
 
 * Deleting an environment:
@@ -221,17 +224,17 @@ Congratulations, you have just created your own Python environment and ran on on
     $ conda config --show envs_dirs
     ```
 
-    On Frontier, the default location is your `$HOME` directory.
-    If you plan to frequently create environments in a different location than the default (such as `/ccs/proj/...`), then there is an option to add directories to the `envs_dirs` list.
+    On Odo, the default location is your `$HOME` directory.
+    If you plan to frequently create environments in a different location than the default (such as `/ccsopen/proj/...`), then there is an option to add directories to the `envs_dirs` list.
     To do so, you must execute:
 
     ```bash
-    $ conda config --append envs_dirs /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier
+    $ conda config --append envs_dirs /ccsopen/proj/<YOUR_PROJECT_ID>/${USER}/conda_envs/odo
     ```
     
     This will create a `.condarc` file in your `$HOME` directory if you do not have one already, which will now contain this new envs_dirs location.
-    This will now enable you to use the `--name env_name` flag when using conda commands for environments stored in that specific directory, instead of having to use the `-p /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/env_name` flag and specifying the full path to the environment.
-    For example, you can do `source activate py3711-frontier` instead of `source activate /ccs/proj/<YOUR_PROJECT_ID>/<YOUR_USER_ID>/conda_envs/frontier/py3711-frontier`.
+    This will now enable you to use the `--name env_name` flag when using conda commands for environments stored in that specific directory, instead of having to use the `-p /ccsopen/proj/<YOUR_PROJECT_ID>/${USER}/conda_envs/odo/env_name` flag and specifying the full path to the environment.
+    For example, you can do `source activate py39-odo` instead of `source activate /ccsopen/proj/<YOUR_PROJECT_ID>/${USER}/conda_envs/odo/py39-odo`.
 
 &nbsp;
 
@@ -323,3 +326,4 @@ Congratulations, you have just created your own Python environment and ran on on
 * [Anaconda Package List](https://docs.anaconda.com/anaconda/packages/pkg-docs/)
 * [Pip User Guide](https://pip.pypa.io/en/stable/user_guide/)
 * [Using Pip In A Conda Environment](https://www.anaconda.com/blog/using-pip-in-a-conda-environment)
+* [Python on OLCF Systems](https://docs.olcf.ornl.gov/software/python/index.html)

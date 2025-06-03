@@ -1,6 +1,6 @@
 # Python: Galaxy Evolution
 
-Scientific simulations generate large amounts of data on Frontier (about 100 Terabytes per day for some applications).
+Scientific simulations generate large amounts of data on Odo (about 100 Terabytes per day for some applications).
 Because of how large some datafiles may be, it is important that writing and reading these files is done as fast as possible.
 Less time spent doing input/output (I/O) leaves more time for advancing a simulation or analyzing data.
 
@@ -15,7 +15,7 @@ For example, you can extract specific variables through slicing, manipulate the 
 Both HDF5 and h5py can be compiled with MPI support, which allows you to optimize your HDF5 I/O in parallel.
 MPI support in Python is accomplished through the [mpi4py](https://mpi4py.readthedocs.io/en/stable/) package, which provides complete Python bindings for MPI.
 Building h5py against mpi4py allows you to write to an HDF5 file using multiple parallel processes, which can be helpful for users handling large datasets in Python.
-h5Py is available after loading the default Python module on Frontier, but it has not been built with parallel support.
+h5Py is available after loading the default Python module on Odo, but it has not been built with parallel support.
 
 This hands-on challenge will teach you how to build a personal, parallel-enabled version of h5py and how to write an HDF5 file in parallel using mpi4py and h5py.
 Afterwards, using mpi4py and h5py, you will fix a galaxy evolution script that showcases the effects of tidal stripping for colliding galaxies.
@@ -33,12 +33,12 @@ After successfully testing your build, you will then have the opportunity to com
 
 Building h5py from source is highly sensitive to the current environment variables set in your profile.
 Because of this, it is extremely important that all the modules and conda environments we plan to load are done in the correct order, so that all the environment variables are set correctly.
-First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Odo and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution
-$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -48,16 +48,16 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC), hdf5 module (necessary for h5py):
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load cray-hdf5-parallel/1.12.2.9
+$ module load PrgEnv-gnu/8.6.0 
+$ module load cray-hdf5-parallel/1.12.2.11
 $ module load miniforge3
 ```
 
 We are in a "base" conda environment, but we need to activate a pre-built conda environment that has `mpi4py` and `h5py`.
-Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our environment:
+Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our environment:
 
 ```bash
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/h5pympi-odo
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicate that you are currently using that specific conda environment. 
@@ -65,7 +65,7 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier/bin/python3
+/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/h5pympi-odo/bin/python3
 ```
 
 ## Testing parallel h5py
@@ -75,13 +75,13 @@ We will test our build by trying to write an HDF5 file in parallel using 42 MPI 
 First, change directories to your scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
+$ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
 $ mkdir h5py_test
 $ cd h5py_test
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/hello_mpi.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/hdf5_parallel.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_hello.sbatch .
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_h5py.sbatch .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/hello_mpi.py .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/hdf5_parallel.py .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/submit_hello.sbatch .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/submit_h5py.sbatch .
 ```
 
 Let's test that mpi4py is working properly first by executing the example Python script "hello_mpi.py".
@@ -175,12 +175,12 @@ The results of the simulation will look something like this:
 First, similar to before, change directories to your Lustre scratch area and copy over the python and batch scripts:
 
 ```bash
-$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
+$ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
 $ mkdir galaxy_challenge
 $ cd galaxy_challenge
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/galaxy.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/generate_animation.py .
-$ cp ~/hands-on-with-frontier/challenges/Python_Galaxy_Evolution/submit_galaxy.sbatch .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/galaxy.py .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/generate_animation.py .
+$ cp ~/hands-on-with-odo/challenges/Python_Galaxy_Evolution/submit_galaxy.sbatch .
 ```
 
 The two scripts of interest are called `galaxy.py` and `generate_animation.py`.
@@ -190,7 +190,7 @@ You will be dealing with `galaxy.py`.
 The goal of `galaxy.py` is to simulate an infalling galaxy made up of "particles" (stars) and a "nucleus" (the compact central region) colliding with a bigger host galaxy.
 This would require a lot of code for it to be the most accurate ("many body" problems in physics are complicated); however, we made some physical assumptions to simplify the problem so that it is less complicated but still results in a roughly accurate galactic event.
 Even with simplifying things down, this script does not run quickly when not using MPI, as the amount of stars you want to simulate over a given time period quickly slows things down.
-We will be simulating 1000 stars and it takes about 2 minutes for the script to complete on Frontier when only using 1 MPI task, while completing in about 20 seconds when using 8 MPI tasks.
+We will be simulating 1000 stars and it takes about 2 minutes for the script to complete on Odo when only using 1 MPI task, while completing in about 20 seconds when using 8 MPI tasks.
 
 In this challenge, you will be using 8 MPI tasks to help speed up the computations by splitting up the particles across your MPI tasks (each MPI task will only simulate a subset of the total number of particles).
 The tasks will then write their subset of the data in parallel to an HDF5 file that will hold the entire final dataset.
@@ -268,13 +268,13 @@ You can then transfer this GIF to your computer with Globus, `scp`, or `sftp` to
 Here's how the h5py+mpi4py environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load cray-hdf5-parallel/1.12.2.9
+$ module load PrgEnv-gnu/8.6.0 
+$ module load cray-hdf5-parallel/1.12.2.11
 $ module load miniforge3
 
-$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier python=3.10 numpy scipy matplotlib -c conda-forge
+$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/h5pympi-odo python=3.10 numpy scipy matplotlib -c conda-forge
 
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/h5pympi-frontier
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/h5pympi-odo
 
 $ MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
 

@@ -135,13 +135,13 @@ transform = transforms.Compose(
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 # CIFAR10: 60000 32x32 color images in 10 classes, with 6000 images per class
-train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True,
+train_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=True,
                                         download=False, transform=transform)
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
                                           shuffle=True, num_workers=0)
 
-test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False,
+test_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=False,
                                        download=False, transform=transform)
 
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size,

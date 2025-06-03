@@ -8,4 +8,4 @@
 
 module load PrgEnv-amd
 
-srun -n1 --cpu-bind=map_cpu:49 --gpus=1 ./run 
+srun -n1 --gpu-bind=closest --gpus=1 ./run 
