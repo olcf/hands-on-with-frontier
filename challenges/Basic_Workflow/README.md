@@ -39,7 +39,22 @@ $ module load PrgEnv-amd
 Now that you've set up your programming environment for the code used in this challenge, you can go ahead and compile the code. First, make sure you're in the `Basic_Workflow/` directory:
 
 ```
-$ cd ~/hands-on-with-odo/challenges/Basic_Workflow
+$ ls  
+```
+The ls command shows you what is in your current directory. You should see: 
+
+```
+login1.odo Basic_Workflow]$ ls
+README.md  submit.sbatch	    vector_addition.o
+Makefile	      run	 vector_addition.c
+
+```
+
+If that is NOT what you see do this to change to the Basic_Workflow directory: 
+
+
+```
+$ cd  ~/hands-on-with-odo/challenges/Basic_Workflow
 ```
 
 > NOTE: The path above assumes you cloned the repo in your `/ccs/home/username` directory.
