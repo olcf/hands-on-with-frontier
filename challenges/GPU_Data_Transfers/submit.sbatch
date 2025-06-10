@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH -A TRN001
+#SBATCH -A TRN039
 #SBATCH -J add_vec_cpu
 #SBATCH -o %x-%j.out
 #SBATCH -t 00:10:00
@@ -8,4 +8,4 @@
 
 module load PrgEnv-amd
 
-srun -n1 --cpu-bind=map_cpu:49 --gpus=1 ./run 
+srun -n1 --gpu-bind=closest --gpus=1 ./run 

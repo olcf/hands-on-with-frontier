@@ -1,6 +1,6 @@
 # OpenMP Basics
 
-OpenMP is programming model that allows you to write parallel code for multi-core, shared-memory processors. Your laptop/desktop likely has a multi-core processor (e.g., 4-core). This is also true of each individual compute node on Frontier - each has 64 physical CPU cores that have access to 512 GB of DDR4 memory. By shared-memory, we simply mean that all the CPU cores have access to the same memory (DRAM). 
+OpenMP is programming model that allows you to write parallel code for multi-core, shared-memory processors. Your laptop/desktop likely has a multi-core processor (e.g., 4-core). This is also true of each individual compute node on Odo (and Frontier) - each has 64 physical CPU cores that have access to 512 GB of DDR4 memory. By shared-memory, we simply mean that all the CPU cores have access to the same memory (DRAM). 
 
 In this challenge, we will explore the very basics of the [OpenMP Application Program Interface (OpenMP API)](https://www.openmp.org/specifications/), which consists of a collection of compiler directives, library routines, and environment variables. In the examples below, we will insert compiler directives into the code to tell the compiler how the program should be executed in parallel, and we will also use a couple of API functions and environment variables along the way.
 
@@ -52,7 +52,7 @@ virtual_core  = sched_getcpu();       // Find the virtual core the OpenMP thread
 
 `omp_get_num_threads()` and `omp_get_thread_num()` are two of the OpenMP API functions. They are used to determine the total number of OpenMP threads spawned inside the parallel region and a specific OpenMP thread's ID, respectively. In order to use these API calls, you need to include the `#include <omp.h>` header file. `sched_getcpu()` returns the ID of the virtual CPU core the OpenMP thread runs on - but this is **NOT** part of OpenMP.
 
-> CLARIFICATION: Each Frontier node contains 64 physical CPU cores, and each physical CPU core has 2 virtual cores for a total of 128 total virtual cores per node. Everywhere else in the challenges, these virtual cores are referred to as hardware threads, but they will be referred to as virtual CPU cores here to avoid confusion with the use of the word threads in the context of OpenMP. 
+> CLARIFICATION: Each Odo (and Frontier) node contains 64 physical CPU cores, and each physical CPU core has 2 virtual cores for a total of 128 total virtual cores per node. Everywhere else in the challenges, these virtual cores are referred to as hardware threads, but they will be referred to as virtual CPU cores here to avoid confusion with the use of the word threads in the context of OpenMP. 
 
 Ok, great! But what about the rest of that OpenMP directive? Let's take a look at each one of the clauses individually:
 
@@ -81,7 +81,7 @@ The `default` clause allows you to set the default value of privacy for variable
 Ok, now let's compile and run the code. First, make sure you're in the correct directory:
 
 ```
-$ cd ~/hands-on-with-frontier/challenges/OpenMP_Basics/hello_world
+$ cd ~/hands-on-with-odo/challenges/OpenMP_Basics/hello_world
 ```
 
 Then, load the gcc compiler (if it's not already in your environment):
@@ -198,7 +198,7 @@ int main()
 }
 ```
 
-This code should be simple enough to understand from the in-line comments (allocate memory for vectors/arrays, intialize values, perform element-wise vector addition, check results). 
+This code should be simple enough to understand from the in-line comments (allocate memory for vectors/arrays, initialize values, perform element-wise vector addition, check results). 
 
 So how would we go about parallelizing the "element-wise vector addition" loop with OpenMP? The first thing you might think of is to add a `#pragma omp parallel` region around the loop, with appropriate privacy clauses (as we did in the hello world example above):
 
@@ -246,7 +246,7 @@ The version of the code included in this directory already has the directives ab
 Ok, now let's compile and run the code. First, make sure you're in the correct directory:
 
 ```
-$ cd ~/hands-on-with-frontier/challenges/OpenMP_Basics/vector_addition
+$ cd ~/hands-on-with-odo/challenges/OpenMP_Basics/vector_addition
 ```
 
 Then, load the gcc compiler (if it's not already in your environment):
@@ -279,7 +279,228 @@ Number of OpenMP threads: 004
 Elapsed Time (s)        : 0.288272
 ```
 
-As you can see, the output is simply the total number of OpenMP threads spawned in the parallel region and the time taken to complete the vector addition loop. As mentioned above, you are encouraged to re-run the code with different numbers of OpenMP threads to see how it affects the total run time. 
+As you can see, the output is simply the total number of OpenMP threads spawned in the parallel region and the time taken to complete the vector addition loop. As mentioned above, you are encouraged to re-run the code with different numbers of OpenMP threads to see how it affects the total run time.
+
+## Bonus
+
+In the above examples, we have made use of the `shared` directive. However, as we briefly mentioned, that was possible because each element and iteration of the loop can be treated independently and will not influence the results of other iterations. Let's explore that some more.
+
+Take the below example, which should be very familiar from this challenge:
+
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+
+int main()
+{
+    // Number of elements in arrays
+    const int N = 1e8;
+
+    // Bytes in arrays
+    size_t bytes_in_array = N*sizeof(double);
+
+    // Allocate memory for arrays
+    double *A = (double*)malloc(bytes_in_array);
+    double *B = (double*)malloc(bytes_in_array);
+    double *C = (double*)malloc(bytes_in_array);
+
+    // Initialize vector values
+    for(int i=0; i<N; i++){
+        A[i] = 1.0;
+        B[i] = 2.0;
+    }
+
+    // Perform element-wise addition of vectors
+    for(int i=0; i<N; i++){
+        C[i] = A[i] + B[i];
+
+        // Free no longer necessary memory on last iteration
+        if(i == N-1) {
+            free(A);
+            free(B);
+        }
+    }
+
+    // Check for correctness
+    for(int i=0; i<N; i++){
+        if(C[i] != 3.0){
+            printf("Error: Element C[%d] = %f instead of 3.0\n", i, C[i]);
+            exit(1);
+        }
+    }
+
+    printf("__SUCCESS__\n");
+
+    free(C);
+
+    return 0;
+}
+```
+
+Notice in the for loop, we are calling `free()` on the vectors `A` and `B` that we no longer use from the last iteration onward.
+
+This is valid in code which does not share memory, and you can run it yourself!
+
+#### Compile and run unshared memory
+
+Navigate to the correct directory:
+
+```bash
+$ cd ~/hands-on-with-odo/challenges/OpenMP_Basics/memory_unshared
+```
+
+Then, load the gcc compiler (if it's not already in your environment):
+
+```bash
+$ module load gcc
+```
+
+To compile, use the command `make`:
+
+```bash
+$ make
+
+gcc -fopenmp -c vector_add_seq.c
+gcc -fopenmp vector_add_seq.o -o vec_add_seq
+```
+
+Now, we can run the program!
+
+```bash
+$ sbatch submit.sbatch
+```
+
+After the program runs you should have an output file named `vec_add_seq-JOBID.out`, where JOBID is the unique ID assigned to your job. The output should look something like this:
+```
+__SUCCESS__
+```
+
+### Shared memory problem
+
+The above works, even if it may not be absolutely best practice. However, if we try to parallelize it the same way we did before, we run into an issue:
+
+```diff
+...
++ #include <omp.h>
+...
++ int num_threads;
++ double start, stop;
+...
++ start = omp_get_wtime();
+
+// Perform element-wise addition of vectors
++ #pragma omp parallel default(none) shared(A, B, C, num_threads, N)
++ {
+    num_threads = omp_get_num_threads();
++     #pragma omp for
+    for(int i=0; i<N; i++){
+        C[i] = A[i] + B[i];
+
+        // Free no longer necessary memory on last iteration
+        if(i == N-1) {
+            free(A);
+            free(B);
+        }
+    }
++ }
+...
+
++ stop = omp_get_wtime();
+```
+
+The above is condensed to demonstrate the added and critical code sections. Can you see the problem we will run into?
+
+We can observe it in action!
+
+#### Compile and run shared memory
+
+Navigate to the correct directory:
+
+```bash
+$ cd ~/hands-on-with-odo/challenges/OpenMP_Basics/memory_shared
+```
+
+Then, load the gcc compiler (if it's not already in your environment):
+
+```bash
+$ module load gcc
+```
+
+To compile, use the command `make`:
+
+```bash
+$ make
+
+gcc -fopenmp -c vector_add_par.c
+gcc -fopenmp vector_add_par.o -o vec_add_par
+```
+
+Now, we can run the program!
+
+```bash
+$ sbatch submit.sbatch
+```
+
+After the program runs you should have an output file named `vec_add_par-JOBID.out`, where JOBID is the unique ID assigned to your job. The output should look something like this:
+
+```
+srun: error: odo01: task 0: Segmentation fault (core dumped)
+srun: Terminating StepId=5731.0
+```
+
+Well, that's strange! Let's take a look into it.
+
+#### Investigating our output
+
+In C and C++, when an error such as `Segmentation fault (core dumped)` is seen, it means we've run into an issue with memory. In particular, it means we tried to access memory that does not belong to our program!
+
+Why would that be happening?
+
+Let's look again at these lines:
+
+```c
+// Free no longer necessary memory on last iteration
+if(i == N-1) {
+    free(A);
+    free(B);
+}
+```
+
+When we `free()` memory, we are telling the C program that we would like to return ownership of the memory to the system. If we later try to access the same memory, we cannot know what is in said memory and that will cause an error.
+
+Since we are running the program in parallel with OpenMP, this condition can be reached at any point, and will likely be reached before every iteration is completed!
+
+How would that cause a problem?
+
+Let's look at a scenario:
+
+1. The vectors are initialized and iteration begins
+```
+A = [1.0, 1.0, ... 1.0];
+B = [2.0, 2.0, ... 2.0];
+```
+2. The final iteration of the loop gets scheduled in the first batch to thread 3 by OpenMP
+```
+thread 1,2, and 4 run:
+    C[any] = A[any] + B[any];
+    
+thread 3 runs:
+    C[final] = A[final] + B[final];
+    free(A);
+    free(B);
+```
+3. The vectors A and B get freed
+```
+A = ?
+B = ?
+```
+4. All subsequent iterations have no data to operate on
+```
+all threads:
+    C[any] = ?? + ??;
+```
+
 
 ## Summary
 
