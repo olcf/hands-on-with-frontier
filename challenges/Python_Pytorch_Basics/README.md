@@ -17,14 +17,14 @@ PyTorch emphasizes the flexibility and human-readableness of Python and allows d
 Think about the simplicity, structure, and usefulness of NumPy and its arrays, but more geared toward ML/DL algorithms and its tensors -- that's what PyTorch is.
 Compared to other frameworks and libraries, it is one of the more "beginner friendly" ML/DL packages due to its dynamic and familiar "Pythonic" nature.
 PyTorch is also useful when GPUs are involved because of its strong GPU acceleration ability.
-On Odo, PyTorch is able to take advantage of the many AMD GPUs available on the system.
+On Frontier, PyTorch is able to take advantage of the many AMD GPUs available on the system.
 
 In this challenge, you will:
 
-* Learn how to access PyTorch on Odo
+* Learn how to access PyTorch on Frontier
 * Learn the basics of PyTorch
 * Learn about Convolutional Neural Networks (CNNs)
-* Tune your own CNN on Odo
+* Tune your own CNN on Frontier
 
 
 Table of Contents:
@@ -52,12 +52,12 @@ Table of Contents:
 
 ## 1. <a name="setup"></a>Setting Up Our Environment
 
-First, we will unload all the current modules that you may have previously loaded on Odo and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-odo/challenges/Python_Pytorch_Basics
-$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -67,17 +67,17 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC) and the GPU module (necessary for using PyTorch on the GPU):
 
 ```bash
-$ module load PrgEnv-gnu/8.6.0
+$ module load PrgEnv-gnu/8.5.0
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PyTorch.
-Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our new environment:
+Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -85,7 +85,7 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo/bin/python3
+/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier/bin/python3
 ```
 
 &nbsp;
@@ -94,7 +94,7 @@ $ which python3
 
 Before we jump into the PyTorch challenge script provided in this repository, let's go over some of the basics.
 The developers provide a great introduction to using PyTorch on their website under the [PyTorch Tutorials](https://pytorch.org/tutorials/beginner/basics/intro.html) section.
-We will be following a slightly modified version of that walkthrough on Odo.
+We will be following a slightly modified version of that walkthrough on Frontier.
 
 Let's get started by importing PyTorch in a Python prompt:
 
@@ -315,7 +315,7 @@ When using a pre-packaged dataset included in torchvision, you can use `torchvis
 In the `cnn.py` challenge script (on lines 136 and 139) you can see this data loading workflow explicitly:
 
 ```python
-train_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=True,
+train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=False, transform=transform)
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
@@ -339,7 +339,7 @@ Shuffling data helps it break the structured learning and hence reducing bias fo
 The above just covers the "training dataset", next we need to initialize the "test dataset" (lines 142 and 145):
 
 ```python
-test_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=False,
+test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=False, transform=transform)
 
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size,
@@ -681,11 +681,12 @@ You'll be submitting a job to run on a compute node to train your network.
 However, before asking for a compute node, change into your scratch directory and copy over the relevant files.
 
 ```bash
-$ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
+$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
 $ mkdir pytorch_test
 $ cd pytorch_test
-$ cp ~/hands-on-with-odo/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
-$ cp ~/hands-on-with-odo/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
 ```
 
 The goal of this challenge is to achieve an overall network accuracy of 60% or greater with a learning rate of 0.001 within an hour of compute time.
@@ -702,7 +703,7 @@ More specifically:
 * `last_batch.png`: Shows you the last batch of animal images to get tested by the network. The pictures are titled by their actual classification and also include what the network guessed the animal was.
 * `overall_results.png`: Bar charts of how accurate your network was at predicting each class of animal. This includes your overall network accuracy, identification success (e.g., number of frogs correct divided by number of frog images), and prediction success (e.g., number of frogs correct divided by number of times GUESSED "frog").
 
-If you have something like [XQuartz](https://www.xquartz.org/index.html) (Mac) or [Xming](http://www.straightrunning.com/XmingNotes/) (Windows) installed on your local computer, and have enabled window forwarding, you can open the images on Odo by doing:
+If you have something like [XQuartz](https://www.xquartz.org/index.html) (Mac) or [Xming](http://www.straightrunning.com/XmingNotes/) (Windows) installed on your local computer, and have enabled window forwarding, you can open the images on Frontier by doing:
 
 ```bash
 $ display last_batch.png
@@ -711,15 +712,23 @@ $ display overall_results.png
 
 Opening the images is **not required**, as all the same statistics will be printed to your `.out` file.
 
-> Note: You can only open the images if you connected to Odo with window forwarding enabled and have X software installed (see above). Enabling window forwarding is usually done by including the `X` or `Y` SSH flags when connecting to the system. For example: `ssh -XY userid@odo.olcf.ornl.gov`. PuTTY users have an "X11 Forwarding" checkbox located in their SSH settings.
+> Note: You can only open the images if you connected to Frontier with window forwarding enabled and have X software installed (see above). Enabling window forwarding is usually done by including the `X` or `Y` SSH flags when connecting to the system. For example: `ssh -XY userid@frontier.olcf.ornl.gov`. PuTTY users have an "X11 Forwarding" checkbox located in their SSH settings.
 
 After you complete the challenge, you can transfer these plots to your computer with Globus, `scp`, or `sftp` to keep as "souvenirs" from this challenge.
 
 To do this challenge:
 
-0. Make sure you copied over the scripts and are in your `/gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/pytorch_test` directory (see beginning of this section).
+0. Make sure you copied over the scripts and are in your `/lustre/orion/PROJECT_ID/scratch/${USER}/pytorch_test` directory (see beginning of this section).
 
-1. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
+1. Run the `download_data.py` script to download the CIFAR-10 dataset. This is necessary because the compute nodes won't be able to download it during your batch job when running `cnn.py`. If successful, you'll see a directory named `data` in your current directory.
+
+    ```bash
+    $ python3 download_data.py
+    ```
+    > Note: You only need to run this script once.
+    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/lustre/orion/[projid]/scratch/[userid]/pytorch_test` directory)
+
+2. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
 
     ```bash
     $ vi cnn.py
@@ -733,14 +742,14 @@ To do this challenge:
     ```
     > Warning: You must pick a `batch_size` so that 50,000 divided by `batch_size` results in a whole number. You can get errors if this is not the case.
 
-2. Submit a job:
+3. Submit a job:
 
     ```bash
     $ sbatch --export=NONE submit_cnn.sbatch
     ```
 
-3. Look at the statistics printed in your `pytorch_cnn-<JOB_ID>.out` file after the job completes to see if you were successful or not (i.e., see "Success!" or "Try again!").
-4. If you aren't successful, write down your results based on your parameters and try again! Looking at your `pytorch_cnn-<JOB_ID>.out` file or PNG files should help give you ideas of how to refine your parameters.
+4. Look at the statistics printed in your `pytorch_cnn-<JOB_ID>.out` file after the job completes to see if you were successful or not (i.e., see "Success!" or "Try again!").
+5. If you aren't successful, write down your results based on your parameters and try again! Looking at your `pytorch_cnn-<JOB_ID>.out` file or PNG files should help give you ideas of how to refine your parameters.
 
 > Hint: It's always a balance of the number of epochs and the size of your batches -- bigger numbers aren't always optimal. Try changing only one of the parameters and look at how it affects your network's performance.
 
@@ -751,20 +760,38 @@ If you liked PyTorch I also suggest taking a look at [PyTorch Lightning](https:/
 
 ### 5.1 <a name="leaderboard"></a>Leaderboard
 
-Below is a top 10 leaderboard of peoples' best CNNs that achieved >60% accuracy within an hour of walltime on Odo!
+Below is a top 10 leaderboard of peoples' best CNNs that achieved >60% accuracy within an hour of walltime on Ascent!
 
 Top Accuracy:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | AAAA B.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 1.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 2.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 3.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 4.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 7.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 8.    | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
+| 9.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 10.   | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
 
 
 Top Speed:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | AAAA B.          | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 1.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 2.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 3.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 4.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 7.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 8.    | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
+| 9.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 10.   | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
 
 
 ## 6. <a name="install"></a>Environment Information
@@ -774,16 +801,18 @@ Top Speed:
 Here's how the PyTorch environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.6.0 
+$ module load PrgEnv-gnu/8.5.0 
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
-$ module load miniforge3/23.11.0
+$ module load miniforge3/23.11.0-0
 
-$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo python=3.10 imagemagick matplotlib -c conda-forge
+$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier python=3.10 imagemagick -c conda-forge
 
-$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 
-$ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/rocm6.1
+$ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
+
+$ pip install matplotlib
 ```
 
 ## 7. <a name="resources"></a>Additional Resources

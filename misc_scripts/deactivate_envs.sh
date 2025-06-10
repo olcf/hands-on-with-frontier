@@ -8,7 +8,6 @@ then
     echo "No conda environments ever activated (fresh login)" # CONDA_SHLVL not set
 else
     echo "Deactivating conda environments" # CONDA_SHLVL set
-    source activate base
     for i in $(seq ${CONDA_SHLVL}); do
         echo ${CONDA_SHLVL}
         conda deactivate

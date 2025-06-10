@@ -123,7 +123,7 @@ class DressedQuantumNet(nn.Module):
 
 
 def train_model(rank, world_size): #model, criterion, optimizer, scheduler, num_epochs):
-    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Odo
+    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Frontier
     device = torch.cuda.current_device()
     print(f"Rank {rank} is using device {torch.cuda.current_device()}")
 
@@ -170,7 +170,7 @@ def train_model(rank, world_size): #model, criterion, optimizer, scheduler, num_
         ),
     }
 
-    data_dir = '/gpfs/wolf2/olcf/stf007/world-shared/9b8/hymenoptera_data'
+    data_dir = '/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/hymenoptera_data'
 
     image_datasets = {
         x if x == "train" else "validation": datasets.ImageFolder(
