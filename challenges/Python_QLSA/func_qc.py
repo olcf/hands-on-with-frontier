@@ -65,11 +65,14 @@ def qc_backend(backend_type, backend_method, args):
         # save your IQM account for future loading
         API_KEY = os.getenv('IQM_API_KEY') # ${IQM_TOKEN} can't be set when using `token` parameter below
         server_url = f"https://cocos.resonance.meetiqm.com/{backend_method}"
-        if "mock" in backend_method:
-            backend = IQMProvider(server_url, token=API_KEY).get_backend(f'facade_{backend_method.split(":")[0]}')
+        if "fake" in backend_method: # "facade" backends only work for Adonis (switching to "fake" backends)
+            if backend_method=="fake_garnet":
+                from iqm.qiskit_iqm import IQMFakeGarnet
+                backend = IQMFakeGarnet()
+            else:
+                raise Exception('Unknown fake backend.')
         else:
             backend = IQMProvider(server_url, token=API_KEY).get_backend()
-        # raise Exception(f'Backend type \'{backend_type}\' not implemented.')
     else:
         raise Exception(f'Backend type \'{backend_type}\' not implemented.')
     return backend
@@ -128,7 +131,9 @@ def qc_circ(n_qubits_matrix, classical_solution, args, input_vars):
     else:
         if args.backend_type in ('real-iqm'):
             from iqm.qiskit_iqm import transpile_to_IQM as transpile
-            # raise Exception(f'Backend type \'{args.backend_type}\' not implemented.')
+            if args.backend_method in ('fake_garnet'):
+                from qiskit.transpiler.passes import RemoveResetInZeroState
+                circ = RemoveResetInZeroState()(circ.decompose())
         else:
             from qiskit import transpile
         t = time.time()

@@ -90,12 +90,20 @@ if __name__ == "__main__":
     files = get_results_files()
     backend_results = get_results(files)
 
+    fig, ax = plt.subplots(nrows=1,ncols=2, figsize=(10,5))
     for backend, fidelities in backend_results.items():
         sorted_fidelities = dict(sorted(fidelities.items()))
-        plt.plot(list(sorted_fidelities.keys()), list(sorted_fidelities.values()), marker='o', label=backend)
-        plt.xlabel("Number of shots")
-        plt.ylabel("Fidelity")
-        plt.title("Fidelity vs Number of Shots")
-        plt.legend()
+        backend_label = backend
+        if backend == 'statevector':
+            backend_label = 'ideal simulator'
+            ax[0].plot(list(sorted_fidelities.keys()), list(sorted_fidelities.values()), marker='o', label=backend_label)
+            ax[0].set_xlabel("Number of shots")
+            ax[0].set_ylabel("Fidelity")
+            ax[0].legend()
+        ax[1].plot(list(sorted_fidelities.keys()), list(sorted_fidelities.values()), marker='o', label=backend_label)
+        ax[1].set_xlabel("Number of shots")
+        ax[1].set_ylabel("Fidelity")
+        ax[1].legend()
+    plt.suptitle("Fidelity vs Number of Shots")
     plt.savefig("fidelity_vs_shots.png", format='png')
     print("DONE! Plot saved as 'fidelity_vs_shots.png'")
