@@ -105,19 +105,6 @@ $ which python3
 /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver/bin/python3
 ```
 
-## HPC Crash Course Challenges
-
-1. Shots-based study. **Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
-     * Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2 (default `input_vars`). Shot range from 100 to 1,000,000.
-     * Report your deduction of the converged shot value (how does the fidelity of the results change when you vary the shots parameter? when does the fidelity start being pretty consistent?).
-     * Run on simulator only (i.e., `-backtyp ideal`).
-
-2. Backend evaluation. **Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
-     * Compare fidelity to `Objective 1` above on actual quantum hardware.
-     * Use IQM’s real device (i.e., `-backtyp real-iqm -backmet garnet`).
-
-> **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Objective 1 and 2.
-
 ## Overview of How to Run
 
 ### Obtaining your IQM Key
@@ -218,7 +205,7 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
 
 1. Start interactive job
     ```
-    $ salloc -A PROJECT_ID -p batch -N 1 -t 1:00:00
+    $ salloc -A PROJECT_ID -p batch -N 1 -t 0:30:00
     ```
 
 2. Load Python environment:
@@ -255,6 +242,29 @@ The general workflow is to 1) Start an interactive job (or batch job) to use Odo
     ```
   
 > **Note:** Alternative to all of the above, you can use the batch script [`submit_odo.sh`](submit_odo.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo.sh`. The `submit_odo.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments (like shot count).
+
+## Challenges
+
+Now that you've tested out the code and environment, let's get to the challenge objectives!
+You'll be using a simulator, emulator, and real quantum hardware to study the fidelity of each method over a range of shots.
+Below are the two objectives:
+
+1. Shots-based study. **Objective:** Determine the convergence of the accuracy (fidelity) with the number of shots.
+     * Make a plot that demonstrates the convergence of fidelity for solving matrix of size 2 × 2 (default `input_vars`). Shot range from 100 to 1,000,000.
+     * Report your deduction of the converged shot value (how does the fidelity of the results change when you vary the shots parameter? when does the fidelity start being pretty consistent?).
+          * Put your answer in a new file called `convergence.txt`.
+     * Run on simulator only (i.e., `-backtyp ideal`).
+          * Example arguments: `-case sample-tridiag -casefile input_vars.yaml -s NUMBER_OF_SHOTS_HERE --savedata -backtyp ideal`
+
+2. Backend evaluation. **Objective:** Compare the results for running the circuits on simulators, emulators, and real devices.
+     * Compare fidelity to `Objective 1` above on the actual quantum hardware and on the emulator -- make a plot that compares all three methods.
+     * Due to limitations of the hardware, limit your shot range from 100 to 20,000 shots.
+     * Use IQM’s real Garnet system (i.e., `-backtyp real-iqm -backmet garnet`).
+          * Example arguments: `-case sample-tridiag -casefile input_vars.yaml -s NUMBER_OF_SHOTS_HERE --savedata -backtyp real-iqm -backmet garnet`
+     * Use the Fake Garnet emulator (i.e., `-backtyp real-iqm -backmet fake_garnet`).
+          * Example arguments: `-case sample-tridiag -casefile input_vars.yaml -s NUMBER_OF_SHOTS_HERE --savedata -backtyp real-iqm -backmet fake_garnet`
+
+> **Hint:** [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py) can be executed after running all of the production runs for every shot and backend combination for Objective 1 and 2 to help you compare.
 
 # References
 * A. W. Harrow, A. Hassidim, and S. Lloyd, "Quantum algorithm for linear systems of equations," [Phys. Rev. Lett. 103, 150502](https://doi.org/10.1103/PhysRevLett.103.150502) (2009).
