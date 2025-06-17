@@ -26,6 +26,9 @@ srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars
 # Run on simulator
 srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp ideal --savedata
 
+# Run on emulator
+#srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet fake_garnet --savedata
+
 # Run on real device
 source keys.sh 
 #srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet garnet --savedata
