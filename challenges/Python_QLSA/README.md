@@ -10,7 +10,7 @@ Here we provide a sample implementation of a QLSA, the [Harrow–Hassidim–Lloy
 An application to fluid dynamics is also provided. The fluid dynamics use case follows the work of [Bharadwaj & Srinivasan (2020)](https://www.sto.nato.int/publications/STO%20Educational%20Notes/STO-EN-AVT-377/EN-AVT-377-01.pdf) and [Gopalakrishnan Meena et al. (2024)](https://doi.org/10.1063/5.0231929). 
 
 ## Significance of the HHL Algorithm
-The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in extreme computational costs (O(n<sup>m</sup>) for solving n equations and m&ge;1). In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver an exponential (O(log n)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
+The HHL algorithm represents a monumental breakthrough in quantum computing, allowing for the efficient solution of linear systems of equations, a ubiquitous subtask that underlies numerous scientific and engineering applications. Traditional algorithms struggle with large-scale data sets, often resulting in extreme computational costs (O(N<sup>m</sup>) for solving N equations and m&ge;1). In contrast, the HHL algorithm harnesses the power of quantum mechanics to deliver an exponential (O(log N)) speedup, enabling faster computations that can solve complex problems in fields such as optimization, machine learning, and fluid dynamics!
 
 Understanding the HHL algorithm not only showcases the unique advantages of quantum computing but also opens the door to innovative applications that were previously unimaginable in classical computing. As we work through this challenge, we will explore the foundational principles and mathematical theory behind subroutines in the HHL algorithm. For specifics on how quantum computing works, please see our [`Python_QML_Basics`](../Python_QML_Basics) challenge.
 
@@ -69,6 +69,135 @@ The following example is a QPE circuit for a Z-gate using 3 ancilla qubits.
 <p align="center" width="100%">
     <img width="90%" src="quantum_phase_estimation_z_gate.png">
 </p>
+
+### Walkthrough of the HHL algorithm
+
+Now, let's go over the HHL algorithm, guided by some exemplar code snipets. A detailed walkthrough of the algorithm can be found in [Qiskit's tutorial](https://github.com/Qiskit/textbook/blob/main/notebooks/ch-applications/hhl_tutorial.ipynb). Here, we provide a guidance on the overall procedure, as a background to run the codes. For a system of $N$ linear equations $A\vec{x}=\vec{b}$ (size of $A$ is $N \times N$), the objective of the HHL algorithm is to represent the solution vector $\vec{x}$ in terms of the eigenbasis of the $A$ matrix:
+$$\ket{x} = A^{-1} \ket{b} = \sum_j \lambda^{-1}_jb_j\ket{u_j}$$
+where $\lambda_j$ and $\ket{u_j}$ are the $j$-th eigenvalue and eigenvector of $A$, and the classical states are rescaled and represented as quantum states (with the $\ket{\cdot}$ notation). We can achieve this with 5 steps, a sample depiction of which is shown below
+<p align="center" width="100%">
+    <img width="90%" src="HHL_sample.png">
+</p>
+
+#### Step 1: State preparation of $\vec{b}$
+The first step is to represent the $\vec{b}$ vector from classical state to quantum $\ket{b}$, called state preparation. One way to do this is to normalize $\vec{b}$ and use amplitude encoding - $j$-th component of $\vec{b}$ corresponds to the amplitude of the $j$-th basis state of the quantum state $\ket{b}$. We need $n_b=\log_2N$ qubits to encode $\vec{b}$. 
+> **Note that $N$ needs to be a power of 2.**
+
+If `vector` is a numpy array representing $\vec{b}$, we can perform amplitude encoding by
+```
+from qiskit.circuit import QuantumCircuit
+nb = int(np.log2(len(vector)))
+vector_circuit = QuantumCircuit(nb)
+vector_circuit.initialize(
+      vector / np.linalg.norm(vector), list(range(nb))
+      )
+```
+Here, the `QuantumCircuit` class initializes a Qiskit representation of a quantum circuit using `nb` qubits that are needed to encode the `vector`. The `QuantumCircuit.initialize` function initilizes the quantum states with the vector provided.
+
+#### Step 2: QPE for eigenvalue estimation of $A$
+Next, we estimate the eigenvalue of $A$ using QPE. To use QPE, we need to first encode $A$ as a unitary operation (as mentioned in the [QPE section](#quantum-phase-estimation-qpe-steps)). We can encode $A$ as the Hamiltonian of the unitary gate $U=e^{iAt}$, which can be achieved by Trotterization. 
+> **Note that for the operation to work, $A$ must be Hermitian.**
+
+As discussed in the QPE section, the controlled qubits (in the ancilla register) stores the states of the eigenvalues of $A$ after the IQFT step within the QPE algorithm. The accuracy depends on the number of controlled qubits, $n_l$, which we determine based on the condition number of $A$. If `matrix` is a 2D numpy array representing $A$, we can perform these operations as
+```
+# initialize matrix class
+matrix_circuit = NumPyMatrix(matrix, evolution_time=2 * np.pi)
+
+# condition number of matrix
+kappa = matrix_circuit.condition_bounds()[1]
+
+# Update the number of qubits required to represent the eigenvalues
+# The +neg_vals is to register negative eigenvalues because
+# e^{-2 \pi i \lambda} = e^{2 \pi i (1 - \lambda)}
+nl = max(nb + 1, int(np.ceil(np.log2(kappa + 1)))) + neg_vals
+
+# perform QPE
+from qiskit.circuit.library import phase_estimation as pe
+pe_circuit = pe.PhaseEstimation(nl, matrix_circuit)
+```
+Here, the `NumPyMatrix` is a class that stores `matrix` and evolution time to perform the matrix exponent. It also has functionalities like returning the condition number of `matrix`. The `PhaseEstimation` function from the Qiskit library returns the QPE circuit.
+
+#### Step 3: Controlled rotation of ancilla qubit
+Once we have the eigenbasis, the ancilla qubit is rotated using a controlled rotation gate based on the eigenvalues. One way to generate this reciprocal circuit `reciprocal_circuit` is by Piecewise Chebyshev approximation of the function as shown [here](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L470).
+
+#### Step 4: Inverse QPE
+While technically we are now, ready to measure the solution state on the $n_b$ qubits (see Step 5), the solution vector cannot be obtained in terms of $\ket{0}$ and $\ket{1}$ as the $n_b$ qubits are entangled with the $n_l$ qubits. Thus, we need to perform an un-compute operation, using inverse QPE, to un-entangle the two qubit registers and the solution vector $\ket{x}$ is stored in the $n_b$ registers as $\ket{0}$ or $\ket{1}$ measurments. Inverse QPE can be done by simply:
+```
+pe_circuit.inverse()
+```
+Combining all the components, the full HHL circuit is given by:
+```
+# Initialise the quantum registers
+from qiskit.circuit import QuantumCircuit, QuantumRegister, AncillaRegister
+qb = QuantumRegister(nb)  # right hand side and solution
+# If state preparation is probabilistic the number of qubit flags should increase
+nf = 1
+qf = QuantumRegister(nf)  # flag qubits
+ql = QuantumRegister(nl)  # eigenvalue evaluation qubits
+qa = AncillaRegister(na)  # ancilla qubits
+
+# Initialize the quantum circuit
+qc = QuantumCircuit(qb, ql, qa, qf)
+
+# Add state preparation circuit of vector
+qc.append(vector_circuit, qb[:])
+
+# Add QPE circuit
+qc.append(
+      pe_circuit, ql[:] + qb[:] + qa[: matrix_circuit.num_ancillas]
+      )
+
+# Add controlled rotation circuit
+qc.append(reciprocal_circuit, ql[::-1] + [qf[0]])
+
+# Add QPE inverse circuit
+qc.append(
+      pe_circuit.inverse(),
+      ql[:] + qb[:] + qa[: matrix_circuit.num_ancillas],
+      )
+
+# return qc
+```
+
+#### Step 5: Measure ancilla and extract solution state
+At this stage, if the ancilla qubit is measured, it should collapse to $\ket{1}$ for the solution state to be stored in the $n_b$ qubit registers. If $\ket{0}$ is measured, the results are discarded and the process is repeated until $\ket{1}$ is measured. 
+
+We note that measuring the entire solution state can lead to loss of the computational advantage of the HHL algorithm and thus practically, only an observable of the system (like the mean or norm of the state) is measured as the outcome. For educational purpose, in the current code and challenge, we will extract out the entire solution vector $\ket{x}$ for comparison with true solution state $\vec{x}$.
+
+The detailed code with all the components can be found [here](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L323).
+
+### Workflow of the code
+
+The codebase comprise of two main Python scripts: [`circuit_HHL.py`](circuit_HHL.py) and [`solver.py`](solver.py). The first generates the HHL circuit and the second runs it with a specific backend (simulator, emulator, or QPU). Our codebase follows the following workflow for solving a given system of linear equations:
+
+#### 1. Create your matrix and vector
+* Code: [`circuit_HHL.py`](circuit_HHL.py)
+
+The `get_matrix_vector()` function in [`func_matrix_vector.py`](func_matrix_vector.py) returns the matrix and vector for various candidate cases. Various cases can be added here and the parameters defined in the input file [`input_vars.yaml`](input_vars.yaml). Given the case info stored using an argument parser variable (see [`circuit_HHL.py`](circuit_HHL.py)), this function can be called as
+```
+import func_matrix_vector as matvec
+matrix, vector, input_vars = matvec.get_matrix_vector(args)
+```
+
+#### 2. Generate the HHL circuit
+* Code: [`circuit_HHL.py`](circuit_HHL.py)
+
+Generate the HHL circuit using the following function call. First we call the `HHL` class using a simulator backend, followed by the circuit construction call.
+```
+from qiskit_aer import AerSimulator
+backend = AerSimulator(method='statevector')
+
+from linear_solvers import HHL
+hhl = HHL(quantum_instance=backend)
+
+circ = hhl.construct_circuit(matrix, vector)
+```
+The code snipets discussed in the [HHL section](#walkthrough-of-the-hhl-algorithm) are embedded in this function, defined in this [code](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L323).
+
+#### 3. Run the HHL circuit
+* Code: [`solver.py`](solver.py)
+
+Finally, we run the generated HHL circuit using a given backend - simulator, emulator, or QPU. The main function call is [`qc_circ()`](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/solver.py#L74), encompased in the script [`func_qc.py`](func_qc.py). The process of running the circuit involves (1) selecting and initializing the [backend](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L95), (2) [transpile](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L119) the circuit for the particular backend, and (3) [run](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L159) the trainspiled circuit.
 
 ### Implications of quantum algorithms
 
