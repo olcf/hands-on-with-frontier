@@ -18,9 +18,9 @@ export https_proxy=http://proxy.ccs.ornl.gov:3128/
 export no_proxy='localhost,127.0.0.0/8,*.ccs.ornl.gov'
 
 module load miniforge3
+source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver 
 
 # HHL circuit generator
-source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver 
 srun -N1 -n1 -c1 python circuit_HHL.py -case sample-tridiag -casefile input_vars.yaml --savedata
 
 # Run on simulator
@@ -30,7 +30,7 @@ srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml
 #srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet fake_garnet --savedata
 
 # Run on real device
-source keys.sh 
+#source keys.sh 
 #srun -N1 -n1 -c2 python solver.py -case sample-tridiag -casefile input_vars.yaml -s 1000 -backtyp real-iqm -backmet garnet --savedata
 
 # Plot results
