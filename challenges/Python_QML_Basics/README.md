@@ -527,9 +527,9 @@ Once the data is in the correct format, we start the actual training and validat
     
 ```
 
-Finally, there is one more part of the code and, coincidentally, it is what would be run first!
+Finally, there is one more part of the code, and coincidentally, it is what would be run first!
 
-The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to setup proper communication between tasks on Odo (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the very top of the "Functions" section above. 
+The `__main__` part of the code is what sets up the initial parallel environment, like the number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to set up proper communication between tasks on Odo (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup`, which we defined at the very top of the "Functions" section above.
 
 ```python
 if __name__ == "__main__":
@@ -554,7 +554,9 @@ if __name__ == "__main__":
     setup(rank, world_size)
 ```
 
-Thanks for taking the deep dive into the code, now to tackle the challenge itself!
+> Fun fact: Python code living in the `__main__` code-block is run when the script is executed directly (e.g., `python3 script.py`). That section of the code is ignored when the script is used as an external module by a different python script.
+
+Thanks for taking the deep dive into the code. Now to tackle the challenge itself!
 
 ## Running the Challenge
 
@@ -565,14 +567,14 @@ To do this challenge:
 0. Make sure you copy over the scripts and are in your `/gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/qml_test` directory:
 
     ```bash
-    $ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
+    $ cd /gpfs/wolf2/olcf/project_id/scratch/${USER}/
     $ mkdir qml_test
     $ cd qml_test
     $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/qml.py ./qml.py
     $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
     ```
 
-1. Use your favorite editor to change `-n` in `submit_qml.sbatch` to distribute the network over a specific number of tasks (pick an integer in the range from 1 to 8):
+1. Use your favorite editor to change the integer following `-n` in `submit_qml.sbatch` to distribute the network over a specific number of tasks (pick an integer in the range from 1 to 8):
 
     ```bash
     $ vi submit_qml.sbatch
@@ -638,7 +640,7 @@ git clone -b v0.41.0 https://github.com/PennyLaneAI/pennylane-lightning.git
 cd pennylane-lightning
 sed -i -e 's/RelWithDebInfo/Release/g' setup.py # Force Release build for better performance
 
-# Install dependencies (will also install PennyLaneLightning 0.41.0 w/ Lightning_qubit)
+# Install dependencies (will also install PennyLaneLightning 0.41.0 with Lightning_qubit)
 pip install pennylane==0.41.0 pennylane_lightning==0.41.0 --no-cache-dir 
 
 # Install (but skip the compilation step for) Lightning-Qubit

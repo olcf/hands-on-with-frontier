@@ -20,14 +20,14 @@ Before we jump into the coding section, let's discuss the differences between cl
 
 See our [`Python_QML_Basics`](../Python_QML_Basics) for a quick review of the differences between classical and quantum computing. Another misconception is that quantum computers can solve problems that classical computers cannot. This is also **not** true! Quantum computers might seem like magic, but they're really only capable of solving classical computations faster and (ideally) with fewer resources than normal computers. In fact, it is partially because of this that we can "simulate" quantum computers classically, which you will be doing in this course. 
 
-In this course we will be using:
+In this course, we will be using:
 1. Simulators - which mimic QPUs using classical computing.
 2. Emulators - which are like simulators, but they add a noise profile calibrated from the real hardware.
 3. Real hardware (or quantum processing unit, QPU) - actual quantum computing hardware provided by IQM. 
 
-The focus of quantum algorithms is to leverage quantum prinicples such as superposition, entanglement, and quantum interference to perform computations in ways classical computers cannot. 
+The focus of quantum algorithms is to leverage quantum principles such as superposition, entanglement, and quantum interference to perform computations in ways that classical computers cannot. 
 
-One way of leveraging quantum mechanics for computing is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or even eigenvalue itself) associated with a quantum state. Given it's prevalance in many quantum algorithms, we believe it's important to give you a primer for how it works. Additionally, by understanding QPE we will see a gentle introduction to the nuances of developing quantum algorithms compared to classical!
+One way of leveraging quantum mechanics for computing is by using one of the most important subroutines in quantum computing, the quantum phase estimation (QPE). QPE is a foundational technique in many quantum algorithms, including the HHL algorithm, that allows us to estimate the phase (or even the eigenvalue itself) associated with a quantum state. Given it's prevalence in many quantum algorithms, we believe it's important to give you a primer on how it works. Additionally, by understanding QPE, we will see a gentle introduction to the nuances of developing quantum algorithms compared to classical!
 
 > **Please note that our intention is not to scare you away with terminology. If you find any terms in the following explanation confusing (don't worry, you're not alone), please reach out if any topics are not clear!**
 
@@ -43,23 +43,23 @@ One way of leveraging quantum mechanics for computing is by using one of the mos
       * The **ancilla register** is used to store the phase estimation and is initialized to ∣0⟩ states.
           * The more qubits that are in the **ancilla register**, the higher the precision of our measurement.
       * The **target register**, ∣ψ⟩, is the register from which we want to extract phase information.
-          * Preparation of |ψ⟩ will be problem specific. For instance, it can be initialized as an equal super postion of |0⟩ and |1⟩, or some other complex state built from a series of gates.
+          * Preparation of |ψ⟩ will be problem-specific. For instance, it can be initialized as an equal superposition of |0⟩ and |1⟩, or some other complex state built from a series of gates.
       * This step is important because we want the ancilla qubits to be in a state capable of representing multiple outcomes simultaneously and the target state ∣ψ⟩ needs to be prepared such that we can derive the phase value by the end.
 3. ***Hadamard Transformation***
-      * Apply a Hadamard tranformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superpostion representing all possibilties of our quantum system (which makes all possibilities have equal probability). 
+      * Apply a Hadamard transformation (i.e., using Hadamard gates in our circuit) to the ancilla qubits in the ancilla register; thereby, putting the ancilla qubits in a superposition representing all possibilities of our quantum system (which makes all possibilities have equal probability). 
       * This step essentially enables quantum parallelism since our initial state can now capture multiple simultaneous outcomes.
       * Additionally, by placing the ancilla register in a superposition of states, we are enabling the ancilla register to interact with ∣ψ⟩ in such a way that useful information about the phase of ∣ψ⟩ can be obtained through interference later on.
 4. ***Controlled Unitaries*** 
       * For each qubit **a** (also known as control qubit) in the ancilla register, apply the controlled unitary operation U<sup>2<sup>**a**</sup></sup> to the state ∣ψ⟩ in such a way that it depends on the eignevalue's binary expansion.
       * In other words, the unitary operation is only applied to the target register when the **a**-th ancillary quibit equals |1⟩.
-      * After performing the controlled unitary operation, the overall state of the quantum system can be thought of a mix of different possibilities (i.e., a superposition) for the ancilla qubits, each corresponding to a piece of phase information related to the target qubit's eigenstate.
+      * After performing the controlled unitary operation, the overall state of the quantum system can be thought of as a mix of different possibilities (i.e., a superposition) for the ancilla qubits, each corresponding to a piece of phase information related to the target qubit's eigenstate.
 5. ***Inverse Quantum Fourier Transform (IQFT)***
       * At this point, the phase information is not easily measured. Therefore, the inverse quantum Fourier transform is applied to the ancilla qubits.
-      * Essentially, the most probable states in the ancilla register would constructively interfere with one another leading them to have higher amplitudes.
+      * Essentially, the most probable states in the ancilla register would constructively interfere with one another, leading them to have higher amplitudes.
       * The IQFT transforms the phase information encoded in the amplitudes of the ancilla qubits into a basis state that can directly represent the estimated phase.
 6. ***Measure the ancilla qubit register***
       * The states measured by the qubits within the ancilla register will yield an **approximation** of the phase θ.
-      * Remember quantum computing is inherently probabilitistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
+      * Remember, quantum computing is inherently probabilistic, so the precision of the estimation is determined by the number of ancilla qubits in the ancilla register.
       * When the ancilla qubit is measured, it collapses to one of the basis states (i.e., |0⟩ or |1⟩) with a probability given by the square of the amplitudes.
       * The measured outcome, **k**, relates to the phase, **θ** as follows: θ = **k**/2<sup>**a**</sup>, where **a** is the number of qubits in the ancilla register.
 
@@ -72,7 +72,7 @@ The following example is a QPE circuit for a Z-gate using 3 ancilla qubits.
 
 ### Walkthrough of the HHL algorithm
 
-Now, let's go over the HHL algorithm, guided by some exemplar code snipets. A detailed walkthrough of the algorithm can be found in [Qiskit's tutorial](https://github.com/Qiskit/textbook/blob/main/notebooks/ch-applications/hhl_tutorial.ipynb). Here, we provide a guidance on the overall procedure, as a background to run the codes. For a system of $N$ linear equations $A\vec{x}=\vec{b}$ (size of $A$ is $N \times N$), the objective of the HHL algorithm is to represent the solution vector $\vec{x}$ in terms of the eigenbasis of the $A$ matrix:
+Now, let's go over the HHL algorithm, guided by some exemplary code snippets. A detailed walkthrough of the algorithm can be found in [Qiskit's tutorial](https://github.com/Qiskit/textbook/blob/main/notebooks/ch-applications/hhl_tutorial.ipynb). Here, we provide guidance on the overall procedure, as a background to run the codes. For a system of $N$ linear equations $A\vec{x}=\vec{b}$ (size of $A$ is $N \times N$), the objective of the HHL algorithm is to represent the solution vector $\vec{x}$ in terms of the eigenbasis of the $A$ matrix:
 $$\ket{x} = A^{-1} \ket{b} = \sum_j \lambda^{-1}_jb_j\ket{u_j}$$
 where $\lambda_j$ and $\ket{u_j}$ are the $j$-th eigenvalue and eigenvector of $A$, and the classical states are rescaled and represented as quantum states (with the $\ket{\cdot}$ notation). We can achieve this with 5 steps, a sample depiction of which is shown below
 <p align="center" width="100%">
@@ -92,13 +92,13 @@ vector_circuit.initialize(
       vector / np.linalg.norm(vector), list(range(nb))
       )
 ```
-Here, the `QuantumCircuit` class initializes a Qiskit representation of a quantum circuit using `nb` qubits that are needed to encode the `vector`. The `QuantumCircuit.initialize` function initilizes the quantum states with the vector provided.
+Here, the `QuantumCircuit` class initializes a Qiskit representation of a quantum circuit using `nb` qubits that are needed to encode the `vector`. The `QuantumCircuit.initialize` function initializes the quantum states with the vector provided.
 
 #### Step 2: QPE for eigenvalue estimation of $A$
 Next, we estimate the eigenvalue of $A$ using QPE. To use QPE, we need to first encode $A$ as a unitary operation (as mentioned in the [QPE section](#quantum-phase-estimation-qpe-steps)). We can encode $A$ as the Hamiltonian of the unitary gate $U=e^{iAt}$, which can be achieved by Trotterization. 
 > **Note that for the operation to work, $A$ must be Hermitian.**
 
-As discussed in the QPE section, the controlled qubits (in the ancilla register) stores the states of the eigenvalues of $A$ after the IQFT step within the QPE algorithm. The accuracy depends on the number of controlled qubits, $n_l$, which we determine based on the condition number of $A$. If `matrix` is a 2D numpy array representing $A$, we can perform these operations as
+As discussed in the QPE section, the controlled qubits (in the ancilla register) store the states of the eigenvalues of $A$ after the IQFT step within the QPE algorithm. The accuracy depends on the number of controlled qubits, $n_l$, which we determine based on the condition number of $A$. If `matrix` is a 2D numpy array representing $A$, we can perform these operations as
 ```
 # initialize matrix class
 matrix_circuit = NumPyMatrix(matrix, evolution_time=2 * np.pi)
@@ -121,7 +121,7 @@ Here, the `NumPyMatrix` is a class that stores `matrix` and evolution time to pe
 Once we have the eigenbasis, the ancilla qubit is rotated using a controlled rotation gate based on the eigenvalues. One way to generate this reciprocal circuit `reciprocal_circuit` is by Piecewise Chebyshev approximation of the function as shown [here](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L470).
 
 #### Step 4: Inverse QPE
-While technically we are now, ready to measure the solution state on the $n_b$ qubits (see Step 5), the solution vector cannot be obtained in terms of $\ket{0}$ and $\ket{1}$ as the $n_b$ qubits are entangled with the $n_l$ qubits. Thus, we need to perform an un-compute operation, using inverse QPE, to un-entangle the two qubit registers and the solution vector $\ket{x}$ is stored in the $n_b$ registers as $\ket{0}$ or $\ket{1}$ measurments. Inverse QPE can be done by simply:
+While technically we are now, ready to measure the solution state on the $n_b$ qubits (see Step 5), the solution vector cannot be obtained in terms of $\ket{0}$ and $\ket{1}$ as the $n_b$ qubits are entangled with the $n_l$ qubits. Thus, we need to perform an un-compute operation, using inverse QPE, to un-entangle the two qubit registers and the solution vector $\ket{x}$ is stored in the $n_b$ registers as $\ket{0}$ or $\ket{1}$ measurements. Inverse QPE can be done by simply:
 ```
 pe_circuit.inverse()
 ```
@@ -162,13 +162,13 @@ qc.append(
 #### Step 5: Measure ancilla and extract solution state
 At this stage, if the ancilla qubit is measured, it should collapse to $\ket{1}$ for the solution state to be stored in the $n_b$ qubit registers. If $\ket{0}$ is measured, the results are discarded and the process is repeated until $\ket{1}$ is measured. 
 
-We note that measuring the entire solution state can lead to loss of the computational advantage of the HHL algorithm and thus practically, only an observable of the system (like the mean or norm of the state) is measured as the outcome. For educational purpose, in the current code and challenge, we will extract out the entire solution vector $\ket{x}$ for comparison with true solution state $\vec{x}$.
+We note that measuring the entire solution state can lead to loss of the computational advantage of the HHL algorithm and thus practically, only an observable of the system (like the mean or norm of the state) is measured as the outcome. For educational purposes, in the current code and challenge, we will extract the entire solution vector $\ket{x}$ for comparison with the true solution state $\vec{x}$.
 
 The detailed code with all the components can be found [here](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L323).
 
 ### Workflow of the code
 
-The codebase comprise of two main Python scripts: [`circuit_HHL.py`](circuit_HHL.py) and [`solver.py`](solver.py). The first generates the HHL circuit and the second runs it with a specific backend (simulator, emulator, or QPU). Our codebase follows the following workflow for solving a given system of linear equations:
+The codebase comprises two main Python scripts: [`circuit_HHL.py`](circuit_HHL.py) and [`solver.py`](solver.py). The first generates the HHL circuit and the second runs it with a specific backend (simulator, emulator, or QPU). Our codebase follows the following workflow for solving a given system of linear equations:
 
 #### 1. Create your matrix and vector
 * Code: [`circuit_HHL.py`](circuit_HHL.py)
@@ -182,7 +182,7 @@ matrix, vector, input_vars = matvec.get_matrix_vector(args)
 #### 2. Generate the HHL circuit
 * Code: [`circuit_HHL.py`](circuit_HHL.py)
 
-Generate the HHL circuit using the following function call. First we call the `HHL` class using a simulator backend, followed by the circuit construction call.
+Generate the HHL circuit using the following function call. First, we call the `HHL` class using a simulator backend, followed by the circuit construction call.
 ```
 from qiskit_aer import AerSimulator
 backend = AerSimulator(method='statevector')
@@ -192,7 +192,7 @@ hhl = HHL(quantum_instance=backend)
 
 circ = hhl.construct_circuit(matrix, vector)
 ```
-The code snipets discussed in the [HHL section](#walkthrough-of-the-hhl-algorithm) are embedded in this function, defined in this [code](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L323).
+The code snippets discussed in the [HHL section](#walkthrough-of-the-hhl-algorithm) are embedded in this function, defined in this [code](https://github.com/jw676/quantum_linear_solvers/blob/a94cf634f77a9061c95baf95b4d3bf6baa9de477/linear_solvers/hhl.py#L323).
 
 #### 3. Run the HHL circuit
 * Code: [`solver.py`](solver.py)
@@ -201,13 +201,13 @@ Finally, we run the generated HHL circuit using a given backend - simulator, emu
 
 ### Implications of quantum algorithms
 
-One final thing to note before diving into the code, is the significance of probabilistic computing. Imagine you used your phone to take a photo of the beautiful smoky mountains, but when you went to show your friends, you couldn't find the photo! The next day you contemplate how odd that was, so you look once more in your photos folder and the smoky mountains are magically there! You repeat this over and over, but the photo only shows up some of the time. If you measured how often you saw the photo, you would notice that there is a probability associated with its appearance (maybe around 50%). Afterwards, you'd throw your phone away with 100% probability because that's no way to maintain a filesystem!
+One final thing to note before diving into the code, is the significance of probabilistic computing. Imagine you used your phone to take a photo of the beautiful Smoky Mountains, but when you went to show your friends, you couldn't find the photo! The next day, you contemplate how odd that was, so you look once more in your photos folder and the Smoky Mountains are magically there! You repeat this over and over, but the photo only shows up some of the time. If you measured how often you saw the photo, you would notice that there is a probability associated with its appearance (maybe around 50%). Afterwards, you'd throw your phone away with 100% probability because that's no way to maintain a filesystem!
 
-Hopefully this idea cements why quantum computers will never out-right replace classical; however, this "weird" behavior does mean that we have to carefully consider how we interpret our calculations. To obtain reliable estimates, we need to run the quantum circuits multiple times. We call each iteration of our run a "**shot**". To obtain statistically relevant results, the more shots of our circuit we run, the better! 
+Hopefully, this idea cements why quantum computers will never outright replace classical; however, this "weird" behavior does mean that we have to carefully consider how we interpret our calculations. To obtain reliable estimates, we need to run the quantum circuits multiple times. We call each iteration of our run a "**shot**". To obtain statistically relevant results, the more shots of our circuit we run, the better! 
 
 For example, if you'd flip a coin 3 times (i.e., 3 shots), and got heads each time, you might say you'd have a 100% probability of getting heads if you stopped there. We know this isn't true! In fact, if you flipped the coin 1000 times (1000 shots), you'd see the probability of getting heads or tails is roughly 50%, as expected.
 
-In this crash course we will observe the effects of the number of shots has on our final results. So without further ado, let's begin coding!
+In this crash course, we will observe the effects of the number of shots has on our final results. So without further ado, let's begin coding!
 
 ## Setting Up Our Environment
 First, we will move to the challenge directory, unload all current modules you may have previously loaded on Odo, and deactivate any previously loaded environments. 
@@ -221,7 +221,7 @@ $ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 # Resets to default modules
 $ module reset
 ```
-Next, we will load our miniforge module (analagous to an open source minconda), and activate the appropriate conda environment for this exercise.
+Next, we will load our miniforge module (analogous to an open-source minconda), and activate the appropriate conda environment for this exercise.
 ```
 $ module load miniforge3
 $ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver
@@ -257,7 +257,7 @@ $ source keys.sh
 
 ### (Optional) Testing the Code 
 
-It is also advisable to test the code first to ensure the environment is setup correctly.
+It is also advisable to test the code first to ensure the environment is set up correctly.
 
 1. Test Qiskit installation: [`test_qiskit_installation.py`](test_qiskit_installation.py)
       ```

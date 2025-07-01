@@ -13,7 +13,7 @@ In high-performance computing (HPC), ML/DL is getting more and more popular beca
 To process and train an accurate ML/DL model in a reasonable amount of time, more and more compute nodes are required as the amount of big data increases.
 
 [PyTorch](https://pytorch.org/) is a library for Python programs that pairs well with HPC resources and facilitates building DL projects.
-PyTorch emphasizes the flexibility and human-readableness of Python and allows deep learning models to be expressed in a similar manner.
+PyTorch emphasizes the flexibility and human-readability of Python and allows deep learning models to be expressed in a similar manner.
 Think about the simplicity, structure, and usefulness of NumPy and its arrays, but more geared toward ML/DL algorithms and its tensors -- that's what PyTorch is.
 Compared to other frameworks and libraries, it is one of the more "beginner friendly" ML/DL packages due to its dynamic and familiar "Pythonic" nature.
 PyTorch is also useful when GPUs are involved because of its strong GPU acceleration ability.
@@ -110,7 +110,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### 2.1 <a name="tensors"></a>Tensors
 
-One of the most important datatypes in all of deep learning are "tensors".
+One of the most important data types in all of deep learning are "tensors".
 Tensors are a specialized data structure that are very similar to arrays and matrices.
 In PyTorch, tensors are used to encode the inputs and outputs of a model.
 Tensors are similar to NumPy’s `ndarrays`, can run on GPUs, and are typically more optimized than normal arrays.
@@ -245,8 +245,8 @@ We define the following hyperparameters for training:
 * <a name="epochs"></a>**Epochs**: the number of times to iterate over *all* the samples.
 * <a name="batches"></a>**Batch size**: the number of data samples propagated through the network at each step.
 * **Number of steps**: the number of iterations *within* each epoch (total number of samples divided by the batch size).
-* **Learning Rate**: how much to update models parameters at each batch/epoch.
-  Smaller values yield slow learning speed, while large values may result in unpredictable behavior during training.
+* **Learning Rate**: how much to update the model's parameters at each batch/epoch.
+  Smaller values yield slow learning speed, while larger values may result in unpredictable behavior during training.
 
 At the end of the challenge, you will tune the **epochs** and **batch size** to try and get "the best" CNN up and running for a fixed learning rate.
 
@@ -484,8 +484,8 @@ One may ask: "why do you use multiple fully connected layers if the output of on
 Other than the reason being "more layers are usually better for everything", there is a more concrete reason.
 If one goes through the math, it will become visible that each neuron (initially) depends only on a **subset** of the image (only a specific section of pixels).
 However, neurons in a fully connected layer have full connections to all activations in the previous layer.
-So, if you introduce multiple fully connected layers, you provide your model with ability to further mix and share a neuron's data, since every single neuron has a connection to every single one in the next layer.
-This creates a flow of information between each of the images pixel locations, rather than just a subset, thus the decision is based truly on the whole image.
+So, if you introduce multiple fully connected layers, you provide your model with the ability to further mix and share a neuron's data, since every single neuron has a connection to every single one in the next layer.
+This creates a flow of information between each of the images' pixel locations, rather than just a subset, thus the decision is based truly on the whole image.
 
 Based on the activation values of the final convolution layer, the series of fully connected layers output a set of confidence scores (values between 0 and 1) that specify how likely the image is to belong to a "class".
 In our case, the output of the final layer is the possibility that the input image contains any of the animals previously mentioned in the [Datasets Section](#dsets).
@@ -544,7 +544,7 @@ criterion = nn.CrossEntropyLoss()
 
 As you will see in the next section, the `criterion` variable (and, therefore, the softmax function) is called directly after obtaining the final results of the `ConvNet.forward()` function.
 
-The final line in defining our CNN is `return x` which returns the final results of our network through a single forward pass.
+The final line in defining our CNN is `return x`, which returns the final results of our network through a single forward pass.
 It's as simple as that!
 Now we're ready to train the CNN in the "training loop" of our code.
 
@@ -612,7 +612,7 @@ Second, we initialize the loss function and optimizer and set them to the `crite
 Next, we enter the training loop, which will train for a number of epochs (**epochs** are user-specified), where within each epoch it will take `n_total_steps` based on how many batches of images are processed at once (the **batch size** is user-specified).
 In the training loop, the `images` and `labels` of the `training_loader` data are first passed to the computing device (recall these variables from the [Loading Data Section](#load)).
 Then, `model(images)` is called to actually process the image data to the CNN -- the results of the images going through the CNN are then set to the `outputs` variable.
-The loss function is then called, which calculates the final probabilities and error an image is a specific classification -- the loss function results are set to the `loss` variable.
+The loss function is then called, which calculates the final probabilities and error of an image in a specific classification -- the loss function results are set to the `loss` variable.
 
 To try and optimize the results for the next step, the `loss` results are then propagated backwards to the "beginning" so that the network can adjust its parameters.
 This is done by first using the previously defined `optimizer` to zero-out its gradients (to prevent double counting), explicitly back-propagate the error with `loss.backward()` and finally tell the network to adjust its parameters based on that back-propagation with `optimizer.step()`.
@@ -660,7 +660,7 @@ We stop tracking computations by surrounding the testing loop with `torch.no_gra
 
 Within the loop itself, all that is happening is passing the images and labels of the `test_loader` test data (recall this variable from the [Loading Data Section](#load)), getting the results from the CNN via the `outputs` variable, and then checking the predictions against the actual labels of the data.
 The results contained in `outputs` are passed through the `torch.max` function, which extracts the maximum value (max probability of a certain class) from the `outputs` tensor -- since the 10 different classes are represented by 10 different indices (0-9), we save the index of the class that represents the max probability into the `predicted` variable.
-After being compared to the actual labels the the images came with, the **total** number of samples and **total** number of correct predictions are then saved into `n_samples` and `n_correct`.
+After being compared to the actual labels the images came with, the **total** number of samples and **total** number of correct predictions are then saved into `n_samples` and `n_correct`.
 In addition to the *overall* correct predictions across the whole network, analysis is also performed on a *class* level:
 
 * The correct predictions for each class are stored in `n_class_correct` (e.g., how many times the network correctly guessed "Frog").
@@ -668,10 +668,10 @@ In addition to the *overall* correct predictions across the whole network, analy
 * How many times the model tried, and potentially failed, to guess a class is stored in `n_class_predics` (e.g., total amount of times, whether correct or not, the network guessed "Frog").
 
 The rest of the code below the testing loop in `cnn.py` just prints statistics and generates the plots, so it is not necessary to explain.
-In a real world application, the results of this test would then be saved and fed to go in another training loop; however, this is where our code ends.
+In a real-world application, the results of this test would then be saved and fed to go in another training loop; however, this is where our code ends.
 Therefore, this marks the end of the CNN code!
 
-Congratulations for making it all the way through the context and explanation of a CNN!
+Congratulations on making it all the way through the context and explanation of a CNN!
 Now for the fun part, the actual challenge!
 
 ## 5. <a name="chall"></a>Challenge: Tuning a CNN
