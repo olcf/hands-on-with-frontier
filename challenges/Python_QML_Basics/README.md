@@ -2,48 +2,47 @@
 
 > Written by: Samuel T. Bieberich (@Sam-Bieberich) and Michael A. Sandoval (@michael-sandoval)
 
-One of the most promising forms of unconventional computing is Quantum Computing (QC), which utilizes quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in classical computers, however, they are able to exploit some different properties, including:
+One of the most promising forms of unconventional computing is Quantum Computing (QC), which utilizes quantum mechanics to perform calculations on qubits. These qubits are analogous to binary bits in classical computers; however, they can exploit some different properties, including:
 
 1. Superposition - the ability of a qubit to be in more than one state at once, measured as a "1" or "0" only a percentage of the time. 
-2. Entanglement - the ability of two qubits to connect to one another across theoretically infinite amounts of space, making them directly related. 
+2. Entanglement - the ability of two qubits to connect across theoretically infinite amounts of space, making them directly related. 
 
-Quantum Computers are well equipped to handle processes like those in Convolutional Neural Networks and machine learning (ML), optimized for computing linear algebra matrix calculations and weighted cost functions. Combining quantum computing with ML results in quantum machine learning (QML). This scientific domain is currently in its infancy, but as soon as more effective quantum computers are built, Quantum Processing Units (QPUs) may be working on the same scale as GPUs and TPUs in the ML-space.
+Quantum Computers are well equipped to handle processes like those in Convolutional Neural Networks and machine learning (ML), optimized for computing linear algebra matrix calculations and weighted cost functions. Combining quantum computing with ML results in quantum machine learning (QML). This scientific domain is currently in its infancy, but as soon as more effective quantum computers are built, Quantum Processing Units (QPUs) may be working on the same scale as GPUs and TPUs in the ML space.
 
 In theory, quantum computers are much more scalable than current HPC infrastructure, slowed by the steady decline of [Moore's Law](https://en.wikipedia.org/wiki/Moore%27s_law). Given this over-idealized outlook, the question remains, ***why would HPC need to be involved at all?***
 
-**The general answer is**: At this stage, instead of viewing QC as completely replacing classical HPC, the goal is integrating QC into a "hybrid" QC/HPC ecosystem. The two can work together to accomplish tasks that they're *each* good at, similar to how a GPU works along CPUs for specific tasks and not for others. So, similar to how a GPU is used to accelerate certain parts of codes, we can view a QPU as an accelerator that can speed up certain demanding, exponential-scaling calculations in a scientific code.
+**The general answer is**: At this stage, instead of viewing QC as completely replacing classical HPC, the goal is to integrate QC into a "hybrid" QC/HPC ecosystem. The two can work together to accomplish tasks that they're *each* good at, similar to how a GPU works along with CPUs for specific tasks and not for others. So, similar to how a GPU is used to accelerate certain parts of code, we can view a QPU as an accelerator that can speed up certain demanding, exponential-scaling calculations in a scientific code.
 
 This tutorial will highlight a "hybrid" QC/HPC ecosystem, where you will use a virtual (simulated) QPU to train an ML model using transfer learning. The challenge problem itself focuses on how to efficiently distribute parallel tasks, so you won't need to know any of the quantum theory, but this allows you to get a glimpse of the quantum computing world.
 
 ## Setting Up Our Environment
 
-First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Odo, and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-frontier/challenges/Python_QML_Basics
-$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-odo/challenges/Python_QML_Basics
+$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
 The `source deactivate_envs.sh` command is only necessary if you already have existing conda environments active.
 The script unloads all of your previously activated conda environments, and no harm will come from executing the script if that does not apply to you.
 
-Next, we will load the gnu compiler module (most Python packages assume GCC), the GPU module, and the Kokkos module (required by our code to run on AMD GPUs using the Kokkos programming model):
+Next, we will load the GNU compiler module (most Python packages assume GCC), the GPU module:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
+$ module load PrgEnv-gnu/8.6.0 
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
-$ module load kokkos/4.3.00-omp
 $ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PennyLane and PyTorch.
-Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
+Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier
+$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -51,20 +50,20 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier/bin/python3
+/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo/bin/python3
 ```
 
 ## Quantum Primer
 
-Before we run the code, it is important to understand the process of what the code will be doing. We will start by analyzing quantum computing and figuring out why it is so readily optimized into ML applications.
+Before we run the code, it is important to understand the process that the code will perform. We will start by analyzing quantum computing and figuring out why it is so readily optimized into ML applications.
 
 ### Qubits
 
-In classical computing there are "Bits", while quantum computing has Quantum Bits or "Qubits". Although they are both used to represent information, they are quite different.
+In classical computing, there are "Bits", while quantum computing has Quantum Bits or "Qubits". Although they are both used to represent information, they are quite different.
 
-* A **Bit** is the smallest unit of measuring information in classical computing and it can only have one of two values: 0 or 1. (i.e., a binary digit)
+* A **Bit** is the smallest unit of measuring information in classical computing, and it can only have one of two values: 0 or 1 (i.e., a binary digit).
 
-* A **Qubit** is the smallest unit of information measurement in quantum computing. Unlike, classical bits, a quantum bit can have multiple states at the same time. Meaning, a quantum bit can have a combination of 0 and 1 simultaneously. This property of Qubits is known as **superposition**.
+* A **Qubit** is the smallest unit of information measurement in quantum computing. Unlike classical bits, a quantum bit can have multiple states at the same time. Meaning, a quantum bit can have a combination of 0 and 1 simultaneously. This property of Qubits is known as **superposition**.
 
 A classical binary bit can only represent a single binary value, such as 0 or 1, meaning that it can only be in one of two possible states. A qubit, however, can represent a 0, a 1, or any proportion of 0 and 1 in superposition of both states, with a certain probability of being a 0 and a certain probability of being a 1.
 
@@ -82,7 +81,7 @@ The state vector originates in the center of the sphere and terminates at a poin
 * The x-axis represents the real part of the state vector.
 * The y-axis represents the imaginary part of the state vector. 
 
-The Bloch Sphere is a unit sphere upon which various rotations of a primary vector can represent quantum superposition states. If the vector points straight up it's 0, if it points straight down it's 1. Since there are technically infinite points on the surface of a sphere, it is logical that there are thus infinitely many unique quantum states. By rotating the "red line" on the gif graphic below, you can note how the parts of the vector pointing towards 1 and 0 vary, thus representing the odds of measuring each binary state. 
+The Bloch Sphere is a unit sphere upon which various rotations of a primary vector can represent quantum superposition states. If the vector points straight up, it's 0; if it points straight down, it's 1. Since there are technically infinite points on the surface of a sphere, it is logical that there are infinitely many unique quantum states. By rotating the "red line" on the GIF graphic below, you can note how the parts of the vector pointing towards 1 and 0 vary, thus representing the odds of measuring each binary state. 
 
 
 ![Bloch Sphere](./images/hzh_x_compare.gif)
@@ -93,7 +92,7 @@ Quantum Circuits perform transformations on the Bloch Sphere by using gates. The
 
 ![QML Circuit](./images/original-circuit.png)
 
-The complex image directly above is what we are going to be designing today! But, no worries, as this whole process is automated. The script below takes the input states of the training and puts them on the left of the stave/circuit, then uses various quantum rotations gates to make the weightings point more toward the 1 or the 0.
+The complex image directly above is what we are going to be designing today! But, no worries, as this whole process is automated. The script below takes the input states of the training and puts them on the left of the stave/circuit, then uses various quantum rotation gates to make the weightings point more toward the 1 or the 0.
 
 When a quantum state is measured, it collapses to one of these states with a probability. While this may seem like a bother to electrical engineering designers, it is actually very helpful, not to mention one of the defining features of quantum physics! 
 
@@ -101,25 +100,25 @@ If you recall the training on just ML, you will notice that all the talk about w
 
 ### Gates 
 
-Just for clarity before we start wading into the deep end in the following sections, it would be best to define some of the most basic quantum gates. Some are very similar to classical boolean logic gates, but others are particularly strange to people without physics backgrounds. 
+Just for clarity before we start wading into the deep end in the following sections, it would be best to define some of the most basic quantum gates. Some are very similar to classical Boolean logic gates, but others are particularly strange to people without physics backgrounds. 
 
 It is worth mentioning that quantum gates have to be this way due to the limitations of quantum physics. As per Google Bard:
 
 > Quantum gates are unitary because they are implemented by the action of a Hamiltonian for a specific time, which gives a unitary time evolution according to the Schrödinger equation. The unitarity property of quantum mechanics restricts the evolution of quantum states. This means that every operation on a normalized quantum state must keep the sum of probabilities of all possible outcomes at exactly 1. Therefore, any quantum gate must be implemented as a unitary operator and is therefore reversible. 
 
-Classical gates such as the NAND gate (one of the Universal gates) are not reversible, and thus can't be translated to quantum circuits. This is a bummer since having quantum universal gates would be nice, but instead, there are universal gate sets, which are composed of 2-5 gates that when combined are universal in scope. More can be read about these gate sets below, or in the linked Wikipedia article. 
+Classical gates such as the NAND gate (one of the Universal gates) are not reversible, and thus can't be translated to quantum circuits. This is a bummer since having quantum universal gates would be nice, but instead, there are universal gate sets, which are composed of 2-5 gates that, when combined, are universal in scope. More can be read about these gate sets below, or in the linked Wikipedia article. 
 
 #### X (NOT)
 
-Flips the qubit polarity (N to S or S to N), exactly the same concept as the classical NOT gates in every computer on Earth. These gates are often not used alone though, but rather in parallel with a control bit which "activates" the X if another qubit is a 1 or 0. These are called CNOT gates and can be stacked to other combinations as well (CCNOT, CCCNOT, etc.).
+Flips the qubit polarity (N to S or S to N), exactly the same concept as the classical NOT gates in every computer on Earth. These gates are often not used alone though, but rather in parallel with a control bit which "activates" the X if another qubit is a 1 or 0. These are called CNOT gates and can be stacked with other combinations as well (CCNOT, CCCNOT, etc.).
 
 #### H (Hadamard)
 
-Puts a qubit into (or out of) a superposition state. Many are used in each circuit, and most qubits are at least put into superposition one time, as this is the main advantage they have over classical bits. In fact, when combined with a Tofolli gate (the fancy name for CCNOT), it is the simplest universal quantum gate set. 
+Puts a qubit into (or out of) a superposition state. Many are used in each circuit, and most qubits are at least put into superposition one time, as this is the main advantage they have over classical bits. In fact, when combined with a Toffoli gate (the fancy name for CCNOT), it is the simplest universal quantum gate set. 
 
 #### RY (Y-axis Rotation)
 
-Along with RX and RZ gates (of which this code doesn't focus as much), rotates the vector in the Bloch Sphere representation of the qubit. This particular gate rotates around the Y axis. 
+Along with RX and RZ gates (of which this code doesn't focus as much), it rotates the vector in the Bloch Sphere representation of the qubit. This particular gate rotates around the Y axis. 
 
 #### More info
 
@@ -159,11 +158,11 @@ torch.manual_seed(42)
 np.random.seed(42)
 ```
 
-Obviously, some such as `time` and `os` are used to check the runtime of the circuit for the output to be in a format we can read.
+Obviously, some, such as `time` and `os` are used to check the runtime of the circuit for the output to be in a format we can read.
 
 All of the PyTorch imports allow for the ML part of the QML implementation. Like the section covering PyTorch in the [Python_Pytorch_Basics](../Python_Pytorch_Basics) tutorial, PyTorch will be used to set up a neural network. The `DDP` import is important, ensuring that the code can be run in parallel on multiple GPUs or nodes.
 
-[PennyLane](https://pennylane.ai/) is a Python library for designing quantum circuits or programs from Xanadu, a Canadian quantum computing company. Pennylane has some great [demos](https://pennylane.ai/qml/demonstrations/) , and much of our OLCF tutorial is based on a version of their [Quantum Transfer Learning](https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning) demo.
+[PennyLane](https://pennylane.ai/) is a Python library for designing quantum circuits or programs from Xanadu, a Canadian quantum computing company. Pennylane has some great [demos](https://pennylane.ai/qml/demonstrations/), and much of our OLCF tutorial is based on a version of their [Quantum Transfer Learning](https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning) demo.
 
 Lastly, setting the "seed" for both NumPy and PyTorch makes sure the script is reproducible upon re-execution and is consistently using the same random data sampling.
 
@@ -193,7 +192,7 @@ def setup(rank, world_size):
     train_model(rank,world_size)
 ```
 
-The next three layers define much of the quantum-related part of the code. The first `H_layer` puts the qubits into superposition. As defined above, this means that the qubits are initialized to have an output of either 1 or 0 with 50% odds. This weighting changes depending on the operations of other gates later in the circuit. Already sounds like a Convolutional Neural Network right? H or Hadamard gates are the gates needed to put a qubit in superposition, so the `H_layer` function just does that for each qubit. 
+The next three layers define much of the quantum-related part of the code. The first `H_layer` puts the qubits into superposition. As defined above, this means that the qubits are initialized to have an output of either 1 or 0 with 50% odds. This weighting changes depending on the operations of other gates later in the circuit. Already sounds like a Convolutional Neural Network, right? H or Hadamard gates are the gates needed to put a qubit in superposition, so the `H_layer` function just does that for each qubit. 
 
 ```python
 def H_layer(nqubits):
@@ -203,9 +202,9 @@ def H_layer(nqubits):
         qml.Hadamard(wires=idx)
 ```
 
-The second quantum layer is the `RY_layer`. As noted above, any additional gates in the circuit are adjusting the weights of the qubits. This layer applies an RY gate to each qubit, rotating the qubit. What does that mean?
+The second quantum layer is the `RY_layer`. As noted above, any additional gates in the circuit adjust the weights of the qubits. This layer applies an RY gate to each qubit, rotating the qubit. What does that mean?
 
-The best representation we have designed for qubits is the [Bloch Sphere](https://en.wikipedia.org/wiki/Bloch_sphere). This representation defines the qubit as a point on the outside of a 3D unit sphere. A rotation around the y axis is perpendicular to the H gate rotation, allowing for weighting without removing the qubit from the superposition state that it is in. 
+The best representation we have designed for qubits is the [Bloch Sphere](https://en.wikipedia.org/wiki/Bloch_sphere). This representation defines the qubit as a point on the outside of a 3D unit sphere. A rotation around the y-axis is perpendicular to the H gate rotation, allowing for weighting without removing the qubit from the superposition state that it is in. 
 
 ```python
 def RY_layer(w):
@@ -215,9 +214,9 @@ def RY_layer(w):
         qml.RY(element, wires=idx)
 ```
 
-The last function in this section covering the quantum circuit initialization is the `entangling_layer`. This layer uses CNOT gates to entangle qubits together. But what's a CNOT gate?
+The last function in this section, covering the quantum circuit initialization, is the `entangling_layer`. This layer uses CNOT gates to entangle qubits together. But what's a CNOT gate?
 
-CNOT gates take the value from one qubit and use it to determine the value of another. The full name is "Controlled-NOT," meaning that if a control is registered as HIGH (1), then receiving qubit is set to LOW (0), hence the NOT. This connects the qubits, setting it so that by knowing the value of the control you know the value of the other later in time. 
+CNOT gates take the value from one qubit and use it to determine the value of another. The full name is "Controlled-NOT," meaning that if a control is registered as HIGH (1), then the receiving qubit is set to LOW (0), hence the NOT. This connects the qubits, setting it so that by knowing the value of the control, you know the value of the other later in time. 
 
 ```python
 def entangling_layer(nqubits):
@@ -316,11 +315,11 @@ The last part of the code is the training section, which is the largest by far. 
 
 As you may notice, at the top there are a few more hyperparameters that were not in the main part of the code. `batch_size` and `num_epochs` can also be changed to allow for optimization of the runtime. These two parameters are common to PyTorch classes and modules, so more info can be found externally [here](https://machinelearningmastery.com/difference-between-a-batch-and-an-epoch/). We will **not** be modifying those parameters in this tutorial.
 
-Additionally, we setup for `DDP` to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Frontier (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0, even if you run with 8 GPUs per node.
+Additionally, we setup for `DDP` to split the calculations into [GPU] pieces, so the print will display "cuda:[#0-7]" for which GPU analyzed that particular part of the data. With the way we are running our script on Odo (1 GPU per MPI rank), each process only sees their own "cuda:0" w/ GPU ID 0, even if you run with 8 GPUs per node.
 
 ```python
 def train_model(rank, world_size): 
-    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Frontier
+    torch.cuda.set_device(0) #assuming 1 gpu per MPI rank on Odo
     device = torch.cuda.current_device()
     print(f"Rank {rank} is using device {torch.cuda.current_device()}")
 
@@ -331,7 +330,7 @@ def train_model(rank, world_size):
     start_time = time.time()    # Start of the computation timer
 ```
 
-The next line takes in the pre-trained resnet18 ImageNet dataset. ImageNet is a very large database with thousands of images, but we will be using a very small dataset (images of ants and bees).
+The next line takes in the pre-trained ResNet18 ImageNet dataset. ImageNet is a very large database with thousands of images, but we will be using a very small dataset (images of ants and bees).
 
 When we say that the model is pre-trained, that just means that everything but the bottom few layers of the dataset has been computed already. This method, called "Transfer Learning", allows for very small subsets to be analyzed accurately, as there is some precedent for the weighting the neurons will need. We will be replacing the last layer of our model with our custom Quantum layer.
 
@@ -339,7 +338,7 @@ When we say that the model is pre-trained, that just means that everything but t
     model = torchvision.models.resnet18(pretrained=True)
 ```
 
-Most of the next lines are defining the correct starting point for the training still, and then noting which GPU will be analyzing which part of the subset. However, one thing of note is the `model.fc` variable. Modifying `model.fc` changes the final fully connected layer of ResNet18; here, this is where we integrate our custom Quantum network into the model (i.e., we replace the final layer with `DressedQuantumNet`).
+Most of the next lines are defining the correct starting point for the training and then noting which GPU will be analyzing which part of the subset. However, one thing of note is the `model.fc` variable. Modifying `model.fc` changes the final fully connected layer of ResNet18; here, this is where we integrate our custom Quantum network into the model (i.e., we replace the final layer with `DressedQuantumNet`).
 
 ```python
     for param in model.parameters():
@@ -381,10 +380,10 @@ Finally, here is where the data is processed. This takes the ants and bees image
         ),
     }
 
-    data_dir = '/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/hymenoptera_data'
+    data_dir = '/gpfs/wolf2/olcf/stf007/world-shared/9b8/hymenoptera_data'
 ```
 
-Once the data is in the correct format, we start the actual training and validation. After splitting the dataset in two to make training and validation stages, you can take in the data loader (also used in regular CNNs) and then start going through each of the epochs. Each epoch takes in the weights from before and runs the quantum functions we defined above. The whole time it is keeping track of how long each stage is, how accurate it was, and the total loss. This is split across each GPU, and later it will be combined so we can see the totals across all of the GPUs in each run. 
+Once the data is in the correct format, we start the actual training and validation. After splitting the dataset into two to make training and validation stages, you can take in the data loader (also used in regular CNNs) and then start going through each of the epochs. Each epoch takes in the weights from before and runs the quantum functions we defined above. The whole time it is keeping track of how long each stage is, how accurate it was, and the total loss. This is split across each GPU, and later it will be combined so we can see the totals across all of the GPUs in each run. 
 
 ```python
     image_datasets = {
@@ -528,9 +527,9 @@ Once the data is in the correct format, we start the actual training and validat
     
 ```
 
-Finally, there is one more part of the code and, coincidentally, it is what would be run first!
+Finally, there is one more part of the code, and coincidentally, it is what would be run first!
 
-The `__main__` part of the code is what sets up the initial parallel environment like number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to setup proper communication between tasks on Frontier (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup` which we defined at the very top of the "Functions" section above. 
+The `__main__` part of the code is what sets up the initial parallel environment, like the number of MPI ranks, the master port and address for our Slurm job, etc. This is necessary to set up proper communication between tasks on Odo (especially when using multiple nodes). The rest of the `main` function prints out the GPUs being used so that we can analyze the comparisons between GPUs at the end of the testing. The last part that is run is a function called `setup`, which we defined at the very top of the "Functions" section above.
 
 ```python
 if __name__ == "__main__":
@@ -555,7 +554,9 @@ if __name__ == "__main__":
     setup(rank, world_size)
 ```
 
-Thanks for taking the deep dive into the code, now to tackle the challenge itself!
+> Fun fact: Python code living in the `__main__` code-block is run when the script is executed directly (e.g., `python3 script.py`). That section of the code is ignored when the script is used as an external module by a different python script.
+
+Thanks for taking the deep dive into the code. Now to tackle the challenge itself!
 
 ## Running the Challenge
 
@@ -563,17 +564,17 @@ Now for the fun part, simulating quantum computing to train the model!
 
 To do this challenge:
 
-0. Make sure you copy over the scripts and are in your `/lustre/orion/PROJECT_ID/scratch/${USER}/qml_test` directory:
+0. Make sure you copy over the scripts and are in your `/gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/qml_test` directory:
 
     ```bash
-    $ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
+    $ cd /gpfs/wolf2/olcf/project_id/scratch/${USER}/
     $ mkdir qml_test
     $ cd qml_test
-    $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/qml.py ./qml.py
-    $ cp ~/hands-on-with-frontier/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
+    $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/qml.py ./qml.py
+    $ cp ~/hands-on-with-odo/challenges/Python_QML_Basics/submit_qml.sbatch ./submit_qml.sbatch
     ```
 
-1. Use your favorite editor to change `-n` in `submit_qml.sbatch` to distribute the network over a specific amount of tasks (pick an integer in the range from 1 to 8):
+1. Use your favorite editor to change the integer following `-n` in `submit_qml.sbatch` to distribute the network over a specific number of tasks (pick an integer in the range from 1 to 8):
 
     ```bash
     $ vi submit_qml.sbatch
@@ -617,38 +618,39 @@ To do this challenge:
 Here's how the PennyLane and PyTorch environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.5.0 
-$ module load rocm/6.1.3
-$ module load craype-accel-amd-gfx90a
-$ module load cmake/3.27.9
-$ module load kokkos/4.3.00-omp
-$ module load gcc-native/12.3
-$ module load miniforge3/23.11.0-0
+module load PrgEnv-gnu/8.6.0 
+module load rocm/6.1.3
+module load craype-accel-amd-gfx90a
+module load cmake/3.30.0
+module load gcc-native/14.2
+module load miniforge3/23.11.0
 
-$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier python=3.10 toml ninja -c conda-forge
-$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qml-frontier
-
-# Install PyTorch
-$ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
-
-# Install PennyLane (w/ Lightning Kokkos plugin)
-$ export CC=cc
-$ export CXX=CC
-$ git clone https://github.com/PennyLaneAI/pennylane-lightning.git
-$ cd pennylane-lightning
-
-$ PL_BACKEND="lightning_qubit" python scripts/configure_pyproject_toml.py
-
-$ SKIP_COMPILATION=True python3 setup.py bdist_wheel
-
-$ pip install dist/PennyLane_Lightning-0.39.0.dev52-py3-none-any.whl
-
-$ PL_BACKEND="lightning_kokkos" python scripts/configure_pyproject_toml.py
-
-$ CMAKE_ARGS="-DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_HIP=ON -DCMAKE_CXX_COMPILER=CC" python3 setup.py bdist_wheel
-
-$ pip install dist/PennyLane_Lightning_Kokkos-0.39.0.dev52-cp310-cp310-linux_x86_64.whl
+conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo python=3.10 toml ninja -c conda-forge
+source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qml-odo
 
 # Install mpi4py
-$ MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
+MPICC="cc -shared" pip install --no-cache-dir --no-binary=mpi4py mpi4py
+
+# Install PyTorch
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
+
+# Install PennyLane (w/ Lightning Kokkos plugin)
+# Clone the latest Lightning repository
+git clone -b v0.41.0 https://github.com/PennyLaneAI/pennylane-lightning.git
+cd pennylane-lightning
+sed -i -e 's/RelWithDebInfo/Release/g' setup.py # Force Release build for better performance
+
+# Install dependencies (will also install PennyLaneLightning 0.41.0 with Lightning_qubit)
+pip install pennylane==0.41.0 pennylane_lightning==0.41.0 --no-cache-dir 
+
+# Install (but skip the compilation step for) Lightning-Qubit
+# Necessary if swapping to a different branch, but already installed lightning_qubit for 0.41.0 release above
+#PL_BACKEND="lightning_qubit" python scripts/configure_pyproject_toml.py
+#SKIP_COMPILATION=True python3 setup.py bdist_wheel
+#pip install dist/*.whl
+
+# Install Lightning-Kokkos for AMD GPU 
+PL_BACKEND="lightning_kokkos" python scripts/configure_pyproject_toml.py
+CMAKE_ARGS="-DKokkos_ENABLE_HIP=ON -DKokkos_ARCH_AMD_GFX90A=ON -DCMAKE_CXX_COMPILER=amdclang++ -DCMAKE_CXX_FLAGS='--gcc-install-dir=/opt/cray/pe/gcc/11.2.0/snos/lib/gcc/x86_64-suse-linux/11.2.0/' -DCATALYST_GIT_TAG='v0.11.0' " python3 setup.py bdist_wheel
+pip install dist/pennylane_lightning_kokkos-0.41.0-cp310-cp310-linux_x86_64.whl
 ```
