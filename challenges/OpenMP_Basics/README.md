@@ -1,6 +1,6 @@
 # OpenMP Basics
 
-OpenMP is programming model that allows you to write parallel code for multi-core, shared-memory processors. Your laptop/desktop likely has a multi-core processor (e.g., 4-core). This is also true of each individual compute node on Odo (and Frontier) - each has 64 physical CPU cores that have access to 512 GB of DDR4 memory. By shared-memory, we simply mean that all the CPU cores have access to the same memory (DRAM). 
+OpenMP is a programming model that allows you to write parallel code for multi-core, shared-memory processors. Your laptop/desktop likely has a multi-core processor (e.g., 4-core). This is also true of each individual compute node on Odo (and Frontier) - each has 64 physical CPU cores that have access to 512 GB of DDR4 memory. By shared-memory, we simply mean that all the CPU cores have access to the same memory (DRAM). 
 
 In this challenge, we will explore the very basics of the [OpenMP Application Program Interface (OpenMP API)](https://www.openmp.org/specifications/), which consists of a collection of compiler directives, library routines, and environment variables. In the examples below, we will insert compiler directives into the code to tell the compiler how the program should be executed in parallel, and we will also use a couple of API functions and environment variables along the way.
 
