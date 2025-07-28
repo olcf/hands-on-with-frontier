@@ -39,10 +39,10 @@ parser.add_argument("--gpu", default=False, action='store_true',
 parser.add_argument("--gpumultiple", default=False, action='store_true',
     help="Use multiple GPUs for the backend of Aer simulator.")
 parser.add_argument("-backtyp", "--backend_type",  type=str, default='ideal',
-    required=False, help="Type of the backend: 'ideal' 'real-ibm' 'real-iqm'")
+    required=False, help="Type of the backend: 'ideal' 'real-ibm' 'real-iqm' 'real-ionq'")
 parser.add_argument("-backmet", "--backend_method",  type=str, default='statevector',
     required=False,
-    help="Method/name of the backend. E.g. 'statevector' 'fake_sherbrooke' 'ibm_sherbrooke' 'garnet' 'fake_garnet' ")
+    help="Method/name of the backend. E.g. 'statevector' 'fake_sherbrooke' 'ibm_sherbrooke' 'garnet' 'fake_garnet' 'aria-1'")
 parser.add_argument("--drawcirc", default=False, action='store_true', help="Draw circuit.")
 parser.add_argument("--plothist", default=False, action='store_true', help="Draw circuit.")
 
