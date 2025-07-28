@@ -215,7 +215,7 @@ The code snippets discussed in the [HHL section](#walkthrough-of-the-hhl-algorit
 #### 3. Run the HHL circuit
 * Code: [`solver.py`](solver.py)
 
-Finally, we run the generated HHL circuit using a given backend - simulator, emulator, or QPU. The main function call is [`qc_circ()`](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/solver.py#L74), encompassed in the script [`func_qc.py`](func_qc.py). The process of running the circuit involves (1) selecting and initializing the [backend](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L95), (2) [transpile](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L119) the circuit for the particular backend, and (3) [run](https://github.com/olcf/hands-on-with-odo/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L159) the transpiled circuit.
+Finally, we run the generated HHL circuit using a given backend - simulator, emulator, or QPU. The main function call is [`qc_circ()`](https://github.com/olcf/hands-on-with-frontier/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/solver.py#L74), encompassed in the script [`func_qc.py`](func_qc.py). The process of running the circuit involves (1) selecting and initializing the [backend](https://github.com/olcf/hands-on-with-frontier/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L95), (2) [transpile](https://github.com/olcf/hands-on-with-frontier/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L119) the circuit for the particular backend, and (3) [run](https://github.com/olcf/hands-on-with-frontier/blob/f3c1ff9c4adfa9ad7f6d77d7fe139a86f893689b/challenges/Python_QLSA/func_qc.py#L159) the transpiled circuit.
 
 ### 2.4 <a name="impl"></a>Implications of quantum algorithms
 
@@ -228,13 +228,13 @@ For example, if you'd flip a coin 3 times (i.e., 3 shots), and got heads each ti
 In this crash course, we will observe the effects of the number of shots has on our final results. So without further ado, let's begin coding!
 
 ## 3. <a name="setup"></a>Setting Up Our Environment
-First, we will move to the challenge directory, unload all current modules you may have previously loaded on Odo, and deactivate any previously loaded environments. 
+First, we will move to the challenge directory, unload all current modules you may have previously loaded on Frontier, and deactivate any previously loaded environments. 
 ```
 # Move to the challenge directory (assuming you cloned the repo in your home directory)
-$ cd ~/hands-on-with-odo/challenges/Python_QLSA/
+$ cd ~/hands-on-with-frontier/challenges/Python_QLSA/
 
 # Unloads any active conda envs (if applicable)
-$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 
 # Resets to default modules
 $ module reset
@@ -242,14 +242,14 @@ $ module reset
 Next, we will load our miniforge module (analogous to an open-source minconda), and activate the appropriate conda environment for this exercise.
 ```
 $ module load miniforge3
-$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qlsa-solver
 ```
 The path to the environment should now be displayed in `"( )"` at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
 If you check with `which python3`, you should see that you're properly in the new environment:
 
 ```
 $ which python3
-/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver/bin/python3
+/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qlsa-solver/bin/python3
 ```
 
 ## 4. <a name="overview"></a>Overview of How to Run
@@ -346,9 +346,9 @@ It is also advisable to test the code first to ensure the environment is set up 
 
 ### 4.3 <a name="qlsa"></a>Running the QLSA Code
 
-The instructions below are mainly for **running interactively** on OLCF Odo. The first time you run the Python scripts, it may take some time to load the libraries.
+The instructions below are mainly for **running interactively** on OLCF Frontier. The first time you run the Python scripts, it may take some time to load the libraries.
 
-The general workflow is to (1) Start an interactive job (or batch job) to use Odo's compute nodes, (2) Load the appropriate Python `conda` environment, (3) Generate the circuit, (4) Run the QLSA solver with the circuit you just generated, and (5) Analyze your results
+The general workflow is to (1) Start an interactive job (or batch job) to use Frontier's compute nodes, (2) Load the appropriate Python `conda` environment, (3) Generate the circuit, (4) Run the QLSA solver with the circuit you just generated, and (5) Analyze your results
 
 1. Start interactive job
     ```
@@ -356,18 +356,18 @@ The general workflow is to (1) Start an interactive job (or batch job) to use Od
     ```
 
 2. Load Python environment:
-    * When targeting real quantum backends, you must go through a [proxy server for connecting outside OLCF](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#batch-jobs) due to the Odo compute nodes being closed off from the internet by default. 
+    * When targeting real quantum backends, you must go through a [proxy server for connecting outside OLCF](https://docs.olcf.ornl.gov/quantum/quantum_software/hybrid_hpc.html#batch-jobs) due to the Frontier compute nodes being closed off from the internet by default. 
       ```
-      $ source ~/hands-on-with-odo/misc_scripts/proxies.sh
+      $ source ~/hands-on-with-frontier/misc_scripts/proxies.sh
       ```
     * First, load the relevant conda module:
       ```
-      $ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+      $ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
       $ module load miniforge3
       ```
       Activate the environment needed for circuit generation and solution:
       ```
-      $ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/qlsa-solver 
+      $ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/qlsa-solver 
       ```
 3. Run QLSA circuit generator script: [`circuit_HHL.py`](circuit_HHL.py)
    Before we run the solver in step #4, we first have to generate the circuit that will be used.
@@ -389,7 +389,7 @@ The general workflow is to (1) Start an interactive job (or batch job) to use Od
     $ python3 plot_fidelity_vs_shots.py
     ```
   
-> **Note:** Alternative to all of the above, you can use the batch script [`submit_odo_example.sh`](submit_odo_example.sh) to [submit a batch job on OLCF Odo](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_odo_example.sh`. The `submit_odo_example.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments (like shot count).
+> **Note:** Alternative to all of the above, you can use the batch script [`submit_frontier_example.sh`](submit_frontier_example.sh) to [submit a batch job on OLCF Frontier](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#batch-scripts) using `sbatch --export=NONE submit_frontier_example.sh`. The `submit_frontier_example.sh` example batch script is already setup with the above steps; however, modifying that file is required if you want to change any python script arguments (like shot count).
 
 ## 5. <a name="chall"></a>Challenges
 
