@@ -39,7 +39,7 @@ MPI_Finalize function calls.
 
 
 
-For a typical MPI program, the number of ranks is set by the programmer in the command used to run the program. This allows the programmer to try different numbers of processes per task without needing to change the code. 
+For a typical MPI program, the number of ranks is set by the programmer in the command used to run the program. This allows the programmer to try differnt numbers of processes per task without needing to change the code. 
 
 The first thing MPI does when it is initialized, is set up the communicator. You can think of a communicator as a package that holds all the needed organizational information for its MPI region in the code. Inside the communicator each process is given a rank. The size of the communicator is equal to its total number of ranks. 
 
@@ -64,7 +64,7 @@ Below is an outline for the program and its MPI functions. For this challenge, r
 
 **Helloworld Outline**
 
-We have set up this example to use 4 ranks, each mapped to a separate core on the node. This was done in the submission script, which you may look at if you wish, with `cat hello/submit_hello.sbatch`.
+We have setup this example to use 4 ranks, each mapped to a separate core on the node. This was done in the submission script, which you may look at if you wish, with `cat hello/submit_hello.sbatch`.
 
 
 The line in the submssion script that sets this example to use 4 ranks with one per core is: 
@@ -115,9 +115,9 @@ When the MPI_Init function is called, all of MPI's global and internal variables
 
 Now it is your turn. Use the outline to help find and enter the missing MPI function in mpi_hello.c. To do this: 
 
-1. Go to hands-on-with-odo/challenges/MPI_Basics/hello/ .
+1. Go to hands-on-with-frontier/challenges/MPI_Basics/hello/ .
 ```
-$ cd ~/hands-on-with-odo/challenges/MPI_Basics/hello/
+$ cd ~/hands-on-with-frontier/challenges/MPI_Basics/hello/
 
 ```
 2. Use your favorite editor or Vim to find and enter the missing MPI function in mpi_hello.c. For example
@@ -130,7 +130,7 @@ $ vi mpi_hello.c
 
 The mpi_hello.c will look like this: 
 
-```c
+```bash
 #include "stdio.h"
 #include "mpi.h"
 
@@ -197,7 +197,7 @@ Hello from rank 2 of 4 total
 Hello from rank 1 of 4 total
 Hello from rank 0 of 4 total
 ```
-Note: The ranks run independently so the order they return in may not be the 3,2,1,0 as you see in my output. That's OK for this example. However, synchronizing tasks is one of the things that MPI programmers do have to think about when the order does matter. That is beyond the scope of this introduction though. 
+Note: Note: The ranks run independently so the order they return in may not be the 3,2,1,0 as you see in my output. That's OK for this example. However, synchronizing tasks is one of the things that MPI programmers do have to think about when the order does matter. That is beyond the scope of this introduction though. 
 
 If you had an error go back and check your code , then recompile it, and try again. You may also look at mpi_hello_solution.c to check your answer.  
 
@@ -247,7 +247,7 @@ In this function:
 
 * Comm - Communicator 
 
-This functions returns after send buffer is ready to reuse. 
+This functions retruns after send buffer is ready to reuse. 
 
 Here is the MPI Receive function. 
 
@@ -277,7 +277,7 @@ Why does the MPI_Send function say that the message has 6 elements?
 What datatype is "hello!" ? 
 Where is the message coming from? 
 
-```c
+```bash
 #include <stdio.h>
 #include <string.h>
 #include "mpi.h"
@@ -333,9 +333,9 @@ int main(int argc, char ** argv)
 To do this challenge: 
 1. Determine the missing arguments. 
 
-2. Go to hands-on-with-odo/challenges/MPI_Basics/ptp/. 
+2. Go to hands-on-with-frontier/challenges/MPI_Basics/ptp/. 
 ```
-$ cd ~/hands-on-with-odo/challenges/MPI_Basics/ptp/
+$ cd ~/hands-on-with-frontier/challenges/MPI_Basics/ptp/
 
 ```
 3. Edit the Receive function in ptp.c with your A, B and C arguments. 
@@ -360,7 +360,7 @@ If your code ran correctly, you will see:
 Process 1 : hello!
 ```
 
- If you want to know more about point to point communication, see: [https://computing.llnl.gov/tutorials/mpi/](https://computing.llnl.gov/tutorials/mpi/). We also want to credit the [National Institute for Computational Sciences](https://www.nics.tennessee.edu/mpi-tutorial) for the idea for this example, and you can find more send and receive challenges on their page.
+ If you want to know more about point to point communication, see: [https://computing.llnl.gov/tutorials/mpi/](https://computing.llnl.gov/tutorials/mpi/). We also want to credit the [National Institute for Computational Sciences](https://www.nics.tennessee.edu/mpi-tutorial) for the idea for this example and you can find more send and receive challenges on their page.
 
 
 # MPI Collectives 
@@ -396,7 +396,7 @@ The function arguments are:
 
 Here is its use.
 
-```c
+```bash
 #include “stdio.h”
 #include “mpi.h”
 
@@ -437,7 +437,7 @@ int main(int argc, char **argv)
 To find this code: 
 
 ```
-$ cd ~/hands-on-with-odo/challenges/MPI_Basics/bcast/
+$ cd ~/hands-on-with-frontier/challenges/MPI_Basics/bcast/
 ```
 
 To compile it:

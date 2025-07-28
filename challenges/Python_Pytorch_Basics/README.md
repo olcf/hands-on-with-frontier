@@ -13,18 +13,18 @@ In high-performance computing (HPC), ML/DL is getting more and more popular beca
 To process and train an accurate ML/DL model in a reasonable amount of time, more and more compute nodes are required as the amount of big data increases.
 
 [PyTorch](https://pytorch.org/) is a library for Python programs that pairs well with HPC resources and facilitates building DL projects.
-PyTorch emphasizes the flexibility and human-readability of Python and allows deep learning models to be expressed in a similar manner.
+PyTorch emphasizes the flexibility and human-readableness of Python and allows deep learning models to be expressed in a similar manner.
 Think about the simplicity, structure, and usefulness of NumPy and its arrays, but more geared toward ML/DL algorithms and its tensors -- that's what PyTorch is.
 Compared to other frameworks and libraries, it is one of the more "beginner friendly" ML/DL packages due to its dynamic and familiar "Pythonic" nature.
 PyTorch is also useful when GPUs are involved because of its strong GPU acceleration ability.
-On Odo, PyTorch is able to take advantage of the many AMD GPUs available on the system.
+On Frontier, PyTorch is able to take advantage of the many AMD GPUs available on the system.
 
 In this challenge, you will:
 
-* Learn how to access PyTorch on Odo
+* Learn how to access PyTorch on Frontier
 * Learn the basics of PyTorch
 * Learn about Convolutional Neural Networks (CNNs)
-* Tune your own CNN on Odo
+* Tune your own CNN on Frontier
 
 
 Table of Contents:
@@ -52,12 +52,12 @@ Table of Contents:
 
 ## 1. <a name="setup"></a>Setting Up Our Environment
 
-First, we will unload all the current modules that you may have previously loaded on Odo and then immediately load the default modules.
+First, we will unload all the current modules that you may have previously loaded on Frontier and then immediately load the default modules.
 Assuming you cloned the repository in your home directory:
 
 ```bash
-$ cd ~/hands-on-with-odo/challenges/Python_Pytorch_Basics
-$ source ~/hands-on-with-odo/misc_scripts/deactivate_envs.sh
+$ cd ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics
+$ source ~/hands-on-with-frontier/misc_scripts/deactivate_envs.sh
 $ module reset
 ```
 
@@ -67,17 +67,17 @@ The script unloads all of your previously activated conda environments, and no h
 Next, we will load the gnu compiler module (most Python packages assume GCC) and the GPU module (necessary for using PyTorch on the GPU):
 
 ```bash
-$ module load PrgEnv-gnu/8.6.0
+$ module load PrgEnv-gnu/8.5.0
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
 $ module load miniforge3
 ```
 
 We loaded the "base" conda environment, but we need to activate a pre-built conda environment that has PyTorch.
-Due to the specific nature of conda on Odo, we will be using `source activate` instead of `conda activate` to activate our new environment:
+Due to the specific nature of conda on Frontier, we will be using `source activate` instead of `conda activate` to activate our new environment:
 
 ```bash
-$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 ```
 
 The path to the environment should now be displayed in "( )" at the beginning of your terminal lines, which indicates that you are currently using that specific conda environment.
@@ -85,7 +85,7 @@ If you check with `which python3`, you should see that you're properly in the ne
 
 ```bash
 $ which python3
-/gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo/bin/python3
+/lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier/bin/python3
 ```
 
 &nbsp;
@@ -94,7 +94,7 @@ $ which python3
 
 Before we jump into the PyTorch challenge script provided in this repository, let's go over some of the basics.
 The developers provide a great introduction to using PyTorch on their website under the [PyTorch Tutorials](https://pytorch.org/tutorials/beginner/basics/intro.html) section.
-We will be following a slightly modified version of that walkthrough on Odo.
+We will be following a slightly modified version of that walkthrough on Frontier.
 
 Let's get started by importing PyTorch in a Python prompt:
 
@@ -110,7 +110,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### 2.1 <a name="tensors"></a>Tensors
 
-One of the most important data types in all of deep learning are "tensors".
+One of the most important datatypes in all of deep learning are "tensors".
 Tensors are a specialized data structure that are very similar to arrays and matrices.
 In PyTorch, tensors are used to encode the inputs and outputs of a model.
 Tensors are similar to NumPy’s `ndarrays`, can run on GPUs, and are typically more optimized than normal arrays.
@@ -245,8 +245,8 @@ We define the following hyperparameters for training:
 * <a name="epochs"></a>**Epochs**: the number of times to iterate over *all* the samples.
 * <a name="batches"></a>**Batch size**: the number of data samples propagated through the network at each step.
 * **Number of steps**: the number of iterations *within* each epoch (total number of samples divided by the batch size).
-* **Learning Rate**: how much to update the model's parameters at each batch/epoch.
-  Smaller values yield slow learning speed, while larger values may result in unpredictable behavior during training.
+* **Learning Rate**: how much to update models parameters at each batch/epoch.
+  Smaller values yield slow learning speed, while large values may result in unpredictable behavior during training.
 
 At the end of the challenge, you will tune the **epochs** and **batch size** to try and get "the best" CNN up and running for a fixed learning rate.
 
@@ -315,7 +315,7 @@ When using a pre-packaged dataset included in torchvision, you can use `torchvis
 In the `cnn.py` challenge script (on lines 136 and 139) you can see this data loading workflow explicitly:
 
 ```python
-train_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=True,
+train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=False, transform=transform)
 
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,
@@ -339,7 +339,7 @@ Shuffling data helps it break the structured learning and hence reducing bias fo
 The above just covers the "training dataset", next we need to initialize the "test dataset" (lines 142 and 145):
 
 ```python
-test_dataset = torchvision.datasets.CIFAR10(root='/gpfs/wolf2/olcf/stf007/world-shared/9b8/torch_basics_data', train=False,
+test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                        download=False, transform=transform)
 
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size,
@@ -484,8 +484,8 @@ One may ask: "why do you use multiple fully connected layers if the output of on
 Other than the reason being "more layers are usually better for everything", there is a more concrete reason.
 If one goes through the math, it will become visible that each neuron (initially) depends only on a **subset** of the image (only a specific section of pixels).
 However, neurons in a fully connected layer have full connections to all activations in the previous layer.
-So, if you introduce multiple fully connected layers, you provide your model with the ability to further mix and share a neuron's data, since every single neuron has a connection to every single one in the next layer.
-This creates a flow of information between each of the images' pixel locations, rather than just a subset, thus the decision is based truly on the whole image.
+So, if you introduce multiple fully connected layers, you provide your model with ability to further mix and share a neuron's data, since every single neuron has a connection to every single one in the next layer.
+This creates a flow of information between each of the images pixel locations, rather than just a subset, thus the decision is based truly on the whole image.
 
 Based on the activation values of the final convolution layer, the series of fully connected layers output a set of confidence scores (values between 0 and 1) that specify how likely the image is to belong to a "class".
 In our case, the output of the final layer is the possibility that the input image contains any of the animals previously mentioned in the [Datasets Section](#dsets).
@@ -544,7 +544,7 @@ criterion = nn.CrossEntropyLoss()
 
 As you will see in the next section, the `criterion` variable (and, therefore, the softmax function) is called directly after obtaining the final results of the `ConvNet.forward()` function.
 
-The final line in defining our CNN is `return x`, which returns the final results of our network through a single forward pass.
+The final line in defining our CNN is `return x` which returns the final results of our network through a single forward pass.
 It's as simple as that!
 Now we're ready to train the CNN in the "training loop" of our code.
 
@@ -612,7 +612,7 @@ Second, we initialize the loss function and optimizer and set them to the `crite
 Next, we enter the training loop, which will train for a number of epochs (**epochs** are user-specified), where within each epoch it will take `n_total_steps` based on how many batches of images are processed at once (the **batch size** is user-specified).
 In the training loop, the `images` and `labels` of the `training_loader` data are first passed to the computing device (recall these variables from the [Loading Data Section](#load)).
 Then, `model(images)` is called to actually process the image data to the CNN -- the results of the images going through the CNN are then set to the `outputs` variable.
-The loss function is then called, which calculates the final probabilities and error of an image in a specific classification -- the loss function results are set to the `loss` variable.
+The loss function is then called, which calculates the final probabilities and error an image is a specific classification -- the loss function results are set to the `loss` variable.
 
 To try and optimize the results for the next step, the `loss` results are then propagated backwards to the "beginning" so that the network can adjust its parameters.
 This is done by first using the previously defined `optimizer` to zero-out its gradients (to prevent double counting), explicitly back-propagate the error with `loss.backward()` and finally tell the network to adjust its parameters based on that back-propagation with `optimizer.step()`.
@@ -660,7 +660,7 @@ We stop tracking computations by surrounding the testing loop with `torch.no_gra
 
 Within the loop itself, all that is happening is passing the images and labels of the `test_loader` test data (recall this variable from the [Loading Data Section](#load)), getting the results from the CNN via the `outputs` variable, and then checking the predictions against the actual labels of the data.
 The results contained in `outputs` are passed through the `torch.max` function, which extracts the maximum value (max probability of a certain class) from the `outputs` tensor -- since the 10 different classes are represented by 10 different indices (0-9), we save the index of the class that represents the max probability into the `predicted` variable.
-After being compared to the actual labels the images came with, the **total** number of samples and **total** number of correct predictions are then saved into `n_samples` and `n_correct`.
+After being compared to the actual labels the the images came with, the **total** number of samples and **total** number of correct predictions are then saved into `n_samples` and `n_correct`.
 In addition to the *overall* correct predictions across the whole network, analysis is also performed on a *class* level:
 
 * The correct predictions for each class are stored in `n_class_correct` (e.g., how many times the network correctly guessed "Frog").
@@ -668,10 +668,10 @@ In addition to the *overall* correct predictions across the whole network, analy
 * How many times the model tried, and potentially failed, to guess a class is stored in `n_class_predics` (e.g., total amount of times, whether correct or not, the network guessed "Frog").
 
 The rest of the code below the testing loop in `cnn.py` just prints statistics and generates the plots, so it is not necessary to explain.
-In a real-world application, the results of this test would then be saved and fed to go in another training loop; however, this is where our code ends.
+In a real world application, the results of this test would then be saved and fed to go in another training loop; however, this is where our code ends.
 Therefore, this marks the end of the CNN code!
 
-Congratulations on making it all the way through the context and explanation of a CNN!
+Congratulations for making it all the way through the context and explanation of a CNN!
 Now for the fun part, the actual challenge!
 
 ## 5. <a name="chall"></a>Challenge: Tuning a CNN
@@ -681,11 +681,12 @@ You'll be submitting a job to run on a compute node to train your network.
 However, before asking for a compute node, change into your scratch directory and copy over the relevant files.
 
 ```bash
-$ cd /gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/
+$ cd /lustre/orion/PROJECT_ID/scratch/${USER}/
 $ mkdir pytorch_test
 $ cd pytorch_test
-$ cp ~/hands-on-with-odo/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
-$ cp ~/hands-on-with-odo/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/download_data.py ./download_data.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/cnn.py ./cnn.py
+$ cp ~/hands-on-with-frontier/challenges/Python_Pytorch_Basics/submit_cnn.sbatch ./submit_cnn.sbatch
 ```
 
 The goal of this challenge is to achieve an overall network accuracy of 60% or greater with a learning rate of 0.001 within an hour of compute time.
@@ -702,7 +703,7 @@ More specifically:
 * `last_batch.png`: Shows you the last batch of animal images to get tested by the network. The pictures are titled by their actual classification and also include what the network guessed the animal was.
 * `overall_results.png`: Bar charts of how accurate your network was at predicting each class of animal. This includes your overall network accuracy, identification success (e.g., number of frogs correct divided by number of frog images), and prediction success (e.g., number of frogs correct divided by number of times GUESSED "frog").
 
-If you have something like [XQuartz](https://www.xquartz.org/index.html) (Mac) or [Xming](http://www.straightrunning.com/XmingNotes/) (Windows) installed on your local computer, and have enabled window forwarding, you can open the images on Odo by doing:
+If you have something like [XQuartz](https://www.xquartz.org/index.html) (Mac) or [Xming](http://www.straightrunning.com/XmingNotes/) (Windows) installed on your local computer, and have enabled window forwarding, you can open the images on Frontier by doing:
 
 ```bash
 $ display last_batch.png
@@ -711,15 +712,23 @@ $ display overall_results.png
 
 Opening the images is **not required**, as all the same statistics will be printed to your `.out` file.
 
-> Note: You can only open the images if you connected to Odo with window forwarding enabled and have X software installed (see above). Enabling window forwarding is usually done by including the `X` or `Y` SSH flags when connecting to the system. For example: `ssh -XY userid@odo.olcf.ornl.gov`. PuTTY users have an "X11 Forwarding" checkbox located in their SSH settings.
+> Note: You can only open the images if you connected to Frontier with window forwarding enabled and have X software installed (see above). Enabling window forwarding is usually done by including the `X` or `Y` SSH flags when connecting to the system. For example: `ssh -XY userid@frontier.olcf.ornl.gov`. PuTTY users have an "X11 Forwarding" checkbox located in their SSH settings.
 
 After you complete the challenge, you can transfer these plots to your computer with Globus, `scp`, or `sftp` to keep as "souvenirs" from this challenge.
 
 To do this challenge:
 
-0. Make sure you copied over the scripts and are in your `/gpfs/wolf2/olcf/PROJECT_ID/scratch/${USER}/pytorch_test` directory (see beginning of this section).
+0. Make sure you copied over the scripts and are in your `/lustre/orion/PROJECT_ID/scratch/${USER}/pytorch_test` directory (see beginning of this section).
 
-1. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
+1. Run the `download_data.py` script to download the CIFAR-10 dataset. This is necessary because the compute nodes won't be able to download it during your batch job when running `cnn.py`. If successful, you'll see a directory named `data` in your current directory.
+
+    ```bash
+    $ python3 download_data.py
+    ```
+    > Note: You only need to run this script once.
+    > Warning: This script MUST be run in the same directory you plan to run `cnn.py` (in your `/lustre/orion/[projid]/scratch/[userid]/pytorch_test` directory)
+
+2. Use your favorite editor to change `num_epochs` and `batch_size` to tune your network (lines 119 and 120, marked by "CHANGE-ME"). For example:
 
     ```bash
     $ vi cnn.py
@@ -733,14 +742,14 @@ To do this challenge:
     ```
     > Warning: You must pick a `batch_size` so that 50,000 divided by `batch_size` results in a whole number. You can get errors if this is not the case.
 
-2. Submit a job:
+3. Submit a job:
 
     ```bash
     $ sbatch --export=NONE submit_cnn.sbatch
     ```
 
-3. Look at the statistics printed in your `pytorch_cnn-<JOB_ID>.out` file after the job completes to see if you were successful or not (i.e., see "Success!" or "Try again!").
-4. If you aren't successful, write down your results based on your parameters and try again! Looking at your `pytorch_cnn-<JOB_ID>.out` file or PNG files should help give you ideas of how to refine your parameters.
+4. Look at the statistics printed in your `pytorch_cnn-<JOB_ID>.out` file after the job completes to see if you were successful or not (i.e., see "Success!" or "Try again!").
+5. If you aren't successful, write down your results based on your parameters and try again! Looking at your `pytorch_cnn-<JOB_ID>.out` file or PNG files should help give you ideas of how to refine your parameters.
 
 > Hint: It's always a balance of the number of epochs and the size of your batches -- bigger numbers aren't always optimal. Try changing only one of the parameters and look at how it affects your network's performance.
 
@@ -751,20 +760,38 @@ If you liked PyTorch I also suggest taking a look at [PyTorch Lightning](https:/
 
 ### 5.1 <a name="leaderboard"></a>Leaderboard
 
-Below is a top 10 leaderboard of peoples' best CNNs that achieved >60% accuracy within an hour of walltime on Odo!
+Below is a top 10 leaderboard of peoples' best CNNs that achieved >60% accuracy within an hour of walltime on Ascent!
 
 Top Accuracy:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | AAAA B.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 1.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 2.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 3.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 4.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 7.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 8.    | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
+| 9.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 10.   | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
 
 
 Top Speed:
 
 | Rank  | Name             | Program                       | Accuracy | Speed   |
 | :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | AAAA B.          | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 1.    | Claire W.        | Summer HPC-CC 2024            | 62.27%   | 556s    |
+| 2.    | Maria P.         | Summer HPC-CC 2024            | 63.37%   | 593s    |
+| 3.    | Johnathan S.     | Summer HPC-CC 2024            | 64.33%   | 627s    |
+| 4.    | Jimi O.          | Summer HPC-CC 2024            | 64.48%   | 630s    |
+| 5.    | Charlotte B.     | Summer HPC-CC 2024            | 63.94%   | 657s    |
+| 6.    | Tony S.          | Summer HPC-CC 2024            | 66.53%   | 910s    |
+| 7.    | Nixon O.         | Summer HPC-CC 2024            | 64.56%   | 970s    |
+| 8.    | Alice T.         | Summer HPC-CC 2024            | 61.32%   | 1859s   |
+| 9.    | Sedrick B.       | Summer HPC-CC 2024            | 62.82%   | 1931s   |
+| 10.   | Bernard C.       | Summer HPC-CC 2024            | 62.50%   | 2054s   |
 
 
 ## 6. <a name="install"></a>Environment Information
@@ -774,16 +801,18 @@ Top Speed:
 Here's how the PyTorch environment was built:
 
 ```bash
-$ module load PrgEnv-gnu/8.6.0 
+$ module load PrgEnv-gnu/8.5.0 
 $ module load rocm/6.1.3
 $ module load craype-accel-amd-gfx90a
-$ module load miniforge3/23.11.0
+$ module load miniforge3/23.11.0-0
 
-$ conda create -p /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo python=3.10 imagemagick matplotlib -c conda-forge
+$ conda create -p /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier python=3.10 imagemagick -c conda-forge
 
-$ source activate /gpfs/wolf2/olcf/stf007/world-shared/9b8/crashcourse_envs/torch-odo
+$ source activate /lustre/orion/world-shared/stf007/msandov1/crash_course_envs/torch-frontier
 
-$ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/rocm6.1
+$ pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/rocm6.1
+
+$ pip install matplotlib
 ```
 
 ## 7. <a name="resources"></a>Additional Resources

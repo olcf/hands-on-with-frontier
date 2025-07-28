@@ -47,7 +47,7 @@ Let's break it down:
 
 `int ldc` : This represents the value of the leading dimension of matrix C.
 
-Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` call. You must pay close attention to whether the varaibles are declared as pointers, doubles, or integers, and you must think about whether `hipblasDgemm` is expecting a varaible's value or its address in memory. A quick review of [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) may be helpful before you start. 
+Your job is to look at the code in `cpu_gpu_dgemm.cpp` and see if you can match the already existing variables to the arguments outlined above in the `hipblasDgemm` call. You must pay close attention to wheather the varaibles are declared as pointers, doubles, or integers, and you must think about wheather `hipblasDgemm` is expecting a varaible's value or its address in memory. A quick review of [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) may be helpful before you start. 
 
 
 
@@ -117,11 +117,11 @@ In the code we:
 ```
 
 Here: 
-1.  `d_A`, `d_B`, `d_C` are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
+1.  `d_A`, `d_B`, `d_`C are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
 See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `d_A`, `*d_A`, or `&d_A` form of the variables to accomplish this.  
 
 
 * Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`.
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or `&alpha` form of the variables to accomplish this.
+See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or &alpha' form of the variables to accomplish this.
 
 
