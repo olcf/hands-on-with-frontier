@@ -55,9 +55,8 @@ def qc_backend(backend_type, backend_method, args):
             instance = os.getenv('IBMQ_INSTANCE')
             # save your QiskitRuntimeService accout for future loading
             QiskitRuntimeService.save_account(
-              channel="ibm_quantum",
-              instance=instance,
               token=API_KEY,
+              instance=instance,
               overwrite=True
             )
             service = QiskitRuntimeService()
@@ -78,7 +77,14 @@ def qc_backend(backend_type, backend_method, args):
         # save your IonQ account for future loading
         API_KEY = os.getenv('IONQ_API_KEY')
         provider = IonQProvider(API_KEY)
-        backend = provider.get_backend(f"qpu.{backend_method}", gateset='qis')
+        if "qpu." in backend_method: # real hardware
+            backend = provider.get_backend(f"{backend_method}", gateset='qis')
+        else: # emulator: add noise to simulator to obtain emulator
+            backend = provider.get_backend("simulator", gateset='qis')
+            backend.set_options(shots=args.SHOTS, sampler_seed=np.random.randint(100), noise_model=backend_method)
+        if args.SHOTS > 500: # NOTE: specific for OLCF tutorial resource limitation
+            print(f"Please use only 500 shots when running on IonQ. Continuing with shots=500...")
+            args.SHOTS = 500
     else:
         raise Exception(f'Backend type \'{backend_type}\' not implemented.')
     return backend

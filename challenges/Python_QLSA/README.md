@@ -382,6 +382,7 @@ The general workflow is to (1) Start an interactive job (or batch job) to use Fr
     ```
     * The above example uses 1000 shots (e.g., `-s 1000`) and a simulator backend (e.g., `-backtyp ideal`).
     * To run the script on actual hardware, use the `-backtyp real-iqm -backmet garnet` flags.
+    * If the queue is long, you can retrieve your job results later using the [`solver_getjob.py`](solver_getjob.py) code. Use the job-id from the output of the [`solver.py`](solver.py) code or the vendor's cloud portal.
     > **WARNING:** make sure to save the runs you want with `--savedata` flag; otherwise, you will be unable to generate a plot for the objectives.
 
 5. Plot your results: [`plot_fidelity_vs_shots.py`](plot_fidelity_vs_shots.py)
