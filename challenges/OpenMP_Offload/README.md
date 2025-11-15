@@ -258,12 +258,12 @@ $ sbatch submit.sbatch
 You can monitor the progress of your job by issuing the command `sacct -u USERNAME`, where `USERNAME` should be replaced with your username. Once the job finishes, you can find the result in the output file, `mat_mul-JOBID.out`. If successful, the results should show the timing output of the job, which should look something similar to this:
 
 ```
-Elapsed time total (s)  : 74.04765627099914
-Elapsed time loop (s)   : 16.28946080500100
-Elapsed time library (s): 51.09464657500212
+Elapsed time total (s)  : 304.1359319686889
+Elapsed time loop (s)   : 279.28946080500100
+Elapsed time library (s): 23.09464657500212
 ```
 
-From the results, we can see we've achieved a 350x speedup relative to our serial version of the matrix-multiply loop. 
+From the results, we can see we've achieved a ~20x speedup relative to our serial version of the matrix-multiply loop. 
 
 However, in our current version of the code, we are only parallelizing the outermost `for` loop in the triply-nested loop, but the middle loop can also be parallelized (it's possible to parallelize the innermost loop too but we will not do so here). This can be accomplished in multiple ways, but for simplicity, we'll just append `collapse(2)` to the `parallel for` directive:
 
@@ -286,12 +286,12 @@ However, in our current version of the code, we are only parallelizing the outer
     }
 ```
 
-This `collapse` clause tells the compiler to collapse the outer 2 loops and treat them as a single loop, which also causes the directive to be applied to the single "combined" loop. Now add this in to the code, recompile, and run the program. It should give you an additional ~3x speedup, for a total of >1000x speedup:
+This `collapse` clause tells the compiler to collapse the outer 2 loops and treat them as a single loop, which also causes the directive to be applied to the single "combined" loop. Now add this in to the code, recompile, and run the program. It should give you an additional ~3x speedup, for a total of >60x speedup:
 
 ```
-Elapsed time total (s)  : 62.66796130000148
-Elapsed time loop (s)   : 5.26038305900147
-Elapsed time library (s): 50.74522275100026
+Elapsed time total (s)  : 58.66796130000148
+Elapsed time loop (s)   : 33.26038305900147
+Elapsed time library (s): 23.74522275100026
 ```
 
 ## Summary
