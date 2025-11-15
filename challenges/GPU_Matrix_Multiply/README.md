@@ -23,7 +23,7 @@ The `hipblasDgemm` version of Dgemm in the [AMD hipblasDgemm documentation](http
 hipblasDgemm(hipblasHandle_t handle, hipblasOperation_t transA, hipblasOperation_t transB, int m, int n, int k, const double *alpha, const double *AP, int lda, const double *BP, int ldb, const double *beta, double *CP, int ldc)
 ```
 
-Let's break it down:
+To break it down:
 
 `hipblasHandle_t handle` : This variable contains the state of the function. If you wanted to, you could write a test based on this variable to see if the function completed its calculation successfully.
 
@@ -31,19 +31,19 @@ Let's break it down:
 
 `int m`, `int n`, `int k` : These are the values of the dimensions of your matrices. 
 
-`const double *alpha` : This is a pointer to the scalar alpha.
+`const double *alpha` : This is a pointer to the scalar alpha-- it expects to receive the address of a scalar value.
 
-`const double *AP` : This is a pointer to matrix A on the GPU. 
+`const double *AP` : This is a pointer to the address of matrix A on the GPU. 
 
 `int lda` : This represents the value of the leading dimension of matrix A.
 
-`const double *BP` : This is a pointer to matrix B on the GPU.
+`const double *BP` : This is a pointer to the address of matrix B on the GPU.
 
 `int ldb` : This represents the value of the leading dimension of matrix B.
 
-`const double *beta` : This is a pointer to the scalar beta.
+`const double *beta` : This is a pointer to the scalar beta--it expects to receive the address of a scalar value.
 
-`double *CP` : This is a pointer to the double-precision matrix C on the GPU.
+`double *CP` : This is a pointer to the the address of the double-precision matrix C on the GPU.
 
 `int ldc` : This represents the value of the leading dimension of matrix C.
 
@@ -110,18 +110,23 @@ The hints get progressively more helpful as you go down. If you want to challeng
 Remember that you do not need to perform a transpose operation on the matrices, so the `hipblasOperation_t` arguments should be set to `HIPBLAS_OP_N`.
 * Pointers 
 
-In the code we:
+In the code:
 ```
  /* Allocate memory for d_A, d_B, d_C on GPU ----------------------------------------*/
     double *d_A, *d_B, *d_C;'
 ```
 
 Here: 
-1.  `d_A`, `d_B`, `d_`C are declared as pointers on the GPU. In C, pointers are special variables used to store memory addresses. The `hipblasDgemm` function is looking for the *memory addresses*, not the *values*, for these pointers. 
-See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `d_A`, `*d_A`, or `&d_A` form of the variables to accomplish this.  
+* d_A, d_B, and d_C are declared as pointers to memory addresses on the GPU. In C, pointers are special variables used to store memory addresses. The hipblasDgemm function expects the memory addresses (pointers), not the values, for these matrices. It is important to note that d_A, d_B, and d_C are already pointers because they were declared as double *.
+See Addresses and Pointers for guidance on when to use the d_A, *d_A, or &d_A forms of a variable.
 
+In the code: 
+```
+    const double alpha = 1.0;
+    const double beta = 0.0;
+```
 
-* Note that `hipblasDgemm` expects pointers for `alpha` and `beta`, but `alpha` and `beta` are declared as regular doubles for the CPU in the code. You must pass the addresses of `alpha` and `beta` in `hipblasDgemm`.
+* Note that hipblasDgemm expects pointers for alpha and beta, but in the code alpha and beta are declared as regular double variables on the CPU. You must pass the addresses of alpha and beta to hipblasDgemm; the operator that does this in C is the address-of operator (&).
 See [Addresses and Pointers](https://github.com/olcf/foundational_hpc_skills/blob/master/intro_to_c/README.md#6-addresses-and-pointers) to determine if you should use the `alpha`, `*alpha`, or &alpha' form of the variables to accomplish this.
 
 
