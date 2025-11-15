@@ -179,6 +179,7 @@ Once you think you have updated the file to include the missing function, compil
 To compile mpi_hello.c 
 
 ```
+$ module reset
 $ make
 ````
 
